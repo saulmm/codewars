@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Codewars"
 include(":app")
- 
+include(":network")
+include(":entity")
