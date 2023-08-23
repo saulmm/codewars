@@ -1,4 +1,4 @@
-package com.saulmm.codewars.network.di
+package com.saulmm.codewars.common.network.di
 
 import com.saulmm.codewars.entity.build.AppVariant
 import dagger.Module
