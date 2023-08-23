@@ -17,3 +17,4 @@ rootProject.name = "Codewars"
 include(":app")
 include(":network")
 include(":entity")
+include(":services")
