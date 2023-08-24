@@ -2,11 +2,13 @@ package com.saulmm.codewars.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.saulmm.codewars.feature.home.HomeScreen
+import com.saulmm.codewars.authoredChallengesViewModel
+import com.saulmm.codewars.feature.home.AuthoredChallengesScreen
 import com.saulmm.common.navigation_contract.home.HomeGraphDest
 import com.saulmm.feature.kata.detail.KataDetailScreen
 
@@ -26,9 +28,15 @@ fun CodewarsNavHost(
             arguments = HomeGraphDest.AuthoredChallenges.navArgs
         ) {
             val userName = HomeGraphDest.AuthoredChallenges.userNameFrom(it.arguments)
-            HomeScreen(userName = userName, navigateToKataDetail = {
-                navController.navigate(HomeGraphDest.KataDetail.buildRoute(it))
-            })
+            val viewModel = authoredChallengesViewModel(userName = userName)
+
+            AuthoredChallengesScreen(
+                userName = userName,
+                viewModel = viewModel,
+                navigateToKataDetail = {
+                    navController.navigate(HomeGraphDest.KataDetail.buildRoute(it))
+                }
+            )
         }
         composable(
             route = HomeGraphDest.KataDetail.route,
