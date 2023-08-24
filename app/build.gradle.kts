@@ -78,4 +78,7 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    testImplementation(libs.truth)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito)
 }
