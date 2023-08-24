@@ -5,4 +5,5 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.44" apply false
     id("org.jetbrains.kotlin.kapt") version "1.8.21" apply false
     alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
+    alias(libs.plugins.androidLibrary) apply false
 }
