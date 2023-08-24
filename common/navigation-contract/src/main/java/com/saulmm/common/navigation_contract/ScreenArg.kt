@@ -1,4 +1,4 @@
-package com.saulmm.codewars.navigation.contract
+package com.saulmm.common.navigation_contract
 
 import androidx.navigation.NavType
 

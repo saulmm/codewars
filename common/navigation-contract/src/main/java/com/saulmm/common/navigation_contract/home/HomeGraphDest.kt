@@ -1,9 +1,9 @@
-package com.saulmm.codewars.navigation.home
+package com.saulmm.common.navigation_contract.home
 
 import android.os.Bundle
 import androidx.navigation.NavType
-import com.saulmm.codewars.navigation.contract.ScreenArg
-import com.saulmm.codewars.navigation.contract.ScreenDest
+import com.saulmm.common.navigation_contract.ScreenArg
+import com.saulmm.common.navigation_contract.ScreenDest
 
 sealed class HomeGraphDest {
     object AuthoredChallenges: ScreenDest("$HOME_GRAPH/home") {

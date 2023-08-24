@@ -57,6 +57,7 @@ dependencies {
     implementation(project(":entity"))
     implementation(project(":common"))
     implementation(project(":common:network"))
+    implementation(project(":common:navigation-contract"))
     implementation(project(":services:codewars-api"))
     implementation(project(":feature:home"))
     implementation(project(":feature:kata-detail"))

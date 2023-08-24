@@ -1,7 +1,6 @@
-package com.saulmm.codewars.navigation.contract
+package com.saulmm.common.navigation_contract
 
 import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 open class ScreenDest(

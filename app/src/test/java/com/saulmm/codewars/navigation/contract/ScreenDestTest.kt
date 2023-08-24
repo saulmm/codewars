@@ -15,26 +15,33 @@ class ScreenDestTest {
 
     @Test
     fun `test route generation without arguments`() {
-        val screenDest = ScreenDest("exampleRoute")
+        val screenDest = com.saulmm.common.navigation_contract.ScreenDest("exampleRoute")
 
         assertThat(screenDest.route).isEqualTo("exampleRoute")
     }
 
     @Test
     fun `test route generation with arguments`() {
-        val screenArg1 = ScreenArg("arg1", NavType.StringType, false)
-        val screenArg2 = ScreenArg("arg2", NavType.IntType, true)
+        val screenArg1 =
+            com.saulmm.common.navigation_contract.ScreenArg("arg1", NavType.StringType, false)
+        val screenArg2 =
+            com.saulmm.common.navigation_contract.ScreenArg("arg2", NavType.IntType, true)
 
-        val screenDest = ScreenDest("exampleRoute", listOf(screenArg1, screenArg2))
+        val screenDest = com.saulmm.common.navigation_contract.ScreenDest(
+            "exampleRoute",
+            listOf(screenArg1, screenArg2)
+        )
 
         assertThat(screenDest.route).isEqualTo("exampleRoute?arg1={arg1}&arg2={arg2}")
     }
 
     @Test
     fun `test navigation arguments generation`() {
-        val screenArg = ScreenArg("arg", NavType.StringType, false)
+        val screenArg =
+            com.saulmm.common.navigation_contract.ScreenArg("arg", NavType.StringType, false)
 
-        val screenDest = ScreenDest("exampleRoute", listOf(screenArg))
+        val screenDest =
+            com.saulmm.common.navigation_contract.ScreenDest("exampleRoute", listOf(screenArg))
 
         val namedNavArgs = screenDest.navArgs
         assertThat(namedNavArgs).hasSize(1)
@@ -43,7 +50,7 @@ class ScreenDestTest {
 
     @Test
     fun `test argsPath generation without arguments`() {
-        val screenDest = ScreenDest("exampleRoute")
+        val screenDest = com.saulmm.common.navigation_contract.ScreenDest("exampleRoute")
 
         assertThat(screenDest.argsPath).isEmpty()
     }
