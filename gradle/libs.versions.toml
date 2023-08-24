@@ -32,10 +32,11 @@ coroutines-test = "1.7.1"
 play-services-coroutines = "1.7.1"
 accompanist-placeholder = "0.30.1"
 lottie-compose = "6.1.0"
+truth = "1.1.5"
+mockito = "5.5.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 kotest = { group = "io.kotest", name = "kotest-assertions-core-jvm", version.ref = "kotest" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines-test" }
@@ -68,6 +69,9 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 accompanist-placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder", version.ref = "accompanist-placeholder" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie-compose" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

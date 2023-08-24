@@ -1,4 +1,4 @@
-package com.saulmm.codewars
+package com.saulmm.common.navigation_contract
 
 import org.junit.Test
 
