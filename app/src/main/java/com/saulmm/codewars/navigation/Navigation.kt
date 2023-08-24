@@ -2,13 +2,12 @@ package com.saulmm.codewars.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.saulmm.codewars.authoredChallengesViewModel
-import com.saulmm.codewars.feature.home.AuthoredChallengesScreen
+import com.saulmm.codewars.feature.home.ui.AuthoredChallengesScreen
 import com.saulmm.common.navigation_contract.home.HomeGraphDest
 import com.saulmm.feature.kata.detail.KataDetailScreen
 

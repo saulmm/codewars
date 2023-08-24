@@ -12,7 +12,6 @@ interface CodewarsApi {
     @GET("/api/v1/users/{userName}/code-challenges/authored")
     suspend fun authoredChallenges(
         @Path("userName") userName: String,
-        @Query("page") page: Int = 0,
     ): CodewarsResponseDto<AuthoredChallengeDto>
 
     @GET("/api/v1/code-challenges/{challengeId}")
