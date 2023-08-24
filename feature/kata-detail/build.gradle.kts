@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.saulmm.codewars.feature.home"
+    namespace = "com.saulmm.feature.kata.detail"
     compileSdk = 33
 
     defaultConfig {

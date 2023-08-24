@@ -12,13 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.saulmm.codewars.feature.home.HomeScreen
 import com.saulmm.codewars.ui.theme.CodewarsTheme
+import com.saulmm.feature.kata.detail.KataDetailScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             CodewarsTheme {
-                HomeScreen(userName = "test")
+                KataDetailScreen(kataId = "yes")
             }
         }
     }
