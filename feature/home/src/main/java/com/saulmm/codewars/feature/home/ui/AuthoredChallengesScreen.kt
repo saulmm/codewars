@@ -20,6 +20,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.entity.Kata
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -31,9 +32,16 @@ fun AuthoredChallengesScreen(
     viewModel: AuthoredChallengesViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val viewState: AuthoredChallengesViewState by viewModel.viewState.collectAsStateWithLifecycle()
     initEventProcessor(navigateToKataDetail, viewModel)
 
+    CodewarsTheme {
+        ChallengesScreenContent(viewModel)
+    }
+}
+
+@Composable
+private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
+    val viewState: AuthoredChallengesViewState by viewModel.viewState.collectAsStateWithLifecycle()
     when (viewState) {
         AuthoredChallengesViewState.Idle -> {
 
@@ -46,7 +54,13 @@ fun AuthoredChallengesScreen(
         is AuthoredChallengesViewState.Loaded -> {
             ChallengesLoaded(
                 challenges = (viewState as AuthoredChallengesViewState.Loaded).katas,
-                onChallengeClick = { viewModel.onViewEvent(AuthoredChallengesViewEvent.OnChallengeClick(it))}
+                onChallengeClick = {
+                    viewModel.onViewEvent(
+                        AuthoredChallengesViewEvent.OnChallengeClick(
+                            it
+                        )
+                    )
+                }
             )
         }
 

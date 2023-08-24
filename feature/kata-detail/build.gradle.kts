@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":entity"))
     implementation(project(":common"))
     implementation(project(":common:network"))
+    implementation(project(":common:codewars-design-system"))
     implementation(project(":services:codewars-api"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

@@ -1,4 +1,4 @@
-package com.saulmm.codewars.ui.theme
+package com.saulmm.codewars.common.design.system
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
