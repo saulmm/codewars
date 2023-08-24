@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
+
 }
 
 android {
@@ -53,6 +55,9 @@ android {
 
 dependencies {
     implementation(project(":entity"))
+    implementation(project(":common"))
+    implementation(project(":common:network"))
+    implementation(project(":services:codewars-api"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
