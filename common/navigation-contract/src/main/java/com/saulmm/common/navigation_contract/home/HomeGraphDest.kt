@@ -8,9 +8,10 @@ import com.saulmm.common.navigation_contract.ScreenDest
 sealed class HomeGraphDest {
     object AuthoredChallenges: ScreenDest("$HOME_GRAPH/home") {
         private const val ARG_USER_NAME = "username"
+        private const val DEFAULT_USERNAME = "bkaes"
 
         override val args: List<ScreenArg<*>> = listOf(
-            ScreenArg(ARG_USER_NAME, NavType.StringType)
+            ScreenArg(ARG_USER_NAME, NavType.StringType, isNullable = true)
         )
 
         fun buildRoute(username: String): String {
@@ -18,7 +19,7 @@ sealed class HomeGraphDest {
         }
 
         fun userNameFrom(bundle: Bundle?): String {
-            return checkNotNull(bundle?.getString(ARG_USER_NAME))
+            return bundle?.getString(ARG_USER_NAME) ?: DEFAULT_USERNAME
         }
     }
 

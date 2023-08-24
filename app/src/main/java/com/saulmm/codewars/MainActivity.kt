@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.saulmm.codewars.feature.home.HomeScreen
+import com.saulmm.codewars.navigation.CodewarsNavHost
 import com.saulmm.codewars.ui.theme.CodewarsTheme
 import com.saulmm.feature.kata.detail.KataDetailScreen
 
@@ -19,7 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CodewarsTheme {
-                KataDetailScreen(kataId = "yes")
+                CodewarsNavHost()
             }
         }
     }
