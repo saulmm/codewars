@@ -32,12 +32,18 @@ class AuthoredChallengesViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun loadChallenges() {
+    suspend fun loadChallenges() {
         _viewState.value = AuthoredChallengesViewState.Loading
 
-        runCatching { authoredChallengesRepository.getFrom(userName) }
-            .onFailure { _viewState.value = AuthoredChallengesViewState.Failure }
-            .onSuccess { _viewState.value = AuthoredChallengesViewState.Loaded(it) }
+        runCatching {
+            authoredChallengesRepository.getFrom(userName)
+        }
+            .onFailure {
+                _viewState.value = AuthoredChallengesViewState.Failure
+            }
+            .onSuccess {
+                _viewState.value = AuthoredChallengesViewState.Loaded(it)
+            }
     }
 
     fun onViewEvent(viewEvent: AuthoredChallengesViewEvent) {
