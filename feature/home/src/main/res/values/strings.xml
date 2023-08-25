@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_home">%s authored challenges</string>
+    <string name="message_home_welcome">
+        This is the list of challenges written by %s. Click on any of them to see each one in detail, where you can get more information or discover how to participate in it. Welcome to CodeWars!
+    </string>
+    <string name="message_error_challenges_title">Couldn\'t load the challenges</string>
+    <string name="message_error_challenges">"Seems there were an issue with your connection, please, try again"</string>
+    <string name="action_try_again">Try again</string>
+</resources>

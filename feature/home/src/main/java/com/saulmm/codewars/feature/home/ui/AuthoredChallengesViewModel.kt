@@ -35,7 +35,7 @@ class AuthoredChallengesViewModel @AssistedInject constructor(
     private suspend fun loadChallenges() {
         _viewState.value = AuthoredChallengesViewState.Loading
 
-        runCatching { authoredChallengesRepository.getFrom(userName) }
+        runCatching { authoredChallengesRepository.getFrom(userName).also { error("hi") } }
             .onFailure {
                 _viewState.value = AuthoredChallengesViewState.Failure
             }
