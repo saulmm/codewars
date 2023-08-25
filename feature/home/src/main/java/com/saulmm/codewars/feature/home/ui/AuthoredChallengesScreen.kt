@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.saulmm.codewars.common.design.system.CodewarsTheme
+import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.entity.Kata
 import com.saulmm.codewars.entity.ProgrammingLanguage
 import com.saulmm.codewars.entity.Rank
@@ -55,7 +56,9 @@ fun AuthoredChallengesScreen(
     initEventProcessor(navigateToKataDetail, viewModel)
 
     CodewarsTheme {
-        ChallengesScreenContent(viewModel)
+        CodewarsBackground {
+            ChallengesScreenContent(viewModel)
+        }
     }
 }
 
@@ -147,17 +150,19 @@ fun ChallengesLoaded(
 @Composable
 fun ChallengeCardPreview() {
     CodewarsTheme {
-        ChallengeCard(
-            challenge = Kata(
-                id = "",
-                name = "Walter's miraculous FizzBuzz factory",
-                description = "Walter's miraculous FizzBuzz factory",
-                rank = Rank.DAN_2,
-                tags = listOf("Arrays", "Algorithms", "Stacks", "Heaps"),
-                languages = emptyList()
-            ),
-            onChallengeClick = {}
-        )
+        CodewarsBackground {
+            ChallengeCard(
+                challenge = Kata(
+                    id = "",
+                    name = "Walter's miraculous FizzBuzz factory",
+                    description = "Walter's miraculous FizzBuzz factory",
+                    rank = Rank.DAN_2,
+                    tags = listOf("Arrays", "Algorithms", "Stacks", "Heaps"),
+                    languages = emptyList()
+                ),
+                onChallengeClick = {}
+            )
+        }
     }
 }
 

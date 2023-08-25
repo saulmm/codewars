@@ -1,3 +1,5 @@
+@file:Suppress("PrivatePropertyName")
+
 package com.saulmm.codewars.common.design.system
 
 import android.app.Activity
@@ -9,7 +11,9 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -26,6 +30,10 @@ private val LightColorScheme = lightColorScheme(
     secondary = PurpleGrey40,
     tertiary = Pink40
 )
+
+private val LightAndroidBackgroundTheme = BackgroundTheme(color = DarkGreenGray95)
+
+private val DarkAndroidBackgroundTheme = BackgroundTheme(color = Color.Black)
 
 @Composable
 fun CodewarsTheme(
@@ -50,9 +58,21 @@ fun CodewarsTheme(
         }
     }
 
+    val backgroundTheme = if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
+
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = CodewarsTypography,
         content = content
     )
+
+    CompositionLocalProvider(
+        LocalBackgroundTheme provides backgroundTheme,
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = CodewarsTypography,
+            content = content,
+        )
+    }
 }
