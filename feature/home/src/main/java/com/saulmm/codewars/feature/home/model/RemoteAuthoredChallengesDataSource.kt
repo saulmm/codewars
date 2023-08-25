@@ -1,6 +1,6 @@
 package com.saulmm.codewars.feature.home.model
 
-import com.saulmm.codewars.entity.Kata
+import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.feature.home.model.mapper.toKata
 import com.saulmm.codewars.services.api.CodewarsApi
 import com.saulmm.codewars.services.api.dto.AuthoredChallengeDto
@@ -11,7 +11,7 @@ class RemoteAuthoredChallengesDataSource @Inject constructor(
 ): AuthoredChallengesDataSource {
 
 
-    override suspend fun authoredChallenges(userName: String): List<Kata> {
+    override suspend fun authoredChallenges(userName: String): List<Challenge> {
         return codewarsApi.authoredChallenges(userName = userName).data
             .map(AuthoredChallengeDto::toKata)
     }

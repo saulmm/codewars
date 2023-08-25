@@ -1,8 +1,8 @@
 package com.saulmm.codewars.feature.home.model
 
-import com.saulmm.codewars.entity.Kata
+import com.saulmm.codewars.entity.Challenge
 
 interface AuthoredChallengesDataSource {
 
-    suspend fun authoredChallenges(userName: String): List<Kata>
+    suspend fun authoredChallenges(userName: String): List<Challenge>
 }

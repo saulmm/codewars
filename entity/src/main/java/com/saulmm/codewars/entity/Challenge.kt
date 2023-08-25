@@ -1,6 +1,6 @@
 package com.saulmm.codewars.entity
 
-data class Kata(
+data class Challenge(
     val id: String,
     val name: String,
     val description: String,
