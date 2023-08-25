@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.accompanist.placeholder)
     implementation(libs.viewmodel.ktx)
     implementation(libs.viewmodel.compose)
     implementation(libs.material)

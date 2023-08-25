@@ -3,12 +3,14 @@
 package com.saulmm.codewars.feature.home.ui
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,7 +21,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
@@ -29,12 +30,14 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -42,6 +45,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.fade
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
@@ -112,7 +119,7 @@ private fun ChallengesScreenContent(userName: String, viewModel: AuthoredChallen
         }
 
         AuthoredChallengesViewState.Loading -> {
-            ChallengesLoading()
+            ChallengesLoading(userName)
         }
     }
 }
@@ -135,24 +142,55 @@ private fun initEventProcessor(
 
 @Composable
 fun ChallengesFailure(userName: String) {
+    var fadeIn by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = fadeIn) {
+        fadeIn = true
+    }
+
     Column {
         AuthoredChallengesHeader(userName = userName)
         Spacer(modifier = Modifier.height(32.dp))
-        ErrorMessageWithAction(
-            titleStringRes = R.string.message_error_challenges_title,
-            messageStringRes = R.string.message_error_challenges,
-            actionStringRes = R.string.action_try_again,
-            onTryAgainClick = { /*TODO*/ })
+        AnimatedVisibility(visible = fadeIn) {
+            ErrorMessageWithAction(
+                titleStringRes = R.string.message_error_challenges_title,
+                messageStringRes = R.string.message_error_challenges,
+                actionStringRes = R.string.action_try_again,
+                onTryAgainClick = { /*TODO*/ }
+            )
+        }
     }
 }
 
 @Composable
-fun ChallengesLoading() {
-    Surface(
-        color = Color.Cyan,
-        modifier = Modifier.fillMaxSize()
-    ) {
+fun ChallengesLoading(userName: String) {
+    Column(modifier = Modifier.padding(16.dp)) {
+        AuthoredChallengesHeader(userName = userName)
+        Spacer(modifier = Modifier.height(16.dp))
+            repeat(2) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .height(196.dp)
+                        .placeholder(
+                            visible = true,
+                            color = MaterialTheme.colorScheme.primaryContainer.copy(
+                                alpha = 0.4f
+                            ),
+                            highlight = PlaceholderHighlight.shimmer(
+                                MaterialTheme.colorScheme.primary.copy(
+                                    alpha = 0.4f
+                                )
+
+                            )
+                        )
+                ) {}
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+
     }
+
 }
 
 @Composable
@@ -190,7 +228,7 @@ private fun ChallengesList(
     showBackground = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
-@Composable()
+@Composable
 fun ChallengesFailurePreview() {
     ChallengesFailure(userName = "Yep")
 }
