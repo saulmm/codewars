@@ -7,8 +7,12 @@ import com.google.common.truth.Truth.assertThat
 import com.saulmm.codewars.feature.home.model.AuthoredChallengesRepository
 import com.saulmm.codewars.feature.home.ui.AuthoredChallengesViewModel
 import com.saulmm.codewars.feature.home.ui.AuthoredChallengesViewState.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
@@ -44,12 +48,14 @@ class AuthoredChallengesViewModelTest {
     fun `when the viewmodel inits, a Loaded event is the last emitted`() = runTest {
         `when`(authoredChallengesRepository.getFrom("")).thenReturn(emptyList())
 
+        Dispatchers.setMain(UnconfinedTestDispatcher())
+
         viewModel().viewState.test {
-            awaitItem()
-            awaitItem()
-            assertThat(awaitItem()).isInstanceOf(Loaded::class.java)
-            cancelAndIgnoreRemainingEvents()
+            assertThat(expectMostRecentItem()).isInstanceOf(Loaded::class.java)
         }
+
+        Dispatchers.resetMain()
+
     }
 
     private fun viewModel(): AuthoredChallengesViewModel {
