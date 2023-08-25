@@ -36,12 +36,8 @@ class AuthoredChallengesViewModel @AssistedInject constructor(
         _viewState.value = AuthoredChallengesViewState.Loading
 
         runCatching { authoredChallengesRepository.getFrom(userName) }
-            .onFailure {
-                _viewState.value = AuthoredChallengesViewState.Failure
-            }
-            .onSuccess {
-                _viewState.value = AuthoredChallengesViewState.Loaded(it)
-            }
+            .onFailure { _viewState.value = AuthoredChallengesViewState.Failure }
+            .onSuccess { _viewState.value = AuthoredChallengesViewState.Loaded(it) }
     }
 
     fun onViewEvent(viewEvent: AuthoredChallengesViewEvent) {

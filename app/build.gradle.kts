@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.saulmm.codewars"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.saulmm.codewars"

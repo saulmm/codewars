@@ -21,8 +21,8 @@ object NetworkModule {
     ): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
             level = when (appVariant) {
-                AppVariant.RELEASE -> HttpLoggingInterceptor.Level.NONE
-                AppVariant.DEBUG -> HttpLoggingInterceptor.Level.BASIC
+                AppVariant.RELEASE -> HttpLoggingInterceptor.Level.BODY
+                AppVariant.DEBUG -> HttpLoggingInterceptor.Level.BODY
                 else -> throw IllegalStateException("Unknown build type $appVariant")
             }
         }
