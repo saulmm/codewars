@@ -35,21 +35,21 @@ class AuthoredChallengesViewModel @AssistedInject constructor(
     suspend fun loadChallenges() {
         _viewState.value = AuthoredChallengesViewState.Loading
 
-        runCatching {
-            authoredChallengesRepository.getFrom(userName)
-        }
-            .onFailure {
-                _viewState.value = AuthoredChallengesViewState.Failure
-            }
-            .onSuccess {
-                _viewState.value = AuthoredChallengesViewState.Loaded(it)
-            }
+        runCatching { authoredChallengesRepository.getFrom(userName) }
+            .onFailure { _viewState.value = AuthoredChallengesViewState.Failure }
+            .onSuccess { _viewState.value = AuthoredChallengesViewState.Loaded(it) }
     }
 
     fun onViewEvent(viewEvent: AuthoredChallengesViewEvent) {
         when (viewEvent) {
             is AuthoredChallengesViewEvent.OnChallengeClick -> {
                 _events.trySend(AuthoredChallengeEvent.NavigateToKataDetail(viewEvent.kataId))
+            }
+
+            AuthoredChallengesViewEvent.OnFailureTryAgainClick -> {
+                viewModelScope.launch {
+                    loadChallenges()
+                }
             }
         }
     }
