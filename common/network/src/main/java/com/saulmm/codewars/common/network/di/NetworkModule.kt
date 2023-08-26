@@ -22,7 +22,7 @@ object NetworkModule {
         return HttpLoggingInterceptor().apply {
             level = when (appVariant) {
                 AppVariant.RELEASE -> HttpLoggingInterceptor.Level.BODY
-                AppVariant.DEBUG -> HttpLoggingInterceptor.Level.BODY
+                AppVariant.DEBUG -> HttpLoggingInterceptor.Level.BASIC
                 else -> throw IllegalStateException("Unknown build type $appVariant")
             }
         }
@@ -35,7 +35,7 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
             .addInterceptor(httpLoggingInterceptor)
-            .readTimeout(CONNECT_TIMEOUT_LIMIT_MINS, TimeUnit.MINUTES)
-            .connectTimeout(READ_TIMEOUT_LIMIT_MINS, TimeUnit.MINUTES)
+            .readTimeout(READ_TIMEOUT_LIMIT_MINS, TimeUnit.MINUTES)
+            .connectTimeout(1, TimeUnit.SECONDS)
     }
 }

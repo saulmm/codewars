@@ -96,14 +96,12 @@ private fun AuthoredChallengesHeader(userName: String) {
 private fun ChallengesScreenContent(userName: String, viewModel: AuthoredChallengesViewModel) {
     val viewState: AuthoredChallengesViewState by viewModel.viewState.collectAsStateWithLifecycle()
     when (viewState) {
-        AuthoredChallengesViewState.Idle -> {
-
-        }
-
+        AuthoredChallengesViewState.Idle -> {}
         AuthoredChallengesViewState.Failure -> {
-            ChallengesFailure(userName)
+            ChallengesFailure(userName, onTryAgainClick = {
+                viewModel.onViewEvent(AuthoredChallengesViewEvent.OnFailureTryAgainClick)
+            })
         }
-
         is AuthoredChallengesViewState.Loaded -> {
             ChallengesLoaded(
                 userName = userName,
@@ -117,7 +115,6 @@ private fun ChallengesScreenContent(userName: String, viewModel: AuthoredChallen
                 }
             )
         }
-
         AuthoredChallengesViewState.Loading -> {
             ChallengesLoading(userName)
         }
@@ -141,7 +138,7 @@ private fun initEventProcessor(
 }
 
 @Composable
-fun ChallengesFailure(userName: String) {
+fun ChallengesFailure(userName: String, onTryAgainClick: () -> Unit) {
     var fadeIn by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = fadeIn) {
@@ -156,7 +153,7 @@ fun ChallengesFailure(userName: String) {
                 titleStringRes = R.string.message_error_challenges_title,
                 messageStringRes = R.string.message_error_challenges,
                 actionStringRes = R.string.action_try_again,
-                onTryAgainClick = { /*TODO*/ }
+                onTryAgainClick = onTryAgainClick
             )
         }
     }
@@ -230,7 +227,7 @@ private fun ChallengesList(
 )
 @Composable
 fun ChallengesFailurePreview() {
-    ChallengesFailure(userName = "Yep")
+    ChallengesFailure(userName = "Yep", onTryAgainClick = {})
 }
 
 @Preview(

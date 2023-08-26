@@ -32,7 +32,7 @@ class AuthoredChallengesViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun loadChallenges() {
+    suspend fun loadChallenges() {
         _viewState.value = AuthoredChallengesViewState.Loading
 
         runCatching { authoredChallengesRepository.getFrom(userName) }
@@ -44,6 +44,12 @@ class AuthoredChallengesViewModel @AssistedInject constructor(
         when (viewEvent) {
             is AuthoredChallengesViewEvent.OnChallengeClick -> {
                 _events.trySend(AuthoredChallengeEvent.NavigateToKataDetail(viewEvent.kataId))
+            }
+
+            AuthoredChallengesViewEvent.OnFailureTryAgainClick -> {
+                viewModelScope.launch {
+                    loadChallenges()
+                }
             }
         }
     }

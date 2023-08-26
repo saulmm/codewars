@@ -71,4 +71,6 @@ dependencies {
     testImplementation(libs.truth)
     testImplementation(libs.junit)
     testImplementation(libs.mockito)
+    testImplementation(libs.turbine)
+    testImplementation(libs.coroutines.test)
 }
