@@ -59,7 +59,7 @@ dependencies {
     implementation(project(":common:network"))
     implementation(project(":common:navigation-contract"))
     implementation(project(":services:codewars-api"))
-    implementation(project(":feature:home"))
+    implementation(project(":feature:challenges"))
     implementation(project(":feature:kata-detail"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
