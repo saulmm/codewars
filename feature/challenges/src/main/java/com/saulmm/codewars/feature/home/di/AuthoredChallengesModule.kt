@@ -1,7 +1,7 @@
 package com.saulmm.codewars.feature.home.di
 
-import com.saulmm.codewars.feature.home.model.AuthoredChallengesRepository
-import com.saulmm.codewars.feature.home.model.RemoteAuthoredChallengesDataSource
+import com.saulmm.codewars.feature.home.model.ChallengesRepository
+import com.saulmm.codewars.feature.home.model.RemoteChallengesDatasource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,8 +17,8 @@ object AuthoredChallengesModule {
     @Provides
     @Singleton
     fun provideAuthoredChallengesRepository(
-        remote: RemoteAuthoredChallengesDataSource
-    ): AuthoredChallengesRepository {
-        return AuthoredChallengesRepository(remote)
+        remote: RemoteChallengesDatasource
+    ): ChallengesRepository {
+        return ChallengesRepository(remote)
     }
 }

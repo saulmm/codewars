@@ -3,7 +3,7 @@ package com.saulmm.codewars.feature.home.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.saulmm.codewars.feature.home.model.AuthoredChallengesRepository
+import com.saulmm.codewars.feature.home.model.ChallengesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class AuthoredChallengesViewModel @AssistedInject constructor(
     @Assisted private val userName: String,
-    private val authoredChallengesRepository: AuthoredChallengesRepository
+    private val challengesRepository: ChallengesRepository
 ): ViewModel() {
     private val _viewState: MutableStateFlow<AuthoredChallengesViewState> =
         MutableStateFlow(AuthoredChallengesViewState.Idle)
@@ -35,7 +35,7 @@ class AuthoredChallengesViewModel @AssistedInject constructor(
     suspend fun loadChallenges() {
         _viewState.value = AuthoredChallengesViewState.Loading
 
-        runCatching { authoredChallengesRepository.getFrom(userName) }
+        runCatching { challengesRepository.getFrom(userName) }
             .onFailure { _viewState.value = AuthoredChallengesViewState.Failure }
             .onSuccess { _viewState.value = AuthoredChallengesViewState.Loaded(it) }
     }

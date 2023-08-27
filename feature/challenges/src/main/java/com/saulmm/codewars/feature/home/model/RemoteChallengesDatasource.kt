@@ -6,9 +6,9 @@ import com.saulmm.codewars.services.api.CodewarsApi
 import com.saulmm.codewars.services.api.dto.AuthoredChallengeDto
 import javax.inject.Inject
 
-class RemoteAuthoredChallengesDataSource @Inject constructor(
+class RemoteChallengesDatasource @Inject constructor(
     private val codewarsApi: CodewarsApi,
-): AuthoredChallengesDataSource {
+): ChallengesDatasource {
 
 
     override suspend fun authoredChallenges(userName: String): List<Challenge> {
