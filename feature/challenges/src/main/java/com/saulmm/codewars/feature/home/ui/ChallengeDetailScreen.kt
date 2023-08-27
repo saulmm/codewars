@@ -1,4 +1,4 @@
-package com.saulmm.feature.kata.detail
+package com.saulmm.codewars.feature.home.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text

@@ -1,4 +1,4 @@
-package com.saulmm.feature.kata.detail
+package com.saulmm.codewars.feature.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

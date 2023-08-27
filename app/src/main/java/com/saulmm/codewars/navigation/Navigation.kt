@@ -9,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.saulmm.codewars.authoredChallengesViewModel
 import com.saulmm.codewars.feature.home.ui.AuthoredChallengesScreen
 import com.saulmm.common.navigation_contract.home.HomeGraphDest
-import com.saulmm.feature.kata.detail.KataDetailScreen
+import com.saulmm.codewars.feature.home.ui.KataDetailScreen
 
 @Composable
 fun CodewarsNavHost(
