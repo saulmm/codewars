@@ -9,7 +9,7 @@ data class ChallengeDetail(
     val rank: Rank,
     val tags: List<String>,
     val languages: List<ProgrammingLanguage>,
-    val url: URI,
+    val url: URI?,
     val stars: Int,
     val voteScore: Int
 )

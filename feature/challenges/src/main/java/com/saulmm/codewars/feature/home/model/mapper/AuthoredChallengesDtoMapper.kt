@@ -5,7 +5,7 @@ import com.saulmm.codewars.entity.rankValueOfOrUnknown
 import com.saulmm.codewars.entity.toProgrammingLanguageOrUnknown
 import com.saulmm.codewars.services.api.dto.AuthoredChallengeDto
 
-fun AuthoredChallengeDto.toKata(): Challenge {
+internal fun AuthoredChallengeDto.toChallenge(): Challenge {
     val truncatedDescription = description.lineSequence()
         .take(MAX_DESCRIPTION_LINES)
         .joinToString("\n")

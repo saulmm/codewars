@@ -8,6 +8,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ChallengeDetailViewModel @AssistedInject constructor(
@@ -15,7 +16,10 @@ class ChallengeDetailViewModel @AssistedInject constructor(
     private val repository: ChallengesRepository,
 ): ViewModel() {
 
-    private val _viewState = MutableStateFlow(ChallengeDetailViewState.Idle)
+    private val _viewState: MutableStateFlow<ChallengeDetailViewState> =
+        MutableStateFlow(ChallengeDetailViewState.Idle)
+
+    val viewState = _viewState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -24,8 +28,14 @@ class ChallengeDetailViewModel @AssistedInject constructor(
     }
 
     private suspend fun loadCharacterDetail() {
+        _viewState.value = ChallengeDetailViewState.Loading
+
         runCatching {
             repository.challengeDetail(challengeId)
+        }.onFailure {
+            _viewState.value = ChallengeDetailViewState.Failure
+        }.onSuccess {
+            _viewState.value = ChallengeDetailViewState.Loaded(it)
         }
     }
 
