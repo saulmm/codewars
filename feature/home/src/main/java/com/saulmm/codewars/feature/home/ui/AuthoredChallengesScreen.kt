@@ -4,12 +4,13 @@ package com.saulmm.codewars.feature.home.ui
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,16 +18,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProvideTextStyle
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +41,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
 import com.saulmm.codewars.common.design.system.CodewarsTheme
@@ -300,15 +294,14 @@ fun ChallengeListPreviewLight() {
 
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun ChallengeCard(
     challenge: Challenge,
     onChallengeClick: (String) -> Unit
 ) {
     Card(
-        onClick = { onChallengeClick.invoke(challenge.id) },
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        modifier = Modifier.clickable { onChallengeClick.invoke(challenge.id) }
     ) {
         Column(
             modifier = Modifier.padding(vertical = 12.dp)
@@ -349,8 +342,7 @@ fun ProgramingLanguages(
     ) {
         items(progammingLanguages) {
             ProgrammingLanguageTag(
-                onClick = { },
-                text = { Text(text = it.displayName) },
+                programmingLanguage = it,
             )
         }
     }
@@ -360,21 +352,17 @@ fun ProgramingLanguages(
 @Composable
 fun ProgrammingLanguageTag(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    text: @Composable () -> Unit,
+    programmingLanguage: ProgrammingLanguage,
 ) {
-    Box(modifier = modifier) {
-        TextButton(
-            onClick = onClick,
-            colors = ButtonDefaults.textButtonColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = contentColorFor(backgroundColor = MaterialTheme.colorScheme.primaryContainer),
-            ),
-        ) {
-            ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
-                text()
-            }
-        }
+    Box(modifier = modifier
+        .clip(RoundedCornerShape(8.dp))
+        .background(MaterialTheme.colorScheme.secondaryContainer)
+        .padding(all = 8.dp)
+    ) {
+        Text(
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            text = programmingLanguage.displayName
+        )
     }
 }
 
