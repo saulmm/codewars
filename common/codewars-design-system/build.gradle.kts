@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":entity"))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)

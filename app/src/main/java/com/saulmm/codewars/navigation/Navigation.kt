@@ -45,7 +45,6 @@ fun CodewarsNavHost(
             val challengeId = HomeGraphDest.KataDetail.kataIdFrom(it.arguments)
             val viewModel = challengesDetailViewModel(challengeId = challengeId)
             ChallengeDetailScreen(
-                challengeId = challengeId,
                 viewModel = viewModel,
                 onBackPressed = { navController.popBackStack() }
             )

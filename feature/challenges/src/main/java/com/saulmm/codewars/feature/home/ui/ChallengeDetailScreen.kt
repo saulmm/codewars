@@ -1,10 +1,13 @@
+@file:OptIn(ExperimentalLayoutApi::class)
+
 package com.saulmm.codewars.feature.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -30,13 +33,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
+import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
 import com.saulmm.codewars.entity.ChallengeDetail
+import com.saulmm.codewars.entity.ProgrammingLanguage
+import com.saulmm.codewars.entity.ProgrammingLanguage.*
 import com.saulmm.codewars.entity.Rank
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChallengeDetailScreen(
-    challengeId: String,
     viewModel: ChallengeDetailViewModel,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
@@ -77,6 +82,20 @@ fun ChallengeDetailScreen(
                 }
 
             }
+        }
+    }
+}
+
+@Composable
+@ExperimentalLayoutApi
+@OptIn(ExperimentalLayoutApi::class)
+private fun ProgrammingLanguagesLayout(list: List<ProgrammingLanguage>) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        list.forEach {
+            ProgrammingLanguageTag(programmingLanguage = it)
         }
     }
 }
@@ -137,15 +156,15 @@ private fun ChallengeDetailContent(
 }
 
 @Composable
-private fun ColumnScope.ChallengeDetailHeader(challenge: ChallengeDetail) {
+private fun ChallengeDetailHeader(challenge: ChallengeDetail) {
     ChallengeDetailTitle(name = challenge.name)
     ChallengeDetailLabel(tags = challenge.tags)
     ChallengeDetailDescription(description = challenge.description)
-
+    ProgrammingLanguagesLayout(list = challenge.languages)
 }
 
 @Composable
-private fun ColumnScope.ChallengeDetailTitle(name: String) {
+private fun ChallengeDetailTitle(name: String) {
     Text(
         text = name,
         color = MaterialTheme.colorScheme.onBackground,
@@ -154,7 +173,7 @@ private fun ColumnScope.ChallengeDetailTitle(name: String) {
 }
 
 @Composable
-private fun ColumnScope.ChallengeDetailLabel(tags: List<String>) {
+private fun ChallengeDetailLabel(tags: List<String>) {
     Text(
         text = tags.joinToString(separator = " • "),
         style = MaterialTheme.typography.labelLarge,
@@ -162,7 +181,7 @@ private fun ColumnScope.ChallengeDetailLabel(tags: List<String>) {
 }
 
 @Composable
-private fun ColumnScope.ChallengeDetailDescription(description: String) {
+private fun ChallengeDetailDescription(description: String) {
     Text(
         text = description,
         style = MaterialTheme.typography.bodyLarge,
@@ -175,10 +194,17 @@ private fun ChallengeDetailContentPreview() {
     val detail = ChallengeDetail(
         id = "verear",
         name = "Josefa Ramos",
-        description = "sit",
+        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                "Nulla nec lorem id diam tristique pulvinar porta a ante. " +
+                "Ut et iaculis lectus. Quisque gravida, nisi quis commodo vestibulum, " +
+                "nibh risus lobortis elit, id eleifend neque orci eget nunc. Donec quis lacus odio. Ut volutpat leo sit amet nisi suscipit placerat. Praesent faucibus malesuada massa at condimentum. Morbi in lorem ut sapien accumsan scelerisque. Pellentesque nec convallis sapien. Aenean non congue lectus. Aliquam interdum euismod ante id euismod. Etiam auctor venenatis euismod. Integer risus quam, ullamcorper ultrices tortor id, maximus porttitor nisl.",
         rank = Rank.DAN_2,
         tags = listOf("Arrays", "Stacks", "Queues", "Trees"),
-        languages = listOf(),
+        languages = listOf(
+            KOTLIN, C, CLOJURE, JAVA, JAVASCRIPT,
+            KOTLIN, C, CLOJURE, JAVA, JAVASCRIPT,
+            KOTLIN, C, CLOJURE, JAVA, JAVASCRIPT,
+        ),
         url = null,
         stars = 7106,
         voteScore = 3559

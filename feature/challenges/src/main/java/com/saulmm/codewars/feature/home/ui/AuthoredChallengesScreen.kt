@@ -18,6 +18,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +48,7 @@ import com.google.accompanist.placeholder.shimmer
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
+import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.ProgrammingLanguage
 import com.saulmm.codewars.entity.Rank
@@ -350,31 +353,10 @@ fun ProgramingLanguages(
         modifier = modifier,
     ) {
         items(progammingLanguages) {
-            ProgrammingLanguageTag(
-                programmingLanguage = it,
-            )
+            ProgrammingLanguageTag(programmingLanguage = it)
         }
     }
 }
-
-
-@Composable
-fun ProgrammingLanguageTag(
-    modifier: Modifier = Modifier,
-    programmingLanguage: ProgrammingLanguage,
-) {
-    Box(modifier = modifier
-        .clip(RoundedCornerShape(8.dp))
-        .background(MaterialTheme.colorScheme.secondaryContainer)
-        .padding(all = 8.dp)
-    ) {
-        Text(
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            text = programmingLanguage.displayName
-        )
-    }
-}
-
 
 // TODO extract into a common android module
 @Composable
