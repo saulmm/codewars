@@ -60,12 +60,6 @@ fun CodewarsTheme(
 
     val backgroundTheme = if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = CodewarsTypography,
-        content = content
-    )
-
     CompositionLocalProvider(
         LocalBackgroundTheme provides backgroundTheme,
     ) {
