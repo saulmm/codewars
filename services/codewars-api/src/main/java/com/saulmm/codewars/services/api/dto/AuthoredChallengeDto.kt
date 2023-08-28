@@ -1,7 +1,5 @@
 package com.saulmm.codewars.services.api.dto
 
-import com.saulmm.codewars.entity.Rank
-
 data class AuthoredChallengeDto(
     val id: String,
     val name: String,
