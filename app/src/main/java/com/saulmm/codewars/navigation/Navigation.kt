@@ -7,9 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.saulmm.codewars.authoredChallengesViewModel
+import com.saulmm.codewars.challengesDetailViewModel
 import com.saulmm.codewars.feature.home.ui.AuthoredChallengesScreen
 import com.saulmm.common.navigation_contract.home.HomeGraphDest
-import com.saulmm.codewars.feature.home.ui.KataDetailScreen
+import com.saulmm.codewars.feature.home.ui.ChallengeDetailScreen
 
 @Composable
 fun CodewarsNavHost(
@@ -41,13 +42,14 @@ fun CodewarsNavHost(
             route = HomeGraphDest.KataDetail.route,
             arguments = HomeGraphDest.KataDetail.navArgs
         ) {
-            val kataId = HomeGraphDest.KataDetail.kataIdFrom(it.arguments)
-            KataDetailScreen(kataId = kataId)
+            val challengeId = HomeGraphDest.KataDetail.kataIdFrom(it.arguments)
+            val viewModel = challengesDetailViewModel(challengeId = challengeId)
+            ChallengeDetailScreen(
+                challengeId = challengeId,
+                viewModel = viewModel,
+                onBackPressed = { navController.popBackStack() }
+            )
         }
     }
 }
 
-private val START_DESTINATION_ROUTE =
-    HomeGraphDest.AuthoredChallenges.buildRoute(
-        username = "bkaes"
-    )

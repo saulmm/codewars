@@ -6,6 +6,6 @@ sealed class ChallengeDetailViewState {
     object Idle: ChallengeDetailViewState()
     object Loading: ChallengeDetailViewState()
     object Failure: ChallengeDetailViewState()
-    data class Loaded(val katas: ChallengeDetail): ChallengeDetailViewState()
+    data class Loaded(val challenge: ChallengeDetail): ChallengeDetailViewState()
 
 }
