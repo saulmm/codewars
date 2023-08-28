@@ -132,8 +132,12 @@ private fun initEventProcessor(
 }
 
 @Composable
-fun ChallengesFailure(userName: String, onTryAgainClick: () -> Unit) {
-    var fadeIn by remember { mutableStateOf(false) }
+fun ChallengesFailure(
+    userName: String,
+    shouldFadeIn: Boolean = true,
+    onTryAgainClick: () -> Unit
+) {
+    var fadeIn by remember { mutableStateOf(!shouldFadeIn) }
 
     LaunchedEffect(key1 = fadeIn) {
         fadeIn = true
@@ -215,20 +219,26 @@ private fun ChallengesList(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
+@Preview
 @Composable
-fun ChallengesFailurePreview() {
-    ChallengesFailure(userName = "Yep", onTryAgainClick = {})
+private fun ChallengesFailurePreview() {
+    CodewarsTheme {
+        CodewarsBackground {
+            ChallengesFailure(
+                userName = "Otis Hahn",
+                shouldFadeIn = false,
+                onTryAgainClick = {}
+
+            )
+        }
+    }
 }
 
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun ChallengeListPreviewDark() {
+private fun ChallengeListPreviewDark() {
     CodewarsTheme {
         CodewarsBackground {
             ChallengesList(
@@ -260,10 +270,9 @@ fun ChallengeListPreviewDark() {
 
 @Preview(
     showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun ChallengeListPreviewLight() {
+private fun ChallengeListPreviewLight() {
     CodewarsTheme {
         CodewarsBackground {
             ChallengesList(
