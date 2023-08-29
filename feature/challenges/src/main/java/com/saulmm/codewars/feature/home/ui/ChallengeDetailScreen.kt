@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -24,13 +25,25 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.halilibo.richtext.markdown.Markdown
+import com.halilibo.richtext.ui.RichText
+import com.halilibo.richtext.ui.RichTextStyle
+import com.halilibo.richtext.ui.RichTextThemeIntegration
+import com.halilibo.richtext.ui.material3.Material3RichText
+import com.halilibo.richtext.ui.material3.SetupMaterial3RichText
+import com.halilibo.richtext.ui.resolveDefaults
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
@@ -155,6 +168,7 @@ private fun ChallengeDetailContent(
     }
 }
 
+@ExperimentalLayoutApi
 @Composable
 private fun ChallengeDetailHeader(challenge: ChallengeDetail) {
     ChallengeDetailTitle(name = challenge.name)
@@ -182,10 +196,22 @@ private fun ChallengeDetailLabel(tags: List<String>) {
 
 @Composable
 private fun ChallengeDetailDescription(description: String) {
-    Text(
-        text = description,
-        style = MaterialTheme.typography.bodyLarge,
-    )
+    var richTextStyle by remember { mutableStateOf(RichTextStyle().resolveDefaults()) }
+    val codeBlockStyle = checkNotNull(richTextStyle.codeBlockStyle)
+    val markDownBackgroundColor = MaterialTheme.colorScheme.tertiaryContainer
+    val markDownForegroundColor = MaterialTheme.colorScheme.onTertiaryContainer
+
+    LaunchedEffect(description) {
+        richTextStyle = richTextStyle.copy(
+            codeBlockStyle = codeBlockStyle.copy(
+                textStyle = checkNotNull(codeBlockStyle.textStyle).copy(markDownForegroundColor),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(markDownBackgroundColor)
+            )
+        )
+    }
+    Material3RichText(style = richTextStyle) { Markdown(content = description) }
 }
 
 @Preview

@@ -64,6 +64,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.navigation.compose)
     implementation(libs.timber)
+    implementation(libs.richtext)
+    implementation(libs.richtext.m3)
     kapt(libs.hilt.compiler)
 
     debugImplementation("androidx.compose.ui:ui-tooling")
