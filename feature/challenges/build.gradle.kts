@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.saulmm.codewars.feature.home"
+    namespace = "com.saulmm.codewars.feature.challenges"
     compileSdk = 34
 
     defaultConfig {

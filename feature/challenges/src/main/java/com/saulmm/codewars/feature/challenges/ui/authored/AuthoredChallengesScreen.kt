@@ -52,7 +52,6 @@ fun AuthoredChallengesScreen(
     userName: String,
     navigateToKataDetail: (String) -> Unit,
     viewModel: AuthoredChallengesViewModel,
-    modifier: Modifier = Modifier,
 ) {
     initEventProcessor(navigateToKataDetail, viewModel)
 

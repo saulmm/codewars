@@ -1,13 +1,11 @@
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
-package com.saulmm.codewars.feature.challenges
+package com.saulmm.codewars.feature.challenges.ui.authored
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import com.saulmm.codewars.feature.challenges.MainDispatcherRule
 import com.saulmm.codewars.feature.challenges.model.ChallengesRepository
-import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengeEvent
-import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesViewEvent
-import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesViewModel
 import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesViewState.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -107,7 +105,7 @@ class AuthoredChallengesViewModelTest {
     private fun viewModel(): AuthoredChallengesViewModel {
         return AuthoredChallengesViewModel(
             userName = "",
-            challengesRepository = challengesRepository
+            repository = challengesRepository
         )
     }
 }

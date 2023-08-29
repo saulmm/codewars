@@ -35,10 +35,10 @@ fun CodewarsNavHost(
 
             AuthoredChallengesScreen(
                 userName = userName,
-                viewModel = viewModel,
                 navigateToKataDetail = {
                     navController.navigate(HomeGraphDest.KataDetail.buildRoute(it))
-                }
+                },
+                viewModel = viewModel
             )
         }
         composable(
