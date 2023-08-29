@@ -24,41 +24,26 @@ class ChallengeDetailViewModel @AssistedInject constructor(
     private val _events = Channel<ChallengeDetailEvent>(Channel.BUFFERED)
 
     val events = _events.receiveAsFlow()
-
     val viewState = _viewState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            loadCharacterDetail()
-        }
+        viewModelScope.launch { loadCharacterDetail() }
     }
 
     private suspend fun loadCharacterDetail() {
         _viewState.value = ChallengeDetailViewState.Loading
 
-        runCatching {
-            repository.challengeDetail(challengeId)
-        }.onFailure {
-            _viewState.value = ChallengeDetailViewState.Failure
-        }.onSuccess {
-            _viewState.value = ChallengeDetailViewState.Loaded(it)
-        }
+        runCatching { repository.challengeDetail(challengeId) }
+            .onFailure { _viewState.value = ChallengeDetailViewState.Failure }
+            .onSuccess { _viewState.value = ChallengeDetailViewState.Loaded(it) }
     }
 
     fun onViewEvent(event: ChallengeDetailViewEvent) {
         when (event) {
-            ChallengeDetailViewEvent.OnScoreClick -> {
-                _events.trySend(ChallengeDetailEvent.ShowScoreInfo)
-            }
-            ChallengeDetailViewEvent.OnStarsClick -> {
-                _events.trySend(ChallengeDetailEvent.ShowStarsInfo)
-            }
-            is ChallengeDetailViewEvent.OnUrlChipClick -> {
-                _events.trySend(ChallengeDetailEvent.NavigateToChallengeUrl(event.uri))
-            }
-            ChallengeDetailViewEvent.OnBackPressed -> {
-                _events.trySend(ChallengeDetailEvent.NavigateBack)
-            }
+            ChallengeDetailViewEvent.OnScoreClick -> { _events.trySend(ChallengeDetailEvent.ShowScoreInfo) }
+            ChallengeDetailViewEvent.OnStarsClick -> { _events.trySend(ChallengeDetailEvent.ShowStarsInfo) }
+            is ChallengeDetailViewEvent.OnUrlChipClick -> { _events.trySend(ChallengeDetailEvent.NavigateToChallengeUrl(event.uri)) }
+            ChallengeDetailViewEvent.OnBackPressed -> { _events.trySend(ChallengeDetailEvent.NavigateBack) }
         }
     }
 
@@ -75,7 +60,6 @@ class ChallengeDetailViewModel @AssistedInject constructor(
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.create(challengeId) as T
             }
-
         }
     }
 }
