@@ -7,5 +7,4 @@ sealed class ChallengeDetailViewState {
     object Loading: ChallengeDetailViewState()
     object Failure: ChallengeDetailViewState()
     data class Loaded(val challenge: ChallengeDetail): ChallengeDetailViewState()
-
 }

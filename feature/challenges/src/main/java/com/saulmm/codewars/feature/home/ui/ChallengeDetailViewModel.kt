@@ -7,8 +7,10 @@ import com.saulmm.codewars.feature.home.model.ChallengesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class ChallengeDetailViewModel @AssistedInject constructor(
@@ -18,6 +20,10 @@ class ChallengeDetailViewModel @AssistedInject constructor(
 
     private val _viewState: MutableStateFlow<ChallengeDetailViewState> =
         MutableStateFlow(ChallengeDetailViewState.Idle)
+
+    private val _events = Channel<ChallengeDetailEvent>(Channel.BUFFERED)
+
+    private val events = _events.receiveAsFlow()
 
     val viewState = _viewState.asStateFlow()
 
@@ -36,6 +42,23 @@ class ChallengeDetailViewModel @AssistedInject constructor(
             _viewState.value = ChallengeDetailViewState.Failure
         }.onSuccess {
             _viewState.value = ChallengeDetailViewState.Loaded(it)
+        }
+    }
+
+    fun onViewEvent(event: ChallengeDetailViewEvent) {
+        when (event) {
+            ChallengeDetailViewEvent.OnScoreChipClick -> {
+                _events.trySend(ChallengeDetailEvent.ShowScoreInfo)
+            }
+            ChallengeDetailViewEvent.OnStarsClick -> {
+                _events.trySend(ChallengeDetailEvent.ShowStarsInfo)
+            }
+            is ChallengeDetailViewEvent.OnUrlChipClick -> {
+                _events.trySend(ChallengeDetailEvent.NavigateToChallengeUrl(event.uri))
+            }
+            ChallengeDetailViewEvent.OnBackPressed -> {
+                _events.trySend(ChallengeDetailEvent.NavigateBack)
+            }
         }
     }
 
