@@ -45,6 +45,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
+import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
@@ -354,20 +355,6 @@ fun ProgramingLanguages(
     ) {
         items(progammingLanguages) {
             ProgrammingLanguageTag(programmingLanguage = it)
-        }
-    }
-}
-
-// TODO extract into a common android module
-@Composable
-inline fun <reified T> Flow<T>.observeWithLifecycle(
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    noinline action: suspend (T) -> Unit
-) {
-    LaunchedEffect(key1 = Unit) {
-        lifecycleOwner.lifecycleScope.launch {
-            flowWithLifecycle(lifecycleOwner.lifecycle, minActiveState).collect(action)
         }
     }
 }

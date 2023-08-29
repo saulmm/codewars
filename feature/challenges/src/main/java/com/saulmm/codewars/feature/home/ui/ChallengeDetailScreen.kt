@@ -49,6 +49,7 @@ import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichTextStyle
 import com.halilibo.richtext.ui.material3.Material3RichText
 import com.halilibo.richtext.ui.resolveDefaults
+import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
@@ -62,7 +63,7 @@ import java.net.URI
 @Composable
 fun ChallengeDetailScreen(
     viewModel: ChallengeDetailViewModel,
-    onBackPressed: () -> Unit,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     CodewarsTheme {
@@ -70,13 +71,17 @@ fun ChallengeDetailScreen(
             val viewState: ChallengeDetailViewState by viewModel.viewState.collectAsStateWithLifecycle()
             val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
+            initEventProcessor(navigateBack, viewModel)
+
             Scaffold(
                 modifier = Modifier
                     .nestedScroll(scrollBehavior.nestedScrollConnection),
                 topBar = {
                     ChallengeDetailTopBar(
                         scrollBehavior = scrollBehavior,
-                        onBackPressed = onBackPressed,
+                        onBackPressed = {
+                            viewModel.onViewEvent(ChallengeDetailViewEvent.OnBackPressed)
+                        }
                     )
                 }
             ) { padding ->
@@ -311,3 +316,22 @@ private fun ChallengeDetailContentPreview() {
         }
     }
 }
+
+@Composable
+private fun initEventProcessor(
+    navigateBack: () -> Unit,
+    viewModel: ChallengeDetailViewModel,
+) {
+    viewModel.events.observeWithLifecycle { event ->
+        when (event) {
+            ChallengeDetailEvent.NavigateBack -> {
+                navigateBack()
+            }
+            is ChallengeDetailEvent.NavigateToChallengeUrl -> TODO()
+            ChallengeDetailEvent.ShowScoreInfo -> TODO()
+            ChallengeDetailEvent.ShowStarsInfo -> TODO()
+        }
+    }
+
+}
+

@@ -23,7 +23,7 @@ class ChallengeDetailViewModel @AssistedInject constructor(
 
     private val _events = Channel<ChallengeDetailEvent>(Channel.BUFFERED)
 
-    private val events = _events.receiveAsFlow()
+    val events = _events.receiveAsFlow()
 
     val viewState = _viewState.asStateFlow()
 
