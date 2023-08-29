@@ -1,4 +1,4 @@
-package com.saulmm.codewars.feature.home.model
+package com.saulmm.codewars.feature.challenges.model
 
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.ChallengeDetail

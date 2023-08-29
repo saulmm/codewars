@@ -1,9 +1,9 @@
-package com.saulmm.codewars.feature.home.ui
+package com.saulmm.codewars.feature.challenges.ui.authored
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.saulmm.codewars.feature.home.model.ChallengesRepository
+import com.saulmm.codewars.feature.challenges.model.ChallengesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

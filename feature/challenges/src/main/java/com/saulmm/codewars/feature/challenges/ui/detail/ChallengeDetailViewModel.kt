@@ -1,9 +1,9 @@
-package com.saulmm.codewars.feature.home.ui
+package com.saulmm.codewars.feature.challenges.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.saulmm.codewars.feature.home.model.ChallengesRepository
+import com.saulmm.codewars.feature.challenges.model.ChallengesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -42,7 +42,11 @@ class ChallengeDetailViewModel @AssistedInject constructor(
         when (event) {
             ChallengeDetailViewEvent.OnScoreClick -> { _events.trySend(ChallengeDetailEvent.ShowScoreInfo) }
             ChallengeDetailViewEvent.OnStarsClick -> { _events.trySend(ChallengeDetailEvent.ShowStarsInfo) }
-            is ChallengeDetailViewEvent.OnUrlChipClick -> { _events.trySend(ChallengeDetailEvent.NavigateToChallengeUrl(event.uri)) }
+            is ChallengeDetailViewEvent.OnUrlChipClick -> { _events.trySend(
+                ChallengeDetailEvent.NavigateToChallengeUrl(
+                    event.uri
+                )
+            ) }
             ChallengeDetailViewEvent.OnBackPressed -> { _events.trySend(ChallengeDetailEvent.NavigateBack) }
         }
     }

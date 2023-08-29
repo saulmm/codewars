@@ -4,8 +4,8 @@ import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.saulmm.codewars.feature.home.ui.AuthoredChallengesViewModel
-import com.saulmm.codewars.feature.home.ui.ChallengeDetailViewModel
+import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesViewModel
+import com.saulmm.codewars.feature.challenges.ui.detail.ChallengeDetailViewModel
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors

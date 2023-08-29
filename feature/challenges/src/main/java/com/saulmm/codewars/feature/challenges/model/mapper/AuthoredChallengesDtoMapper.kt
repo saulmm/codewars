@@ -1,4 +1,4 @@
-package com.saulmm.codewars.feature.home.model.mapper
+package com.saulmm.codewars.feature.challenges.model.mapper
 
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.rankValueOfOrUnknown

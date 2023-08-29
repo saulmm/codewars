@@ -1,4 +1,4 @@
-package com.saulmm.codewars.feature.home.ui
+package com.saulmm.codewars.feature.challenges.ui.authored
 
 sealed class AuthoredChallengeEvent {
     data class NavigateToKataDetail(val kataId: String): AuthoredChallengeEvent()
