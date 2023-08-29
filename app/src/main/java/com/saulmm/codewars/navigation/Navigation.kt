@@ -1,15 +1,19 @@
 package com.saulmm.codewars.navigation
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.saulmm.codewars.authoredChallengesViewModel
+import com.saulmm.codewars.challengesDetailViewModel
 import com.saulmm.codewars.feature.home.ui.AuthoredChallengesScreen
 import com.saulmm.common.navigation_contract.home.HomeGraphDest
-import com.saulmm.feature.kata.detail.KataDetailScreen
+import com.saulmm.codewars.feature.home.ui.ChallengeDetailScreen
 
 @Composable
 fun CodewarsNavHost(
@@ -41,13 +45,17 @@ fun CodewarsNavHost(
             route = HomeGraphDest.KataDetail.route,
             arguments = HomeGraphDest.KataDetail.navArgs
         ) {
-            val kataId = HomeGraphDest.KataDetail.kataIdFrom(it.arguments)
-            KataDetailScreen(kataId = kataId)
+            val context = LocalContext.current
+            val challengeId = HomeGraphDest.KataDetail.kataIdFrom(it.arguments)
+            val viewModel = challengesDetailViewModel(challengeId = challengeId)
+            ChallengeDetailScreen(
+                viewModel = viewModel,
+                navigateBack = { navController.popBackStack() },
+                navigateToUrl = { url ->
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url.toString())))
+                }
+            )
         }
     }
 }
 
-private val START_DESTINATION_ROUTE =
-    HomeGraphDest.AuthoredChallenges.buildRoute(
-        username = "bkaes"
-    )

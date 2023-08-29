@@ -1,6 +1,7 @@
 package com.saulmm.codewars.services.api
 
 import com.saulmm.codewars.services.api.dto.AuthoredChallengeDto
+import com.saulmm.codewars.services.api.dto.ChallengeDetailDto
 import com.saulmm.codewars.services.api.dto.CodeChallengeDto
 import com.saulmm.codewars.services.api.dto.CodewarsResponseDto
 import retrofit2.http.GET
@@ -17,5 +18,5 @@ interface CodewarsApi {
     @GET("/api/v1/code-challenges/{challengeId}")
     suspend fun challenge(
         @Path("challengeId") challengeId: String,
-    ): CodewarsResponseDto<CodeChallengeDto>
+    ): ChallengeDetailDto
 }

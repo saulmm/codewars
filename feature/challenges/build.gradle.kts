@@ -1,26 +1,20 @@
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.application")
-    id("kotlin-kapt")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-
 }
 
 android {
-    namespace = "com.saulmm.codewars"
+    namespace = "com.saulmm.codewars.feature.home"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.saulmm.codewars"
         minSdk = 24
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -41,25 +35,19 @@ android {
     }
     buildFeatures {
         compose = true
-        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.7"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 
 dependencies {
     implementation(project(":entity"))
     implementation(project(":common"))
+    implementation(project(":common:android"))
     implementation(project(":common:network"))
-    implementation(project(":common:navigation-contract"))
+    implementation(project(":common:codewars-design-system"))
     implementation(project(":services:codewars-api"))
-    implementation(project(":feature:challenges"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
@@ -71,11 +59,14 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.accompanist.placeholder)
     implementation(libs.viewmodel.ktx)
     implementation(libs.viewmodel.compose)
     implementation(libs.material)
     implementation(libs.navigation.compose)
     implementation(libs.timber)
+    implementation(libs.richtext)
+    implementation(libs.richtext.m3)
     kapt(libs.hilt.compiler)
 
     debugImplementation("androidx.compose.ui:ui-tooling")
@@ -84,4 +75,5 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockito)
     testImplementation(libs.turbine)
+    testImplementation(libs.coroutines.test)
 }

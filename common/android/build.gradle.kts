@@ -5,14 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.saulmm.codewars.common.design.system"
+    namespace = "com.saulmm.codewars.common.android"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 24
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -40,11 +37,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":entity"))
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
+
     implementation(libs.core.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
 }
