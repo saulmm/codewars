@@ -1,4 +1,4 @@
-package com.saulmm.codewars.feature.home.ui
+package com.saulmm.codewars.feature.challenges.ui.authored
 
 import com.saulmm.codewars.entity.Challenge
 

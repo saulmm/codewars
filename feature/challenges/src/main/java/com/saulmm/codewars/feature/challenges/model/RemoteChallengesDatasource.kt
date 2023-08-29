@@ -1,9 +1,9 @@
-package com.saulmm.codewars.feature.home.model
+package com.saulmm.codewars.feature.challenges.model
 
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.ChallengeDetail
-import com.saulmm.codewars.feature.home.model.mapper.toChallenge
-import com.saulmm.codewars.feature.home.model.mapper.toChallengeDetail
+import com.saulmm.codewars.feature.challenges.model.mapper.toChallenge
+import com.saulmm.codewars.feature.challenges.model.mapper.toChallengeDetail
 import com.saulmm.codewars.services.api.CodewarsApi
 import com.saulmm.codewars.services.api.dto.AuthoredChallengeDto
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.saulmm.codewars.feature.home
+package com.saulmm.codewars.feature.challenges
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

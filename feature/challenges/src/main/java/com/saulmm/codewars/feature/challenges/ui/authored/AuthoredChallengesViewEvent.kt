@@ -1,4 +1,4 @@
-package com.saulmm.codewars.feature.home.ui
+package com.saulmm.codewars.feature.challenges.ui.authored
 
 sealed class AuthoredChallengesViewEvent {
     data class OnChallengeClick(val kataId: String): AuthoredChallengesViewEvent()

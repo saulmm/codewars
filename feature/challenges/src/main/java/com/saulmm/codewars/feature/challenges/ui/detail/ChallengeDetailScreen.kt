@@ -2,7 +2,7 @@
     ExperimentalLayoutApi::class
 )
 
-package com.saulmm.codewars.feature.home.ui
+package com.saulmm.codewars.feature.challenges.ui.detail
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -58,8 +58,7 @@ import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
 import com.saulmm.codewars.entity.ChallengeDetail
 import com.saulmm.codewars.entity.ProgrammingLanguage
 import com.saulmm.codewars.entity.Rank
-import com.saulmm.codewars.feature.home.R
-import com.saulmm.codewars.feature.home.model.ChallengesRepository
+import com.saulmm.codewars.feature.challenges.R
 import java.net.URI
 
 @OptIn(ExperimentalMaterial3Api::class)

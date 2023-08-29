@@ -11,9 +11,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.saulmm.codewars.authoredChallengesViewModel
 import com.saulmm.codewars.challengesDetailViewModel
-import com.saulmm.codewars.feature.home.ui.AuthoredChallengesScreen
+import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesScreen
 import com.saulmm.common.navigation_contract.home.HomeGraphDest
-import com.saulmm.codewars.feature.home.ui.ChallengeDetailScreen
+import com.saulmm.codewars.feature.challenges.ui.detail.ChallengeDetailScreen
 
 @Composable
 fun CodewarsNavHost(
@@ -35,10 +35,10 @@ fun CodewarsNavHost(
 
             AuthoredChallengesScreen(
                 userName = userName,
-                viewModel = viewModel,
                 navigateToKataDetail = {
                     navController.navigate(HomeGraphDest.KataDetail.buildRoute(it))
-                }
+                },
+                viewModel = viewModel
             )
         }
         composable(
