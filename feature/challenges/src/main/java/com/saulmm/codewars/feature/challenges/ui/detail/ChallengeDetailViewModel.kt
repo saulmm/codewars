@@ -8,6 +8,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -33,7 +34,10 @@ class ChallengeDetailViewModel @AssistedInject constructor(
     private suspend fun loadCharacterDetail() {
         _viewState.value = ChallengeDetailViewState.Loading
 
-        runCatching { repository.challengeDetail(challengeId) }
+        runCatching {
+            delay(5_000)
+            repository.challengeDetail(challengeId)
+        }
             .onFailure { _viewState.value = ChallengeDetailViewState.Failure }
             .onSuccess { _viewState.value = ChallengeDetailViewState.Loaded(it) }
     }
