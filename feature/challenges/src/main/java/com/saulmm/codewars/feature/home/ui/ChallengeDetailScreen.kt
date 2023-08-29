@@ -4,6 +4,7 @@
 
 package com.saulmm.codewars.feature.home.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -57,6 +59,7 @@ import com.saulmm.codewars.entity.ChallengeDetail
 import com.saulmm.codewars.entity.ProgrammingLanguage
 import com.saulmm.codewars.entity.Rank
 import com.saulmm.codewars.feature.home.R
+import com.saulmm.codewars.feature.home.model.ChallengesRepository
 import java.net.URI
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,14 +67,18 @@ import java.net.URI
 fun ChallengeDetailScreen(
     viewModel: ChallengeDetailViewModel,
     navigateBack: () -> Unit,
-    modifier: Modifier = Modifier
+    navigateToUrl: (URI) -> Unit,
 ) {
     CodewarsTheme {
         CodewarsBackground {
             val viewState: ChallengeDetailViewState by viewModel.viewState.collectAsStateWithLifecycle()
             val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-            initEventProcessor(navigateBack, viewModel)
+            initEventProcessor(
+                navigateBack = navigateBack,
+                navigateToUrl = navigateToUrl,
+                viewModel = viewModel
+            )
 
             Scaffold(
                 modifier = Modifier
@@ -94,9 +101,12 @@ fun ChallengeDetailScreen(
                     is ChallengeDetailViewState.Loaded -> {
                         ChallengeDetailContent(
                             challenge = (viewState as ChallengeDetailViewState.Loaded).challenge,
+                            onStarsClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnStarsClick) },
+                            onScoreClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnScoreClick) },
+                            onCodewarsClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnUrlChipClick(it)) },
                             modifier = Modifier
                                 .padding(padding)
-                                .verticalScroll(rememberScrollState())
+                                .verticalScroll(rememberScrollState()),
                         )
                     }
 
@@ -167,14 +177,22 @@ private fun CharacterDetailLoading() {
 @Composable
 private fun ChallengeDetailContent(
     challenge: ChallengeDetail,
-    modifier: Modifier = Modifier
+    onStarsClick: () -> Unit,
+    onScoreClick: () -> Unit,
+    onCodewarsClick: (URI) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            ChallengeDetailHeader(challenge = challenge)
+            ChallengeDetailHeader(
+                challenge = challenge,
+                onStarsClick = onStarsClick,
+                onScoreClick = onScoreClick,
+                onCodewarsClick = onCodewarsClick,
+            )
             ProgrammingLanguagesLayout(list = challenge.languages)
             ChallengeDetailDescription(description = challenge.description)
 
@@ -184,10 +202,20 @@ private fun ChallengeDetailContent(
 
 @ExperimentalLayoutApi
 @Composable
-private fun ChallengeDetailHeader(challenge: ChallengeDetail) {
+private fun ChallengeDetailHeader(
+    challenge: ChallengeDetail,
+    onStarsClick: () -> Unit,
+    onScoreClick: () -> Unit,
+    onCodewarsClick: (URI) -> Unit,
+) {
     ChallengeDetailTitle(name = challenge.name)
     ChallengeDetailLabel(tags = challenge.tags)
-    ChallengeInfoRow(challenge = challenge)
+    ChallengeInfoRow(
+        challenge = challenge,
+        onStarsClick = onStarsClick,
+        onScoreClick = onScoreClick,
+        onCodewarsClick = onCodewarsClick
+    )
 }
 
 @Composable
@@ -208,18 +236,36 @@ private fun ChallengeDetailLabel(tags: List<String>) {
 }
 
 @Composable
-private fun ChallengeInfoRow(challenge: ChallengeDetail) {
+private fun ChallengeInfoRow(
+    challenge: ChallengeDetail,
+    onStarsClick: () -> Unit,
+    onScoreClick: () -> Unit,
+    onCodewarsClick: (URI) -> Unit,
+) {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        ChallengeStars(stars = challenge.stars)
-        ChallengeScore(voteScore = challenge.voteScore)
-        challenge.url?.let { UrlShortcut(it) }
+        ChallengeStars(
+            stars = challenge.stars,
+            onClick = onStarsClick
+        )
+
+        ChallengeScore(
+            voteScore = challenge.voteScore,
+            onClick = onScoreClick
+        )
+
+        challenge.url?.let {
+            UrlShortcut(
+                url = it,
+                onCodewarsClick = onCodewarsClick
+            )
+        }
     }
 }
 
 @Composable
-private fun ChallengeStars(stars: Int) {
+private fun ChallengeStars(stars: Int, onClick: () -> Unit) {
     AssistChip(
-        onClick = { /*TODO*/ },
+        onClick = { onClick.invoke() },
         label = { Text(text = stars.toString()) },
         leadingIcon = {
             Icon(
@@ -231,9 +277,9 @@ private fun ChallengeStars(stars: Int) {
 }
 
 @Composable
-private fun ChallengeScore(voteScore: Int) {
+private fun ChallengeScore(voteScore: Int, onClick: () -> Unit) {
     AssistChip(
-        onClick = { /*TODO*/ },
+        onClick = { onClick.invoke() },
         label = { Text(text = "${voteScore}/100") },
         leadingIcon = {
             Icon(
@@ -245,9 +291,12 @@ private fun ChallengeScore(voteScore: Int) {
 }
 
 @Composable
-private fun UrlShortcut(url: URI) {
+private fun UrlShortcut(
+    url: URI,
+    onCodewarsClick: (URI) -> Unit,
+) {
     AssistChip(
-        onClick = { /*TODO*/ },
+        onClick = { onCodewarsClick.invoke(url) },
         label = {
             Text(
                 text = "Codewars",
@@ -312,7 +361,13 @@ private fun ChallengeDetailContentPreview() {
 
     CodewarsTheme {
         CodewarsBackground {
-            ChallengeDetailContent(detail)
+            ChallengeDetailContent(
+                challenge = detail,
+                onStarsClick = {},
+                onScoreClick = {},
+                onCodewarsClick = {},
+                modifier = Modifier,
+            )
         }
     }
 }
@@ -320,18 +375,26 @@ private fun ChallengeDetailContentPreview() {
 @Composable
 private fun initEventProcessor(
     navigateBack: () -> Unit,
+    navigateToUrl: (URI) -> Unit,
     viewModel: ChallengeDetailViewModel,
 ) {
+    val context = LocalContext.current
+
     viewModel.events.observeWithLifecycle { event ->
         when (event) {
             ChallengeDetailEvent.NavigateBack -> {
-                navigateBack()
+                navigateBack.invoke()
             }
-            is ChallengeDetailEvent.NavigateToChallengeUrl -> TODO()
-            ChallengeDetailEvent.ShowScoreInfo -> TODO()
-            ChallengeDetailEvent.ShowStarsInfo -> TODO()
+            is ChallengeDetailEvent.NavigateToChallengeUrl -> {
+                navigateToUrl.invoke(event.uri)
+            }
+            ChallengeDetailEvent.ShowScoreInfo -> {
+                Toast.makeText(context, context.getString(R.string.message_score), Toast.LENGTH_SHORT).show()
+            }
+            ChallengeDetailEvent.ShowStarsInfo -> {
+                Toast.makeText(context, context.getString(R.string.message_stars), Toast.LENGTH_SHORT).show()
+            }
         }
     }
-
 }
 

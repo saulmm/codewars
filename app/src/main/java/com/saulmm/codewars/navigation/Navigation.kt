@@ -1,7 +1,10 @@
 package com.saulmm.codewars.navigation
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -42,11 +45,15 @@ fun CodewarsNavHost(
             route = HomeGraphDest.KataDetail.route,
             arguments = HomeGraphDest.KataDetail.navArgs
         ) {
+            val context = LocalContext.current
             val challengeId = HomeGraphDest.KataDetail.kataIdFrom(it.arguments)
             val viewModel = challengesDetailViewModel(challengeId = challengeId)
             ChallengeDetailScreen(
                 viewModel = viewModel,
-                onBackPressed = { navController.popBackStack() }
+                navigateBack = { navController.popBackStack() },
+                navigateToUrl = { url ->
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url.toString())))
+                }
             )
         }
     }

@@ -47,7 +47,7 @@ class ChallengeDetailViewModel @AssistedInject constructor(
 
     fun onViewEvent(event: ChallengeDetailViewEvent) {
         when (event) {
-            ChallengeDetailViewEvent.OnScoreChipClick -> {
+            ChallengeDetailViewEvent.OnScoreClick -> {
                 _events.trySend(ChallengeDetailEvent.ShowScoreInfo)
             }
             ChallengeDetailViewEvent.OnStarsClick -> {

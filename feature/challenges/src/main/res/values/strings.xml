@@ -7,4 +7,7 @@
     <string name="message_error_challenges_title">Couldn\'t load the challenges</string>
     <string name="message_error_challenges">"Seems there were an issue with your connection, please, try again"</string>
     <string name="action_try_again">Try again</string>
+    <string name="message_score">The score of this challenge on Codewars.</string>
+    <string name="message_stars">The number of stars obtained by this challenge on Codewars.</string>
+
 </resources>
