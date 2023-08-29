@@ -46,5 +46,6 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     implementation(libs.core.ktx)
+    implementation(libs.accompanist.placeholder)
     implementation(platform(libs.compose.bom))
 }
