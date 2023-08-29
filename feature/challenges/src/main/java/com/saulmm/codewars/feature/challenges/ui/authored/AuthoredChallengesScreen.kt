@@ -34,14 +34,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.placeholder
-import com.google.accompanist.placeholder.shimmer
 import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
 import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
+import com.saulmm.codewars.common.design.system.component.placeholder
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.ProgrammingLanguage
 import com.saulmm.codewars.entity.Rank
@@ -161,18 +159,7 @@ fun ChallengesLoading(userName: String) {
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
                         .height(196.dp)
-                        .placeholder(
-                            visible = true,
-                            color = MaterialTheme.colorScheme.primaryContainer.copy(
-                                alpha = 0.4f
-                            ),
-                            highlight = PlaceholderHighlight.shimmer(
-                                MaterialTheme.colorScheme.primary.copy(
-                                    alpha = 0.4f
-                                )
-
-                            )
-                        )
+                        .placeholder()
                 ) {}
                 Spacer(modifier = Modifier.height(24.dp))
             }

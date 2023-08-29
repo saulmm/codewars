@@ -7,4 +7,5 @@ sealed class ChallengeDetailViewEvent {
     object OnScoreClick: ChallengeDetailViewEvent()
     object OnStarsClick: ChallengeDetailViewEvent()
     object OnBackPressed: ChallengeDetailViewEvent()
+    object OnTryAgainClick: ChallengeDetailViewEvent()
 }

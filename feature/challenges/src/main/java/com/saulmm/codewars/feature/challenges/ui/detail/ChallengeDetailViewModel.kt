@@ -8,6 +8,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -27,15 +28,18 @@ class ChallengeDetailViewModel @AssistedInject constructor(
     val viewState = _viewState.asStateFlow()
 
     init {
-        viewModelScope.launch { loadCharacterDetail() }
+        loadCharacterDetail()
     }
 
-    private suspend fun loadCharacterDetail() {
-        _viewState.value = ChallengeDetailViewState.Loading
+    private fun loadCharacterDetail() {
+        viewModelScope.launch {
+            _viewState.value = ChallengeDetailViewState.Loading
 
-        runCatching { repository.challengeDetail(challengeId) }
-            .onFailure { _viewState.value = ChallengeDetailViewState.Failure }
-            .onSuccess { _viewState.value = ChallengeDetailViewState.Loaded(it) }
+            runCatching { repository.challengeDetail(challengeId) }
+                .onFailure { _viewState.value = ChallengeDetailViewState.Failure }
+                .onSuccess { _viewState.value = ChallengeDetailViewState.Loaded(it) }
+        }
+
     }
 
     fun onViewEvent(event: ChallengeDetailViewEvent) {
@@ -48,6 +52,7 @@ class ChallengeDetailViewModel @AssistedInject constructor(
                 )
             ) }
             ChallengeDetailViewEvent.OnBackPressed -> { _events.trySend(ChallengeDetailEvent.NavigateBack) }
+            ChallengeDetailViewEvent.OnTryAgainClick -> { loadCharacterDetail() }
         }
     }
 
