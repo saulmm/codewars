@@ -12,7 +12,7 @@ internal fun ChallengeDetailDto.toChallengeDetail(): ChallengeDetail {
         name = name,
         description = description,
         rank = rankValueOfOrUnknown(rank.name),
-        tags = listOf(),
+        tags = tags,
         languages = languages.map(String::toProgrammingLanguageOrUnknown),
         url = url.toURIOrNull(),
         stars = totalStars,

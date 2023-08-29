@@ -1,13 +1,17 @@
-@file:OptIn(ExperimentalLayoutApi::class)
+@file:OptIn(ExperimentalLayoutApi::class, ExperimentalLayoutApi::class,
+    ExperimentalLayoutApi::class
+)
 
 package com.saulmm.codewars.feature.home.ui
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -15,6 +19,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,23 +41,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.RichText
 import com.halilibo.richtext.ui.RichTextStyle
-import com.halilibo.richtext.ui.RichTextThemeIntegration
 import com.halilibo.richtext.ui.material3.Material3RichText
-import com.halilibo.richtext.ui.material3.SetupMaterial3RichText
 import com.halilibo.richtext.ui.resolveDefaults
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
 import com.saulmm.codewars.entity.ChallengeDetail
 import com.saulmm.codewars.entity.ProgrammingLanguage
-import com.saulmm.codewars.entity.ProgrammingLanguage.*
 import com.saulmm.codewars.entity.Rank
+import com.saulmm.codewars.feature.home.R
+import java.net.URI
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -164,6 +173,9 @@ private fun ChallengeDetailContent(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ChallengeDetailHeader(challenge = challenge)
+            ProgrammingLanguagesLayout(list = challenge.languages)
+            ChallengeDetailDescription(description = challenge.description)
+
         }
     }
 }
@@ -173,8 +185,7 @@ private fun ChallengeDetailContent(
 private fun ChallengeDetailHeader(challenge: ChallengeDetail) {
     ChallengeDetailTitle(name = challenge.name)
     ChallengeDetailLabel(tags = challenge.tags)
-    ChallengeDetailDescription(description = challenge.description)
-    ProgrammingLanguagesLayout(list = challenge.languages)
+    ChallengeInfoRow(challenge = challenge)
 }
 
 @Composable
@@ -193,6 +204,67 @@ private fun ChallengeDetailLabel(tags: List<String>) {
         style = MaterialTheme.typography.labelLarge,
     )
 }
+
+@Composable
+private fun ChallengeInfoRow(challenge: ChallengeDetail) {
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        ChallengeStars(stars = challenge.stars)
+        ChallengeScore(voteScore = challenge.voteScore)
+        challenge.url?.let { UrlShortcut(it) }
+    }
+}
+
+@Composable
+private fun ChallengeStars(stars: Int) {
+    AssistChip(
+        onClick = { /*TODO*/ },
+        label = { Text(text = stars.toString()) },
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_star),
+                contentDescription = "$stars stars",
+            )
+        }
+    )
+}
+
+@Composable
+private fun ChallengeScore(voteScore: Int) {
+    AssistChip(
+        onClick = { /*TODO*/ },
+        label = { Text(text = "${voteScore}/100") },
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_graph),
+                contentDescription = "$voteScore",
+            )
+        }
+    )
+}
+
+@Composable
+private fun UrlShortcut(url: URI) {
+    AssistChip(
+        onClick = { /*TODO*/ },
+        label = {
+            Text(
+                text = "Codewars",
+                style = TextStyle(
+                    textDecoration = TextDecoration.Underline,
+                    fontWeight = FontWeight.Bold
+                ),
+            )
+        },
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_exit),
+                contentDescription = "see on codewars",
+            )
+        }
+    )
+}
+
+
 
 @Composable
 private fun ChallengeDetailDescription(description: String) {
@@ -227,13 +299,12 @@ private fun ChallengeDetailContentPreview() {
         rank = Rank.DAN_2,
         tags = listOf("Arrays", "Stacks", "Queues", "Trees"),
         languages = listOf(
-            KOTLIN, C, CLOJURE, JAVA, JAVASCRIPT,
-            KOTLIN, C, CLOJURE, JAVA, JAVASCRIPT,
-            KOTLIN, C, CLOJURE, JAVA, JAVASCRIPT,
+            ProgrammingLanguage.KOTLIN, ProgrammingLanguage.C, ProgrammingLanguage.CLOJURE, ProgrammingLanguage.JAVA, ProgrammingLanguage.JAVASCRIPT,
+            ProgrammingLanguage.COBOL, ProgrammingLanguage.COMMONLISP, ProgrammingLanguage.DART, ProgrammingLanguage.SCALA,
         ),
-        url = null,
+        url = URI.create("http://www.codewars.com"),
         stars = 7106,
-        voteScore = 3559
+        voteScore = 90
 
     )
 
