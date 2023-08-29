@@ -1,5 +1,5 @@
 @file:OptIn(ExperimentalLayoutApi::class, ExperimentalLayoutApi::class,
-    ExperimentalLayoutApi::class
+    ExperimentalLayoutApi::class, ExperimentalLayoutApi::class, ExperimentalLayoutApi::class
 )
 
 package com.saulmm.codewars.feature.challenges.ui.detail
@@ -13,7 +13,10 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -25,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -35,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -54,12 +59,15 @@ import com.halilibo.richtext.ui.resolveDefaults
 import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
+import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
 import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
+import com.saulmm.codewars.common.design.system.component.placeholder
 import com.saulmm.codewars.entity.ChallengeDetail
 import com.saulmm.codewars.entity.ProgrammingLanguage
 import com.saulmm.codewars.entity.Rank
 import com.saulmm.codewars.feature.challenges.R
 import java.net.URI
+import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,7 +102,11 @@ fun ChallengeDetailScreen(
                 when (viewState) {
                     ChallengeDetailViewState.Idle -> {}
                     ChallengeDetailViewState.Failure -> {
-                        CharacterDetailFailure()
+                        CharacterDetailFailure(
+                            onTryAgainClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnTryAgainClick) },
+                            modifier = Modifier
+                                .padding(padding)
+                        )
                     }
 
                     is ChallengeDetailViewState.Loaded -> {
@@ -110,7 +122,10 @@ fun ChallengeDetailScreen(
                     }
 
                     ChallengeDetailViewState.Loading -> {
-                        CharacterDetailLoading()
+                        ChallengeDetailLoading(
+                            modifier = Modifier
+                                .padding(padding)
+                        )
                     }
                 }
 
@@ -156,21 +171,21 @@ private fun ChallengeDetailTopBar(
 }
 
 @Composable
-private fun CharacterDetailFailure() {
+private fun CharacterDetailFailure(
+    onTryAgainClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Red)
-    )
-}
-
-@Composable
-private fun CharacterDetailLoading() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Blue)
-    )
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        ErrorMessageWithAction(
+            titleStringRes = R.string.message_error_challenge_title,
+            messageStringRes = R.string.message_error_challenges,
+            actionStringRes = R.string.action_try_again,
+            onTryAgainClick = onTryAgainClick
+        )
+    }
 }
 
 @Composable
@@ -262,6 +277,69 @@ private fun ChallengeInfoRow(
 }
 
 @Composable
+private fun ChallengeDetailLoading(modifier: Modifier = Modifier) {
+    val roundedCorners = 8.dp
+    Column(
+        modifier = modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(roundedCorners))
+                .fillMaxWidth(.9f)
+                .height(72.dp)
+                .placeholder()
+        ) {}
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            repeat(3) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(roundedCorners))
+                        .size(width = 72.dp, height = 32.dp)
+                        .placeholder()
+                ) {}
+            }
+        }
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(roundedCorners))
+                .fillMaxWidth(.4f)
+                .height(16.dp)
+                .placeholder()
+        ) {}
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(roundedCorners))
+                .fillMaxWidth(.5f)
+                .height(64.dp)
+                .placeholder()
+        ) {}
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            val randomTextLines = remember {
+                Random.nextInt(8, 14)
+            }
+
+            repeat(randomTextLines) {
+                val randomWidthFraction = remember {
+                    (Random.nextDouble(0.8, 1.0)).toFloat()
+                }
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .fillMaxWidth(randomWidthFraction)
+                        .height(24.dp)
+                        .placeholder()
+                ) {}
+
+            }
+        }
+    }
+}
+
+@Composable
 private fun ChallengeStars(stars: Int, onClick: () -> Unit) {
     AssistChip(
         onClick = { onClick.invoke() },
@@ -335,6 +413,29 @@ private fun ChallengeDetailDescription(description: String) {
     }
     Material3RichText(style = richTextStyle) { Markdown(content = description) }
 }
+
+@Preview
+@Composable
+private fun ChallengeDetailLoadingPreview() {
+    CodewarsTheme {
+        CodewarsBackground {
+            ChallengeDetailLoading()
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun ChallengeDetailFailurePreview() {
+    CodewarsTheme {
+        CodewarsBackground {
+            CharacterDetailFailure(
+                onTryAgainClick = {}
+            )
+        }
+    }
+}
+
 
 @Preview
 @Composable

@@ -28,18 +28,18 @@ class ChallengeDetailViewModel @AssistedInject constructor(
     val viewState = _viewState.asStateFlow()
 
     init {
-        viewModelScope.launch { loadCharacterDetail() }
+        loadCharacterDetail()
     }
 
-    private suspend fun loadCharacterDetail() {
-        _viewState.value = ChallengeDetailViewState.Loading
+    private fun loadCharacterDetail() {
+        viewModelScope.launch {
+            _viewState.value = ChallengeDetailViewState.Loading
 
-        runCatching {
-            delay(5_000)
-            repository.challengeDetail(challengeId)
+            runCatching { repository.challengeDetail(challengeId) }
+                .onFailure { _viewState.value = ChallengeDetailViewState.Failure }
+                .onSuccess { _viewState.value = ChallengeDetailViewState.Loaded(it) }
         }
-            .onFailure { _viewState.value = ChallengeDetailViewState.Failure }
-            .onSuccess { _viewState.value = ChallengeDetailViewState.Loaded(it) }
+
     }
 
     fun onViewEvent(event: ChallengeDetailViewEvent) {
@@ -52,6 +52,7 @@ class ChallengeDetailViewModel @AssistedInject constructor(
                 )
             ) }
             ChallengeDetailViewEvent.OnBackPressed -> { _events.trySend(ChallengeDetailEvent.NavigateBack) }
+            ChallengeDetailViewEvent.OnTryAgainClick -> { loadCharacterDetail() }
         }
     }
 
