@@ -4,9 +4,12 @@ package com.saulmm.codewars.feature.challenges.ui.authored
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.feature.challenges.MainDispatcherRule
 import com.saulmm.codewars.feature.challenges.model.ChallengesRepository
+import com.saulmm.codewars.feature.challenges.model.params.ChallengePreviewParams
 import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesViewState.*
+import com.saulmm.codewars.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -27,7 +30,7 @@ class AuthoredChallengesViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     @Mock
-    lateinit var challengesRepository: ChallengesRepository
+    lateinit var challengesRepository: Repository<ChallengePreviewParams, List<Challenge>>
 
     init {
         MockitoAnnotations.openMocks(this)
@@ -35,7 +38,7 @@ class AuthoredChallengesViewModelTest {
 
     @Test
     fun `when the viewmodel inits and repository returns, last emitted item is Loaded`() = runTest {
-        `when`(challengesRepository.getFrom("")).thenReturn(emptyList())
+        `when`(challengesRepository.get(ChallengePreviewParams(""))).thenReturn(emptyList())
 
         viewModel().viewState.test {
             awaitItem() // Idle
@@ -46,7 +49,7 @@ class AuthoredChallengesViewModelTest {
 
     @Test
     fun `when the viewmodel inits, a Loaded event is the last emitted`() = runTest {
-        `when`(challengesRepository.getFrom("")).thenReturn(emptyList())
+        `when`(challengesRepository.get(ChallengePreviewParams(""))).thenReturn(emptyList())
 
         Dispatchers.setMain(UnconfinedTestDispatcher())
 
@@ -59,7 +62,7 @@ class AuthoredChallengesViewModelTest {
 
     @Test
     fun `when clicking on a challenge, a NavigateToDetail event should be emitted`() = runTest {
-        `when`(challengesRepository.getFrom("")).thenReturn(emptyList())
+        `when`(challengesRepository.get(ChallengePreviewParams(""))).thenReturn(emptyList())
 
         val viewModel = viewModel().also {
             it.onViewEvent(AuthoredChallengesViewEvent.OnChallengeClick(""))
@@ -73,7 +76,7 @@ class AuthoredChallengesViewModelTest {
 
     @Test
     fun `when loading challenges fail, most recent view state should be failure`() = runTest {
-        `when`(challengesRepository.getFrom("")).thenThrow(RuntimeException())
+        `when`(challengesRepository.get(ChallengePreviewParams(""))).thenThrow(RuntimeException())
 
         Dispatchers.setMain(UnconfinedTestDispatcher())
 
@@ -86,7 +89,7 @@ class AuthoredChallengesViewModelTest {
 
     @Test
     fun `when clicking on try again to restart the request, a second loading is emitted`() = runTest {
-        `when`(challengesRepository.getFrom("")).thenThrow(RuntimeException())
+        `when`(challengesRepository.get(ChallengePreviewParams(""))).thenThrow(RuntimeException())
 
         val viewModel = viewModel()
 

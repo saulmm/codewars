@@ -7,9 +7,11 @@ import com.saulmm.codewars.entity.ChallengeDetail
 import com.saulmm.codewars.entity.Rank
 import com.saulmm.codewars.feature.challenges.MainDispatcherRule
 import com.saulmm.codewars.feature.challenges.model.ChallengesRepository
+import com.saulmm.codewars.feature.challenges.model.params.ChallengeDetailParams
 import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengeEvent
 import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesViewEvent
 import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesViewState
+import com.saulmm.codewars.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
@@ -29,7 +31,7 @@ class ChallengeDetailViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     @Mock
-    lateinit var challengesRepository: ChallengesRepository
+    lateinit var challengesRepository: Repository<ChallengeDetailParams, ChallengeDetail>
 
     init {
         MockitoAnnotations.openMocks(this)
@@ -37,7 +39,7 @@ class ChallengeDetailViewModelTest {
 
     @Test
     fun `when the viewmodel inits and repository returns, last emitted item is Loaded`() = runTest {
-        `when`(challengesRepository.challengeDetail("")).thenReturn(CHALLENGE_DETAIL_FIXTURE)
+        `when`(challengesRepository.get(ChallengeDetailParams(""))).thenReturn(CHALLENGE_DETAIL_FIXTURE)
 
         viewModel().viewState.test {
             awaitItem() // Idle
@@ -48,7 +50,7 @@ class ChallengeDetailViewModelTest {
 
     @Test
     fun `when the viewmodel inits, a Loaded event is the last emitted`() = runTest {
-        `when`(challengesRepository.challengeDetail("")).thenReturn(CHALLENGE_DETAIL_FIXTURE)
+        `when`(challengesRepository.get(ChallengeDetailParams(""))).thenReturn(CHALLENGE_DETAIL_FIXTURE)
 
         Dispatchers.setMain(UnconfinedTestDispatcher())
 
@@ -61,7 +63,7 @@ class ChallengeDetailViewModelTest {
 
     @Test
     fun `when clicking on the stars, a ShowStarsInfo event should be emitted`() = runTest {
-        `when`(challengesRepository.challengeDetail("")).thenReturn(CHALLENGE_DETAIL_FIXTURE)
+        `when`(challengesRepository.get(ChallengeDetailParams(""))).thenReturn(CHALLENGE_DETAIL_FIXTURE)
 
         val viewModel = viewModel().also {
             it.onViewEvent(ChallengeDetailViewEvent.OnStarsClick)
@@ -75,7 +77,7 @@ class ChallengeDetailViewModelTest {
 
     @Test
     fun `when clicking on the score, a ShowScoreInfo event should be emitted`() = runTest {
-        `when`(challengesRepository.challengeDetail("")).thenReturn(CHALLENGE_DETAIL_FIXTURE)
+        `when`(challengesRepository.get(ChallengeDetailParams(""))).thenReturn(CHALLENGE_DETAIL_FIXTURE)
 
         val viewModel = viewModel().also {
             it.onViewEvent(ChallengeDetailViewEvent.OnScoreClick)
@@ -89,7 +91,7 @@ class ChallengeDetailViewModelTest {
 
     @Test
     fun `when clicking on codewars, a NavigateToChallengeUrl event should be emitted`() = runTest {
-        `when`(challengesRepository.challengeDetail("")).thenReturn(CHALLENGE_DETAIL_FIXTURE)
+        `when`(challengesRepository.get(ChallengeDetailParams(""))).thenReturn(CHALLENGE_DETAIL_FIXTURE)
         val urlFixture = URI.create("http://www.google.es")
         val viewModel = viewModel().also {
             it.onViewEvent(ChallengeDetailViewEvent.OnUrlChipClick(urlFixture))
@@ -103,7 +105,7 @@ class ChallengeDetailViewModelTest {
 
     @Test
     fun `when clicking back, a NavigateBack event should be emitted`() = runTest {
-        `when`(challengesRepository.challengeDetail("")).thenReturn(CHALLENGE_DETAIL_FIXTURE)
+        `when`(challengesRepository.get(ChallengeDetailParams(""))).thenReturn(CHALLENGE_DETAIL_FIXTURE)
         val viewModel = viewModel().also {
             it.onViewEvent(ChallengeDetailViewEvent.OnBackPressed)
         }
