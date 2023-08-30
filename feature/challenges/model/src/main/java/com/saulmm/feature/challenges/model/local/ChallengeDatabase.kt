@@ -2,10 +2,10 @@ package com.saulmm.feature.challenges.model.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.saulmm.feature.challenges.model.local.dao.ChallengeDetailDao
-import com.saulmm.feature.challenges.model.local.dao.ChallengePreviewDao
-import com.saulmm.feature.challenges.model.local.entities.ChallengeDetailDbo
-import com.saulmm.feature.challenges.model.local.entities.ChallengePreviewDbo
+import com.saulmm.feature.challenges.model.local.database.dao.ChallengeDetailDao
+import com.saulmm.feature.challenges.model.local.database.dao.ChallengePreviewDao
+import com.saulmm.feature.challenges.model.local.database.entities.ChallengeDetailDbo
+import com.saulmm.feature.challenges.model.local.database.entities.ChallengePreviewDbo
 
 @Database(
     entities = [

@@ -47,7 +47,6 @@ dependencies {
     implementation(project(":common:android"))
     implementation(project(":common:network"))
     implementation(project(":common:repository"))
-    implementation(project(":services:codewars-api"))
     implementation(project(":common:codewars-design-system"))
     implementation(project(":feature:challenges:model"))
     implementation(libs.core.ktx)

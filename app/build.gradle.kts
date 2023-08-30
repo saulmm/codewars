@@ -58,7 +58,6 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":common:network"))
     implementation(project(":common:navigation-contract"))
-    implementation(project(":services:codewars-api"))
     implementation(project(":feature:challenges"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

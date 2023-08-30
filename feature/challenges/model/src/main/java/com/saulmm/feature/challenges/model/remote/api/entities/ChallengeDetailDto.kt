@@ -1,4 +1,4 @@
-package com.saulmm.codewars.services.api.dto
+package com.saulmm.feature.challenges.model.remote.api.entities
 
 import com.squareup.moshi.Json
 

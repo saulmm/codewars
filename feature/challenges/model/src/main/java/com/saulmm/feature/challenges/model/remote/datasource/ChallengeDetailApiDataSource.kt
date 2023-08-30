@@ -4,7 +4,7 @@ import com.saulmm.codewars.entity.ChallengeDetail
 import com.saulmm.feature.challenges.model.params.ChallengeDetailParams
 import com.saulmm.feature.challenges.model.remote.mapper.toChallengeDetail
 import com.saulmm.codewars.repository.ReadableDataSource
-import com.saulmm.codewars.services.api.CodewarsApi
+import com.saulmm.feature.challenges.model.remote.api.CodewarsApi
 import javax.inject.Inject
 
 internal class ChallengeDetailApiDataSource @Inject constructor(

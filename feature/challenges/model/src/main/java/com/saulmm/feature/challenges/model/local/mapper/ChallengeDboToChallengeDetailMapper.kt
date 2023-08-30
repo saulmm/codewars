@@ -3,7 +3,7 @@ package com.saulmm.feature.challenges.model.local.mapper
 import com.saulmm.codewars.common.extensions.toURIOrNull
 import com.saulmm.codewars.entity.ChallengeDetail
 import com.saulmm.codewars.entity.rankValueOfOrUnknown
-import com.saulmm.feature.challenges.model.local.entities.ChallengeDetailDbo
+import com.saulmm.feature.challenges.model.local.database.entities.ChallengeDetailDbo
 
 internal fun ChallengeDetailDbo.toChallengeDetail(): ChallengeDetail {
     return ChallengeDetail(

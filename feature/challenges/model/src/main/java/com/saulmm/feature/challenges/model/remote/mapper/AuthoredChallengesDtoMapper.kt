@@ -3,7 +3,7 @@ package com.saulmm.feature.challenges.model.remote.mapper
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.rankValueOfOrUnknown
 import com.saulmm.codewars.entity.toProgrammingLanguageOrUnknown
-import com.saulmm.codewars.services.api.dto.AuthoredChallengeDto
+import com.saulmm.feature.challenges.model.remote.api.entities.AuthoredChallengeDto
 
 internal fun AuthoredChallengeDto.toChallenge(): Challenge {
     val truncatedDescription = description.lineSequence()

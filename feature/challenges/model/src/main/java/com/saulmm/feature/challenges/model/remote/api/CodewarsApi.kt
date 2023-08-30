@@ -1,12 +1,10 @@
-package com.saulmm.codewars.services.api
+package com.saulmm.feature.challenges.model.remote.api
 
-import com.saulmm.codewars.services.api.dto.AuthoredChallengeDto
-import com.saulmm.codewars.services.api.dto.ChallengeDetailDto
-import com.saulmm.codewars.services.api.dto.CodeChallengeDto
-import com.saulmm.codewars.services.api.dto.CodewarsResponseDto
+import com.saulmm.feature.challenges.model.remote.api.entities.AuthoredChallengeDto
+import com.saulmm.feature.challenges.model.remote.api.entities.ChallengeDetailDto
+import com.saulmm.feature.challenges.model.remote.api.entities.CodewarsResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface CodewarsApi {
 

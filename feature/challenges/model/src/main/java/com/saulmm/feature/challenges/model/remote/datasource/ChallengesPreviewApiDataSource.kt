@@ -4,8 +4,8 @@ import com.saulmm.codewars.entity.Challenge
 import com.saulmm.feature.challenges.model.params.ChallengePreviewParams
 import com.saulmm.feature.challenges.model.remote.mapper.toChallenge
 import com.saulmm.codewars.repository.ReadableDataSource
-import com.saulmm.codewars.services.api.CodewarsApi
-import com.saulmm.codewars.services.api.dto.AuthoredChallengeDto
+import com.saulmm.feature.challenges.model.remote.api.CodewarsApi
+import com.saulmm.feature.challenges.model.remote.api.entities.AuthoredChallengeDto
 import javax.inject.Inject
 
 internal class ChallengesPreviewApiDataSource @Inject constructor(

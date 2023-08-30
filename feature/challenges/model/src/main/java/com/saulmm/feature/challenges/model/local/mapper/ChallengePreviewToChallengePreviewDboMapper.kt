@@ -1,7 +1,7 @@
 package com.saulmm.feature.challenges.model.local.mapper
 
 import com.saulmm.codewars.entity.Challenge
-import com.saulmm.feature.challenges.model.local.entities.ChallengePreviewDbo
+import com.saulmm.feature.challenges.model.local.database.entities.ChallengePreviewDbo
 
 internal fun Challenge.toDbo(
     userName: String,

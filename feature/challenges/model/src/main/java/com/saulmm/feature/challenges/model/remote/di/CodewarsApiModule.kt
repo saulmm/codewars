@@ -1,8 +1,8 @@
-package com.saulmm.codewars.services.api.di
+package com.saulmm.feature.challenges.model.remote.di
 
 import com.saulmm.codewars.entity.build.AppVariant
 import com.saulmm.codewars.entity.build.AppVariant.*
-import com.saulmm.codewars.services.api.CodewarsApi
+import com.saulmm.feature.challenges.model.remote.api.CodewarsApi
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides

@@ -1,4 +1,4 @@
-package com.saulmm.feature.challenges.model.local.entities
+package com.saulmm.feature.challenges.model.local.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

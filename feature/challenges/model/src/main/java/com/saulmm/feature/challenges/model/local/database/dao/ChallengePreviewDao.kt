@@ -1,9 +1,9 @@
-package com.saulmm.feature.challenges.model.local.dao
+package com.saulmm.feature.challenges.model.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.saulmm.feature.challenges.model.local.entities.ChallengePreviewDbo
+import com.saulmm.feature.challenges.model.local.database.entities.ChallengePreviewDbo
 
 @Dao
 internal interface ChallengePreviewDao {

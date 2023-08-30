@@ -4,7 +4,7 @@ import com.saulmm.codewars.common.extensions.toURIOrNull
 import com.saulmm.codewars.entity.ChallengeDetail
 import com.saulmm.codewars.entity.rankValueOfOrUnknown
 import com.saulmm.codewars.entity.toProgrammingLanguageOrUnknown
-import com.saulmm.codewars.services.api.dto.ChallengeDetailDto
+import com.saulmm.feature.challenges.model.remote.api.entities.ChallengeDetailDto
 
 internal fun ChallengeDetailDto.toChallengeDetail(): ChallengeDetail {
     return ChallengeDetail(
