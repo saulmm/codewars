@@ -4,5 +4,5 @@ import java.util.Date
 
 interface WritableDataSource<T, S> {
     suspend fun saveData(query: T, data: S)
-    suspend fun lastSavedDataDate(): Date?
+    suspend fun lastSavedDataDate(query: T): Date?
 }

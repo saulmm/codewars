@@ -1,7 +1,7 @@
 package com.saulmm.codewars.feature.challenges.model.remote.datasource
 
 import com.saulmm.codewars.entity.Challenge
-import com.saulmm.codewars.feature.challenges.model.ChallengePreviewParams
+import com.saulmm.codewars.feature.challenges.model.params.ChallengePreviewParams
 import com.saulmm.codewars.feature.challenges.model.remote.mapper.toChallenge
 import com.saulmm.codewars.repository.ReadableDataSource
 import com.saulmm.codewars.services.api.CodewarsApi

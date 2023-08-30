@@ -1,8 +1,12 @@
 package com.saulmm.codewars.feature.challenges.model.di
 
 import com.saulmm.codewars.entity.Challenge
-import com.saulmm.codewars.feature.challenges.model.ChallengePreviewParams
-import com.saulmm.codewars.feature.challenges.model.local.ChallengesPreviewRoomDataSource
+import com.saulmm.codewars.entity.ChallengeDetail
+import com.saulmm.codewars.feature.challenges.model.local.datasources.ChallengeDetailRoomDataSource
+import com.saulmm.codewars.feature.challenges.model.params.ChallengePreviewParams
+import com.saulmm.codewars.feature.challenges.model.local.datasources.ChallengesPreviewRoomDataSource
+import com.saulmm.codewars.feature.challenges.model.params.ChallengeDetailParams
+import com.saulmm.codewars.feature.challenges.model.remote.datasource.ChallengeDetailApiDataSource
 import com.saulmm.codewars.feature.challenges.model.remote.datasource.ChallengesPreviewApiDataSource
 import com.saulmm.codewars.repository.CachingRepository
 import com.saulmm.codewars.repository.Repository
@@ -27,5 +31,19 @@ class ChallengeModelModule {
             local = local
         )
     }
+
+
+    @Provides
+    @Singleton
+    fun provideChallengeDetailRepository(
+        remote: ChallengeDetailApiDataSource,
+        local: ChallengeDetailRoomDataSource,
+    ): Repository<ChallengeDetailParams, ChallengeDetail> {
+        return CachingRepository(
+            remote = remote,
+            local = local
+        )
+    }
+
 }
 

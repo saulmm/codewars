@@ -1,7 +1,8 @@
-package com.saulmm.codewars.feature.challenges.model.local
+package com.saulmm.codewars.feature.challenges.model.local.datasources
 
 import com.saulmm.codewars.entity.Challenge
-import com.saulmm.codewars.feature.challenges.model.ChallengePreviewParams
+import com.saulmm.codewars.feature.challenges.model.local.ChallengeDatabase
+import com.saulmm.codewars.feature.challenges.model.params.ChallengePreviewParams
 import com.saulmm.codewars.feature.challenges.model.local.mapper.toChallengePreview
 import com.saulmm.codewars.feature.challenges.model.local.mapper.toDbo
 import com.saulmm.codewars.repository.ReadAndWriteDataSource
@@ -34,7 +35,9 @@ class ChallengesPreviewRoomDataSource @Inject constructor(
         )
     }
 
-    override suspend fun lastSavedDataDate(): Date? {
-        return Date(challengePreviewDao.getMostRecentInsertedDate() ?: 0)
+    override suspend fun lastSavedDataDate(query: ChallengePreviewParams): Date? {
+        return challengePreviewDao.getMostRecentInsertedDate()?.let {
+            Date(it)
+        }
     }
 }

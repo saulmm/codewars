@@ -9,11 +9,11 @@ import com.saulmm.codewars.feature.challenges.model.local.entities.ChallengeDeta
 interface ChallengeDetailDao {
 
     @Query("SELECT * from challenge_detail where id = :id")
-    suspend fun getById(id: String): ChallengeDetailDbo
+    suspend fun getById(id: String): ChallengeDetailDbo?
 
     @Insert
     suspend fun insert(challenge: ChallengeDetailDbo)
 
-    @Query("SELECT MAX(insertedAt) FROM challenge_preview WHERE username = :username")
-    suspend fun getMostRecentInsertedDate(username: String): Long
+    @Query("SELECT insertedAt FROM challenge_detail WHERE id = :id")
+    suspend fun getMostRecentInsertedDate(id: String): Long?
 }

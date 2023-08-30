@@ -3,20 +3,22 @@ package com.saulmm.codewars.feature.challenges.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.saulmm.codewars.feature.challenges.model.ChallengesRepository
+import com.saulmm.codewars.entity.ChallengeDetail
+import com.saulmm.codewars.feature.challenges.model.params.ChallengeDetailParams
+import com.saulmm.codewars.repository.Repository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ChallengeDetailViewModel @AssistedInject constructor(
     @Assisted private val challengeId: String,
-    private val repository: ChallengesRepository,
+    private val repository: Repository<ChallengeDetailParams, ChallengeDetail>,
 ): ViewModel() {
 
     private val _viewState: MutableStateFlow<ChallengeDetailViewState> =
@@ -35,8 +37,13 @@ class ChallengeDetailViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _viewState.value = ChallengeDetailViewState.Loading
 
-            runCatching { repository.challengeDetail(challengeId) }
-                .onFailure { _viewState.value = ChallengeDetailViewState.Failure }
+            runCatching {
+                requireNotNull(repository.get(ChallengeDetailParams(challengeId)))
+            }
+                .onFailure {
+                    Timber.e(it)
+                    _viewState.value = ChallengeDetailViewState.Failure
+                }
                 .onSuccess { _viewState.value = ChallengeDetailViewState.Loaded(it) }
         }
 
