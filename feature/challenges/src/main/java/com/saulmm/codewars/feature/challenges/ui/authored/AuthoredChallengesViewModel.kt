@@ -3,7 +3,9 @@ package com.saulmm.codewars.feature.challenges.ui.authored
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.saulmm.codewars.feature.challenges.model.ChallengesRepository
+import com.saulmm.codewars.entity.Challenge
+import com.saulmm.codewars.feature.challenges.model.params.ChallengePreviewParams
+import com.saulmm.codewars.repository.Repository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -12,11 +14,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class AuthoredChallengesViewModel @AssistedInject constructor(
     @Assisted private val userName: String,
-    private val repository: ChallengesRepository
-): ViewModel() {
+    private val repository: Repository<ChallengePreviewParams, List<Challenge>>
+) : ViewModel() {
     private val _viewState: MutableStateFlow<AuthoredChallengesViewState> =
         MutableStateFlow(AuthoredChallengesViewState.Idle)
 
@@ -35,9 +38,15 @@ class AuthoredChallengesViewModel @AssistedInject constructor(
     suspend fun loadChallenges() {
         _viewState.value = AuthoredChallengesViewState.Loading
 
-        runCatching { repository.getFrom(userName) }
-            .onFailure { _viewState.value = AuthoredChallengesViewState.Failure }
-            .onSuccess { _viewState.value = AuthoredChallengesViewState.Loaded(it) }
+        runCatching {
+            requireNotNull(
+                repository.get(ChallengePreviewParams(userName))
+            )
+        }.onFailure {
+            Timber.e(it)
+            _viewState.value = AuthoredChallengesViewState.Failure
+        }
+        .onSuccess { _viewState.value = AuthoredChallengesViewState.Loaded(it) }
     }
 
     fun onViewEvent(viewEvent: AuthoredChallengesViewEvent) {

@@ -15,6 +15,15 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas",
+                    "room.incremental" to "true"
+                )
+            }
+        }
     }
 
     buildTypes {
@@ -66,6 +75,9 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.richtext)
     implementation(libs.richtext.m3)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
+    implementation(project(mapOf("path" to ":common:repository")))
     kapt(libs.hilt.compiler)
 
     debugImplementation("androidx.compose.ui:ui-tooling")
