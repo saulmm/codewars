@@ -11,7 +11,6 @@ internal fun Challenge.toDbo(
         id = id,
         name = name,
         shortDescription = description,
-        rankName = rank.name,
         tags = tags.joinToString(separator = ","),
         languages = languages.joinToString(separator = ",") { it.name },
         username = userName,

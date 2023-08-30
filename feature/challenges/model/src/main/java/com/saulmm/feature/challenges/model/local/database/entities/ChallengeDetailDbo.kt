@@ -8,7 +8,6 @@ internal class ChallengeDetailDbo(
     @PrimaryKey val id: String,
     val name: String,
     val description: String,
-    val rankName: String,
     val tags: String,
     val languages: String,
     val url: String?,

@@ -42,7 +42,6 @@ import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
 import com.saulmm.codewars.common.design.system.component.placeholder
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.ProgrammingLanguage
-import com.saulmm.codewars.entity.Rank
 import com.saulmm.codewars.feature.challenges.R
 
 @Composable
@@ -229,7 +228,6 @@ private fun ChallengeListPreviewDark() {
                         id = "1",
                         name = "Walter's miraculous FizzBuzz factory",
                         description = "Walter's miraculous FizzBuzz factory",
-                        rank = Rank.DAN_2,
                         tags = listOf("Arrays", "Algorithms", "Stacks", "Heaps"),
                         languages = listOf(ProgrammingLanguage.C, ProgrammingLanguage.KOTLIN)
                     ),
@@ -237,7 +235,6 @@ private fun ChallengeListPreviewDark() {
                         id = "2",
                         name = "Walter's miraculous FizzBuzz factory",
                         description = "Walter's miraculous FizzBuzz factory",
-                        rank = Rank.DAN_2,
                         tags = listOf("Arrays", "Algorithms", "Stacks", "Heaps"),
                         languages = listOf(ProgrammingLanguage.C, ProgrammingLanguage.KOTLIN)
                     )
@@ -263,7 +260,6 @@ private fun ChallengeListPreviewLight() {
                         id = "1",
                         name = "Walter's miraculous FizzBuzz factory",
                         description = "Walter's miraculous FizzBuzz factory",
-                        rank = Rank.DAN_2,
                         tags = listOf("Arrays", "Algorithms", "Stacks", "Heaps"),
                         languages = listOf(ProgrammingLanguage.C, ProgrammingLanguage.KOTLIN)
                     ),
@@ -271,7 +267,6 @@ private fun ChallengeListPreviewLight() {
                         id = "2",
                         name = "Walter's miraculous FizzBuzz factory",
                         description = "Walter's miraculous FizzBuzz factory",
-                        rank = Rank.DAN_2,
                         tags = listOf("Arrays", "Algorithms", "Stacks", "Heaps"),
                         languages = listOf(ProgrammingLanguage.C, ProgrammingLanguage.KOTLIN)
                     )

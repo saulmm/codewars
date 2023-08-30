@@ -18,8 +18,9 @@ This project utilizes the [Codewars API](https://dev.codewars.com/#introduction)
 ### Requirements
 
 - Android Studio Giraffe (Latest Build 2022.3.1 Patch 1)
+- Set JAVA_11 JDK on Android Studio Settings > Build, Execution, Deployment > Build Tools > Gradle 
 
-#### Project capabilities
+#### Project features
 
 - Clean Architecture.
 - Model View ViewModel.
@@ -31,8 +32,11 @@ This project utilizes the [Codewars API](https://dev.codewars.com/#introduction)
 - Dynamic Theming with Material3.
 - Offline Capabilities.
 - Unit Testing.
+- Room.
+- Retrofit.
 - Gradle Kotlin DSL.
 - Gradle Version Catalogs.
+- Gradle Precompiled Scripts
 
 ## Modularization and Modules
 
@@ -110,3 +114,11 @@ internal class ChallengeModelModule {
 }
 ```
 
+### Known Issues
+
+- I am aware that the performance of the challenges list can be improved. I have attempted to debug recompositions and researched an issue related to Modifiers, the internal `composable()` API, and the `.clickable {}` modifier. With a bit more time, I would prioritize enhancing the performance.
+
+  For more information, you can refer to the following resources:
+
+    - [Solving the Mystery of Recompositions in Compose's LazyList](https://blog.shreyaspatil.dev/solving-the-mystery-of-recompositions-in-composes-lazylist)
+    - [What's New in Jetpack Compose - August '23 Release](https://android-developers.googleblog.com/2023/08/whats-new-in-jetpack-compose-august

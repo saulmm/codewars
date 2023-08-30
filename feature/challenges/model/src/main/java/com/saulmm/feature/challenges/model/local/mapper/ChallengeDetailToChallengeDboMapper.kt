@@ -10,7 +10,6 @@ internal fun ChallengeDetail.toDbo(insertedAt: Date): ChallengeDetailDbo {
         id = id,
         name = name,
         description = description,
-        rankName = rank.name,
         tags = tags.joinToString(separator = ","),
         languages = languages.joinToString(separator = ",", transform = ProgrammingLanguage::name),
         url = url?.toString(),

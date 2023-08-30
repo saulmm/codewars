@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     private const val READ_TIMEOUT_LIMIT_MINS = 2L
-    private const val CONNECT_TIMEOUT_LIMIT_MINS = 3L
 
     @Provides
     fun provideOkHttpLoggingInterceptor(

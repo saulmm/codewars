@@ -1,10 +1,11 @@
 import com.saulmm.codewars.buildsrc.BuildConstants
 
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.application")
-    id("kotlin-kapt")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
+    id(libs.plugins.androidApplication.get().pluginId)
+    id(libs.plugins.org.jetbrains.kotlin.kapt.get().pluginId)
+    id(libs.plugins.kotlinAndroid.get().pluginId)
+    id(libs.plugins.hilt.get().pluginId)
 }
 
 android {
