@@ -126,3 +126,6 @@ internal class ChallengeModelModule {
 
     - [Solving the Mystery of Recompositions in Compose's LazyList](https://blog.shreyaspatil.dev/solving-the-mystery-of-recompositions-in-composes-lazylist)
     - [What's New in Jetpack Compose - August '23 Release](https://android-developers.googleblog.com/2023/08/whats-new-in-jetpack-compose-august
+
+
+- Additionally, I'm conscious that on the detail screen, when rendering certain descriptions in Markdown and under dark themes, some elements might not have sufficient contrast. Given more time, I would debug and add the appropriate styling to the richtext library.
