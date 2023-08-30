@@ -3,7 +3,6 @@ package com.saulmm.codewars.feature.challenges.ui.detail
 import app.cash.turbine.test
 import com.google.common.truth.Truth.*
 import com.saulmm.codewars.entity.ChallengeDetail
-import com.saulmm.codewars.entity.Rank
 import com.saulmm.codewars.feature.challenges.MainDispatcherRule
 import com.saulmm.feature.challenges.model.params.ChallengeDetailParams
 import com.saulmm.codewars.repository.Repository
@@ -121,7 +120,6 @@ class ChallengeDetailViewModelTest {
             id = "partiendo",
             name = "Corrine Molina",
             description = "lacus",
-            rank = Rank.DAN_2,
             tags = listOf(),
             languages = listOf(),
             url = null,

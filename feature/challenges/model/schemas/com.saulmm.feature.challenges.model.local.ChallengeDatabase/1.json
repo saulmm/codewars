@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c0e8e3cae53227acfbc60cb17bea6279",
+    "identityHash": "ad20fe1a3cc1f79b4f2e3cdda1c74de4",
     "entities": [
       {
         "tableName": "challenge_detail",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `rankName` TEXT NOT NULL, `tags` TEXT NOT NULL, `languages` TEXT NOT NULL, `url` TEXT, `stars` INTEGER NOT NULL, `voteScore` INTEGER NOT NULL, `insertedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `tags` TEXT NOT NULL, `languages` TEXT NOT NULL, `url` TEXT, `stars` INTEGER NOT NULL, `voteScore` INTEGER NOT NULL, `insertedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -23,12 +23,6 @@
           {
             "fieldPath": "description",
             "columnName": "description",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "rankName",
-            "columnName": "rankName",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -80,7 +74,7 @@
       },
       {
         "tableName": "challenge_preview",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `shortDescription` TEXT NOT NULL, `rankName` TEXT NOT NULL, `tags` TEXT NOT NULL, `languages` TEXT NOT NULL, `username` TEXT NOT NULL, `insertedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `shortDescription` TEXT NOT NULL, `tags` TEXT NOT NULL, `languages` TEXT NOT NULL, `username` TEXT NOT NULL, `insertedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -97,12 +91,6 @@
           {
             "fieldPath": "shortDescription",
             "columnName": "shortDescription",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "rankName",
-            "columnName": "rankName",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -144,7 +132,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c0e8e3cae53227acfbc60cb17bea6279')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ad20fe1a3cc1f79b4f2e3cdda1c74de4')"
     ]
   }
 }

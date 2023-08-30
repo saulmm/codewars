@@ -28,7 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -42,7 +41,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -64,7 +62,6 @@ import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
 import com.saulmm.codewars.common.design.system.component.placeholder
 import com.saulmm.codewars.entity.ChallengeDetail
 import com.saulmm.codewars.entity.ProgrammingLanguage
-import com.saulmm.codewars.entity.Rank
 import com.saulmm.codewars.feature.challenges.R
 import java.net.URI
 import kotlin.random.Random
@@ -447,7 +444,6 @@ private fun ChallengeDetailContentPreview() {
                 "Nulla nec lorem id diam tristique pulvinar porta a ante. " +
                 "Ut et iaculis lectus. Quisque gravida, nisi quis commodo vestibulum, " +
                 "nibh risus lobortis elit, id eleifend neque orci eget nunc. Donec quis lacus odio. Ut volutpat leo sit amet nisi suscipit placerat. Praesent faucibus malesuada massa at condimentum. Morbi in lorem ut sapien accumsan scelerisque. Pellentesque nec convallis sapien. Aenean non congue lectus. Aliquam interdum euismod ante id euismod. Etiam auctor venenatis euismod. Integer risus quam, ullamcorper ultrices tortor id, maximus porttitor nisl.",
-        rank = Rank.DAN_2,
         tags = listOf("Arrays", "Stacks", "Queues", "Trees"),
         languages = listOf(
             ProgrammingLanguage.KOTLIN, ProgrammingLanguage.C, ProgrammingLanguage.CLOJURE, ProgrammingLanguage.JAVA, ProgrammingLanguage.JAVASCRIPT,
