@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.saulmm.codewars.entity.Challenge
-import com.saulmm.codewars.feature.challenges.model.params.ChallengePreviewParams
+import com.saulmm.feature.challenges.model.params.ChallengePreviewParams
 import com.saulmm.codewars.repository.Repository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

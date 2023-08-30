@@ -1,25 +1,18 @@
 package com.saulmm.codewars.feature.challenges.ui.detail
 
 import app.cash.turbine.test
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.*
 import com.saulmm.codewars.entity.ChallengeDetail
 import com.saulmm.codewars.entity.Rank
 import com.saulmm.codewars.feature.challenges.MainDispatcherRule
-import com.saulmm.codewars.feature.challenges.model.ChallengesRepository
-import com.saulmm.codewars.feature.challenges.model.params.ChallengeDetailParams
-import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengeEvent
-import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesViewEvent
-import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesViewState
+import com.saulmm.feature.challenges.model.params.ChallengeDetailParams
 import com.saulmm.codewars.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers.any
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import java.net.URI

@@ -15,15 +15,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.schemaLocation" to "$projectDir/schemas",
-                    "room.incremental" to "true"
-                )
-            }
-        }
     }
 
     buildTypes {
@@ -55,8 +46,10 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":common:android"))
     implementation(project(":common:network"))
-    implementation(project(":common:codewars-design-system"))
+    implementation(project(":common:repository"))
     implementation(project(":services:codewars-api"))
+    implementation(project(":common:codewars-design-system"))
+    implementation(project(":feature:challenges:model"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
@@ -75,9 +68,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.richtext)
     implementation(libs.richtext.m3)
-    implementation(libs.room.ktx)
-    kapt(libs.room.compiler)
-    implementation(project(mapOf("path" to ":common:repository")))
+
     kapt(libs.hilt.compiler)
 
     debugImplementation("androidx.compose.ui:ui-tooling")
