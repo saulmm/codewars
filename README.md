@@ -10,7 +10,7 @@ This project utilizes the [Codewars API](https://dev.codewars.com/#introduction)
 
 ### APK
 
-You can find an APK ready to install here [apk/codewars.apk].
+You can find an APK ready to install here [**codewars.apk**](apk/codewars.apk).
 
 ### Screenshots
 
