@@ -8,6 +8,6 @@ object BuildConstants {
     const val COMPILE_SDK = 34
     const val VERSION_CODE = 1
     const val VERSION_NAME = "1.0"
-    val JAVA_VERSION = JavaVersion.VERSION_11
+    val JAVA_VERSION = JavaVersion.VERSION_17
     val KOTLIN_COMPILER_EXTENSION_VERSION = "1.4.7"
 }

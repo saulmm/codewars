@@ -6,7 +6,6 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("base-android-module")
-
 }
 
 android {
