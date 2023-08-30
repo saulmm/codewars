@@ -15,10 +15,6 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = false
