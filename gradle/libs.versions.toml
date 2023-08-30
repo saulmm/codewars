@@ -36,6 +36,7 @@ truth = "1.1.5"
 mockito = "5.5.0"
 turbine = "1.0.0"
 richtext = "0.16.0"
+room = "2.5.2"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -77,6 +78,8 @@ mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 richtext = { group = "com.halilibo.compose-richtext", name ="richtext-commonmark", version.ref = "richtext"}
 richtext-m3 = { group = "com.halilibo.compose-richtext", name ="richtext-ui-material3", version.ref = "richtext"}
+room-ktx = { group = "androidx.room", name ="room-ktx", version.ref = "room"}
+room-compiler = { group = "androidx.room", name ="room-compiler", version.ref = "room"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

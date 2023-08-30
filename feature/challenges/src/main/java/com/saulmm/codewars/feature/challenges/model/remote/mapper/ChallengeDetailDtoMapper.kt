@@ -1,4 +1,4 @@
-package com.saulmm.codewars.feature.challenges.model.mapper
+package com.saulmm.codewars.feature.challenges.model.remote.mapper
 
 import com.saulmm.codewars.common.extensions.toURIOrNull
 import com.saulmm.codewars.entity.ChallengeDetail
