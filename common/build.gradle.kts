@@ -1,3 +1,5 @@
+import com.saulmm.codewars.buildsrc.BuildConstants
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     id("java-library")
@@ -6,8 +8,8 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = BuildConstants.JAVA_VERSION
+    targetCompatibility = BuildConstants.JAVA_VERSION
 }
 
 dependencies {

@@ -1,35 +1,18 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
+@file:Suppress("UnstableApiUsage")
+import com.saulmm.codewars.buildsrc.BuildConstants
+
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    id("base-android-module")
 }
 
 android {
     namespace = "com.saulmm.common.navigation_contract"
-    compileSdk = 34
 
-    defaultConfig {
-        minSdk = 24
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+    buildFeatures {
+        compose = true
     }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    composeOptions {
+        kotlinCompilerExtensionVersion = BuildConstants.KOTLIN_COMPILER_EXTENSION_VERSION
     }
 }
 

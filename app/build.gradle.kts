@@ -1,21 +1,22 @@
+import com.saulmm.codewars.buildsrc.BuildConstants
+
 plugins {
     id("com.android.application")
     id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
-
 }
 
 android {
     namespace = "com.saulmm.codewars"
-    compileSdk = 34
+    compileSdk = BuildConstants.COMPILE_SDK
 
     defaultConfig {
         applicationId = "com.saulmm.codewars"
-        minSdk = 24
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = BuildConstants.MIN_SDK
+        targetSdk = BuildConstants.TARGET_SDK
+        versionCode = BuildConstants.VERSION_CODE
+        versionName = BuildConstants.VERSION_NAME
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -33,23 +34,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = BuildConstants.JAVA_VERSION
+        targetCompatibility = BuildConstants.JAVA_VERSION
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = BuildConstants.JAVA_VERSION.toString()
     }
     buildFeatures {
         compose = true
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+        kotlinCompilerExtensionVersion = BuildConstants.KOTLIN_COMPILER_EXTENSION_VERSION
     }
 }
 
@@ -58,7 +54,6 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":common:network"))
     implementation(project(":common:navigation-contract"))
-    implementation(project(":services:codewars-api"))
     implementation(project(":feature:challenges"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

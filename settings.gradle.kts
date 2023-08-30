@@ -16,8 +16,6 @@ dependencyResolutionManagement {
 rootProject.name = "Codewars"
 include(":app")
 include(":entity")
-include(":services")
-include(":services:codewars-api")
 include(":common")
 include(":common:network")
 include(":feature")
@@ -26,3 +24,4 @@ include(":common:navigation-contract")
 include(":common:codewars-design-system")
 include(":common:android")
 include(":common:repository")
+include(":feature:challenges:model")

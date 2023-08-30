@@ -6,8 +6,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.feature.challenges.MainDispatcherRule
-import com.saulmm.codewars.feature.challenges.model.ChallengesRepository
-import com.saulmm.codewars.feature.challenges.model.params.ChallengePreviewParams
+import com.saulmm.feature.challenges.model.params.ChallengePreviewParams
 import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesViewState.*
 import com.saulmm.codewars.repository.Repository
 import kotlinx.coroutines.Dispatchers
