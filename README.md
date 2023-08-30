@@ -8,6 +8,10 @@ This project utilizes the [Codewars API](https://dev.codewars.com/#introduction)
 - List view for easy navigation.
 - Detailed challenge information on a separate screen.
 
+### APK
+
+You can find an APK ready to install here [apk/codewars.apk].
+
 ### Screenshots
 
 |           | Light Theme                                     | Dark Theme                                     |
