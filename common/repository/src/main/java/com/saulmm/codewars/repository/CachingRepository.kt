@@ -19,12 +19,6 @@ open class CachingRepository<Input, Output>(
         val localData = local.getData(query)
             ?.takeIf { lastSavedIsValid(query) }
 
-        if (localData != null) {
-            println("[repository], returning from local, query: $query")
-        } else {
-            println("[repository], returning and saving into remote, query: $query")
-        }
-
         return localData ?: remote.getData(query)
             ?.also { local.saveData(query, it) }
     }

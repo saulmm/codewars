@@ -36,8 +36,6 @@ internal class ChallengesPreviewRoomDataSource @Inject constructor(
     }
 
     override suspend fun lastSavedDataDate(query: ChallengePreviewParams): Date? {
-        return challengePreviewDao.getMostRecentInsertedDate()?.let {
-            Date(it)
-        }
+        return challengePreviewDao.getMostRecentInsertedDate()?.let(::Date)
     }
 }

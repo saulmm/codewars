@@ -2,7 +2,6 @@ package com.saulmm.feature.challenges.model.local.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.saulmm.codewars.entity.Rank
 
 @Entity(tableName = "challenge_preview")
 internal data class ChallengePreviewDbo(
