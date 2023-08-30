@@ -354,7 +354,7 @@ private fun ChallengeStars(stars: Int, onClick: () -> Unit) {
 private fun ChallengeScore(voteScore: Int, onClick: () -> Unit) {
     AssistChip(
         onClick = { onClick.invoke() },
-        label = { Text(text = "${voteScore}/100") },
+        label = { Text(text = "$voteScore") },
         leadingIcon = {
             Icon(
                 painter = painterResource(id = R.drawable.ic_graph),
