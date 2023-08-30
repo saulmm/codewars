@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.richtext)
     implementation(libs.richtext.m3)
     implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
     implementation(project(mapOf("path" to ":common:repository")))
     kapt(libs.hilt.compiler)
 

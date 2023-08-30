@@ -8,7 +8,7 @@ import com.saulmm.codewars.services.api.CodewarsApi
 import com.saulmm.codewars.services.api.dto.AuthoredChallengeDto
 import javax.inject.Inject
 
-class RemoteChallengesDatasource @Inject constructor(
+class RemoteChallengesDatasourceLegacy @Inject constructor(
     private val codewarsApi: CodewarsApi,
 ): ChallengesDatasource {
 

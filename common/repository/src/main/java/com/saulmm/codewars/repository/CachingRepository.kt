@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit
 open class CachingRepository<Input, Output>(
     private val remote: ReadableDataSource<Input, Output>,
     private val local: ReadAndWriteDataSource<Input, Output>
-) {
+): Repository<Input, Output> {
 
     private suspend fun lastSavedIsValid(): Boolean {
         val time = local.lastSavedDataDate()?.time
@@ -16,7 +16,7 @@ open class CachingRepository<Input, Output>(
             ?: false
     }
 
-    suspend fun getData(query: Input): Output? {
+    override suspend fun get(query: Input): Output? {
         val localData = local.getData(query)
             ?.takeIf { lastSavedIsValid() }
 

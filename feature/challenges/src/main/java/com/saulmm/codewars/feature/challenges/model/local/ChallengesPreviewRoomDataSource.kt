@@ -8,7 +8,7 @@ import com.saulmm.codewars.repository.ReadAndWriteDataSource
 import java.util.Date
 import javax.inject.Inject
 
-class LocalChallengesPreviewDatasource @Inject constructor(
+class ChallengesPreviewRoomDataSource @Inject constructor(
     private val challengeDatabase: ChallengeDatabase
 ): ReadAndWriteDataSource<ChallengePreviewParams, List<Challenge>> {
 
@@ -35,6 +35,6 @@ class LocalChallengesPreviewDatasource @Inject constructor(
     }
 
     override suspend fun lastSavedDataDate(): Date? {
-        return Date(challengePreviewDao.getMostRecentInsertedDate())
+        return Date(challengePreviewDao.getMostRecentInsertedDate() ?: 0)
     }
 }

@@ -15,5 +15,5 @@ interface ChallengePreviewDao {
     suspend fun insertAll(vararg challenges: ChallengePreviewDbo)
 
     @Query("SELECT MAX(insertedAt) FROM challenge_preview")
-    suspend fun getMostRecentInsertedDate(): Long
+    suspend fun getMostRecentInsertedDate(): Long?
 }
