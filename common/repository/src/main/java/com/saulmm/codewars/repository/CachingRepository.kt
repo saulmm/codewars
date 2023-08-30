@@ -10,7 +10,6 @@ open class CachingRepository<Input, Output>(
 
     private suspend fun lastSavedIsValid(query: Input): Boolean {
         val time = local.lastSavedDataDate(query)?.time
-        println("Time: $time")
         return time
             ?.let { lastSavedTime -> (Date().time - lastSavedTime) <= FOUR_HOURS_MILLIS }
             ?: false
