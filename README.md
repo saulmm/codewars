@@ -8,6 +8,12 @@ This project utilizes the [Codewars API](https://dev.codewars.com/#introduction)
 - List view for easy navigation.
 - Detailed challenge information on a separate screen.
 
+### Screenshots
+
+|           | Light Theme                                     | Dark Theme                                     |
+|-----------|-------------------------------------------------|------------------------------------------------|
+| List      | <img src="art/list-light.png" width="400"/>     | <img src="art/list-dark.png" width="400"/>     |
+| Detail    | <img src="art/detail-light.png" width="400"/>   | <img src="art/detail-dark.png" width="400"/>   |
 
 ### Requirements
 
@@ -26,6 +32,7 @@ This project utilizes the [Codewars API](https://dev.codewars.com/#introduction)
 - Offline Capabilities.
 - Unit Testing.
 - Gradle Kotlin DSL.
+- Gradle Version Catalogs.
 
 ## Modularization and Modules
 
@@ -68,4 +75,38 @@ Implementing the presentation layer for the challenges feature, this module comp
 All API requests are stored in a local database to persist the information for a duration of four hours. The implementation can be found in the `CachingRepository<T,Q>` class within the `:common:repository` module.
 
 This approach makes it particularly straightforward to create repositories for various features, simply by utilizing dependency injection.
+
+> [`ChallengeModule.kt`](https://github.com/saulmm/codewars/blob/3efc3474655133fc950ba3f5a2af5d5739eb0e6f/feature/challenges/model/src/main/java/com/saulmm/feature/challenges/model/di/ChallengeModelModule.kt)
+```kotlin
+@Module
+@InstallIn(SingletonComponent::class)
+internal class ChallengeModelModule {
+
+    @Provides
+    @Singleton
+    fun provideChallengePreviewRepository(
+        remote: ChallengesPreviewApiDataSource,
+        local: ChallengesPreviewRoomDataSource,
+    ): Repository<ChallengePreviewParams, List<Challenge>> {
+        return CachingRepository(
+            remote = remote,
+            local = local
+        )
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideChallengeDetailRepository(
+        remote: ChallengeDetailApiDataSource,
+        local: ChallengeDetailRoomDataSource,
+    ): Repository<ChallengeDetailParams, ChallengeDetail> {
+        return CachingRepository(
+            remote = remote,
+            local = local
+        )
+    }
+
+}
+```
 
