@@ -5,6 +5,11 @@
 package com.saulmm.codewars.feature.challenges.ui.detail
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -96,34 +101,41 @@ fun ChallengeDetailScreen(
                     )
                 }
             ) { padding ->
-                when (viewState) {
-                    ChallengeDetailViewState.Idle -> {}
-                    ChallengeDetailViewState.Failure -> {
-                        CharacterDetailFailure(
-                            onTryAgainClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnTryAgainClick) },
-                            modifier = Modifier
-                                .padding(padding)
-                        )
+                AnimatedContent(
+                    targetState = viewState,
+                    transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) },
+                    label = "Animated Detail Viewstate"
+                ) { viewState ->
+                    when (viewState) {
+                        ChallengeDetailViewState.Idle -> {}
+                        ChallengeDetailViewState.Failure -> {
+                            CharacterDetailFailure(
+                                onTryAgainClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnTryAgainClick) },
+                                modifier = Modifier
+                                    .padding(padding)
+                            )
+                        }
+
+                        is ChallengeDetailViewState.Loaded -> {
+                            ChallengeDetailContent(
+                                challenge = (viewState as ChallengeDetailViewState.Loaded).challenge,
+                                onStarsClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnStarsClick) },
+                                onScoreClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnScoreClick) },
+                                onCodewarsClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnUrlChipClick(it)) },
+                                modifier = Modifier
+                                    .padding(padding)
+                                    .verticalScroll(rememberScrollState()),
+                            )
+                        }
+
+                        ChallengeDetailViewState.Loading -> {
+                            ChallengeDetailLoading(
+                                modifier = Modifier
+                                    .padding(padding)
+                            )
+                        }
                     }
 
-                    is ChallengeDetailViewState.Loaded -> {
-                        ChallengeDetailContent(
-                            challenge = (viewState as ChallengeDetailViewState.Loaded).challenge,
-                            onStarsClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnStarsClick) },
-                            onScoreClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnScoreClick) },
-                            onCodewarsClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnUrlChipClick(it)) },
-                            modifier = Modifier
-                                .padding(padding)
-                                .verticalScroll(rememberScrollState()),
-                        )
-                    }
-
-                    ChallengeDetailViewState.Loading -> {
-                        ChallengeDetailLoading(
-                            modifier = Modifier
-                                .padding(padding)
-                        )
-                    }
                 }
 
             }
