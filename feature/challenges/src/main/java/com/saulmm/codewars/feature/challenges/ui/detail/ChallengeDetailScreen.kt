@@ -118,7 +118,7 @@ fun ChallengeDetailScreen(
 
                         is ChallengeDetailViewState.Loaded -> {
                             ChallengeDetailContent(
-                                challenge = (viewState as ChallengeDetailViewState.Loaded).challenge,
+                                challenge = viewState.challenge,
                                 onStarsClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnStarsClick) },
                                 onScoreClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnScoreClick) },
                                 onCodewarsClick = { viewModel.onViewEvent(ChallengeDetailViewEvent.OnUrlChipClick(it)) },
