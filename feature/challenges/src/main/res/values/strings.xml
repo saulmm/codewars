@@ -12,7 +12,7 @@
     <string name="message_score">The score of this challenge on Codewars.</string>
     <string name="message_stars">The number of stars obtained by this challenge on Codewars.</string>
     <string name="label_preferences">Preferences</string>
-    <string name="label_selected_user">Selected user</string>
+    <string name="label_selected_user">Current Codewars User</string>
     <string name="message_selected_user">\'bklaes\' is the user is currently selected, you\'ll only see code challenges and information from this users. Tap here to change it.</string>
 
 </resources>

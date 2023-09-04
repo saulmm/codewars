@@ -60,6 +60,10 @@ class AuthoredChallengesViewModel @AssistedInject constructor(
                     loadChallenges()
                 }
             }
+
+            AuthoredChallengesViewEvent.OnSettingsClick -> {
+                _events.trySend(AuthoredChallengeEvent.NavigateToSettings)
+            }
         }
     }
 

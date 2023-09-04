@@ -21,15 +21,25 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,9 +58,14 @@ import com.saulmm.codewars.feature.challenges.R
 fun AuthoredChallengesScreen(
     userName: String,
     navigateToKataDetail: (String) -> Unit,
+    navigateToSettings: () -> Unit,
     viewModel: AuthoredChallengesViewModel,
 ) {
-    initEventProcessor(navigateToKataDetail, viewModel)
+    initEventProcessor(
+        navigateToKataDetail = navigateToKataDetail,
+        navigateToSettings = navigateToSettings,
+        viewModel = viewModel
+    )
 
     CodewarsTheme {
         CodewarsBackground {
@@ -88,37 +103,63 @@ private fun ChallengesScreenContent(userName: String, viewModel: AuthoredChallen
         viewModel.onViewEvent(AuthoredChallengesViewEvent.OnChallengeClick(challengeId))
     }
 
-    AnimatedContent(
-        targetState = viewState,
-        transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) },
-        label = "Animated Content"
-    ) { targetState ->
-        when (targetState) {
-            AuthoredChallengesViewState.Idle -> {}
-            AuthoredChallengesViewState.Failure -> {
-                ChallengesFailure(
-                    userName = userName,
-                    onTryAgainClick = onFailureTryAgainClick
-                )
+    val onSettingsClick = {
+        viewModel.onViewEvent(AuthoredChallengesViewEvent.OnSettingsClick)
+    }
+
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+
+    Scaffold(
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            AuthoredChallengesTopBar(
+                scrollBehavior = scrollBehavior,
+                onSettingsClick = onSettingsClick
+            )
+        }
+    ) { paddingValues ->
+        AnimatedContent(
+            targetState = viewState,
+            transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) },
+            label = "Animated Content"
+        ) { targetState ->
+            when (targetState) {
+                AuthoredChallengesViewState.Idle -> {}
+                AuthoredChallengesViewState.Failure -> {
+                    ChallengesFailure(
+                        paddingValues = paddingValues,
+                        userName = userName,
+                        onTryAgainClick = onFailureTryAgainClick,
+                    )
+                }
+                is AuthoredChallengesViewState.Loaded -> {
+                    ChallengesLoaded(
+                        paddingValues = paddingValues,
+                        userName = userName,
+                        challenges = (viewState as AuthoredChallengesViewState.Loaded).katas,
+                        onChallengeClick = onChallengeClick
+                    )
+                }
+                AuthoredChallengesViewState.Loading -> {
+                    ChallengesLoading(
+                        paddingValues = paddingValues,
+                        userName = userName
+                    )
+                }
             }
-            is AuthoredChallengesViewState.Loaded -> {
-                ChallengesLoaded(
-                    userName = userName,
-                    challenges = (viewState as AuthoredChallengesViewState.Loaded).katas,
-                    onChallengeClick = onChallengeClick
-                )
-            }
-            AuthoredChallengesViewState.Loading -> {
-                ChallengesLoading(userName)
-            }
+
         }
 
     }
+
 }
 
 @Composable
 private fun initEventProcessor(
     navigateToKataDetail: (String) -> Unit,
+    navigateToSettings: () -> Unit,
     viewModel: AuthoredChallengesViewModel,
 ) {
 
@@ -127,17 +168,44 @@ private fun initEventProcessor(
             is AuthoredChallengeEvent.NavigateToKataDetail -> {
                 navigateToKataDetail(event.kataId)
             }
+
+            AuthoredChallengeEvent.NavigateToSettings ->
+                navigateToSettings()
         }
     }
-
 }
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun AuthoredChallengesTopBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    onSettingsClick: () -> Unit,
+) {
+    TopAppBar(
+        title = {},
+
+        actions = {
+            IconButton(onClick = { onSettingsClick() }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_settings),
+                    contentDescription = "Settings",
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior,
+        modifier = Modifier
+    )
+}
+
 
 @Composable
 fun ChallengesFailure(
     userName: String,
-    onTryAgainClick: () -> Unit
+    onTryAgainClick: () -> Unit,
+    paddingValues: PaddingValues = PaddingValues()
 ) {
-    Column {
+    Column(modifier = Modifier.padding(paddingValues)) {
         AuthoredChallengesHeader(userName = userName)
         Spacer(modifier = Modifier.height(32.dp))
         ErrorMessageWithAction(
@@ -150,21 +218,23 @@ fun ChallengesFailure(
 }
 
 @Composable
-fun ChallengesLoading(userName: String) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        AuthoredChallengesHeader(userName = userName)
-        Spacer(modifier = Modifier.height(16.dp))
-            repeat(2) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .height(196.dp)
-                        .placeholder()
-                ) {}
-                Spacer(modifier = Modifier.height(24.dp))
-            }
+fun ChallengesLoading(userName: String, paddingValues: PaddingValues) {
+    Box(Modifier.padding(paddingValues)) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            AuthoredChallengesHeader(userName = userName)
+            Spacer(modifier = Modifier.height(16.dp))
+                repeat(2) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .height(196.dp)
+                            .placeholder()
+                    ) {}
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
 
+        }
     }
 
 }
@@ -173,9 +243,12 @@ fun ChallengesLoading(userName: String) {
 fun ChallengesLoaded(
     userName: String,
     challenges: List<Challenge>,
-    onChallengeClick: (String) -> Unit
+    onChallengeClick: (String) -> Unit,
+    paddingValues: PaddingValues
 ) {
-    ChallengesList(userName, challenges, onChallengeClick)
+    Box(modifier = Modifier.padding(paddingValues)) {
+        ChallengesList(userName, challenges, onChallengeClick)
+    }
 }
 
 @Composable
@@ -206,9 +279,9 @@ private fun ChallengesFailurePreview() {
     CodewarsTheme {
         CodewarsBackground {
             ChallengesFailure(
-                userName = "Otis Hahn"
-
-            ) {}
+                userName = "Otis Hahn",
+                {},
+            )
         }
     }
 }

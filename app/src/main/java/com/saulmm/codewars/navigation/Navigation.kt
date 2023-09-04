@@ -40,6 +40,9 @@ fun CodewarsNavHost(
                 navigateToKataDetail = {
                     navController.navigate(HomeGraphDest.KataDetail.buildRoute(it))
                 },
+                navigateToSettings = {
+                     navController.navigate(SettingsGraphDest.Settings.route)
+                },
                 viewModel = viewModel
             )
         }

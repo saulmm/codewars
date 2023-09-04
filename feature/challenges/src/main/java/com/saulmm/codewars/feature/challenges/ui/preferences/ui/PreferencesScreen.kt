@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -54,26 +55,39 @@ fun PreferencesScreen(
 
                 ) {
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(space = 16.dp),
-                        modifier = Modifier.padding(start = 48.dp, top = 16.dp, end = 16.dp)
+                        verticalArrangement = Arrangement.spacedBy(space = 24.dp),
+                        modifier = Modifier
+                            .padding(16.dp)
                             .fillMaxWidth()
                     ) {
                         Text(
                             text = stringResource(id = R.string.label_preferences),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(start = 72.dp)
                         )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Icon(painter = painterResource(id = R.drawable.ic_user), contentDescription = "user")
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_user_2),
+                                contentDescription = "user",
+                                modifier = Modifier.padding(16.dp)
+
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
                             Column {
-                                Text(text = stringResource(id = R.string.label_preferences))
+                                Text(
+                                    text = stringResource(id = R.string.label_selected_user),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = stringResource(id = R.string.message_selected_user),
-                                    modifier = Modifier.alpha(0.7f)
+                                    modifier = Modifier.alpha(0.7f),
+                                    style = MaterialTheme.typography.bodySmall
                                 )
                             }
                         }
@@ -90,7 +104,10 @@ private fun SettingsTopBar(
     onBackPressed: () -> Unit,
 ) {
     TopAppBar(
-        title = { stringResource(id = R.string.action_settings) },
+        title = { Text(
+            text = stringResource(id = R.string.action_settings),
+            modifier = Modifier.padding(start = 24.dp)
+        ) },
         scrollBehavior = scrollBehavior,
         navigationIcon = { OnBackIconButton(onBackPressed = onBackPressed) }
     )
