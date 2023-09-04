@@ -2,7 +2,10 @@
 
 package com.saulmm.codewars.feature.challenges.ui.preferences.ui
 
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,19 +13,32 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,49 +66,64 @@ fun PreferencesScreen(
                     )
                 }
             ) { paddingValues ->
-                Column(
-                    modifier = Modifier.padding(paddingValues),
-
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(space = 24.dp),
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.label_preferences),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.padding(start = 72.dp)
-                        )
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_user_2),
-                                contentDescription = "user",
-                                modifier = Modifier.padding(16.dp)
-
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Column {
-                                Text(
-                                    text = stringResource(id = R.string.label_selected_user),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    fontWeight = FontWeight.SemiBold,
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = stringResource(id = R.string.message_selected_user),
-                                    modifier = Modifier.alpha(0.7f),
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                            }
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    var openDialog by remember { mutableStateOf(false) }
+                    val context = LocalContext.current
+                    PreferencesContent(onChangeUserClick = { openDialog = true })
+                    ChangeUserNameDialog(
+                        openDialog = openDialog,
+                        onDialogDismissed = { openDialog = false },
+                        onConfirmClicked = {
+                            openDialog = false
+                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                         }
-                    }
+                    )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PreferencesContent(
+    onChangeUserClick: () -> Unit,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(space = 24.dp),
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = stringResource(id = R.string.label_preferences),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(start = 72.dp)
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable { onChangeUserClick() }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_user_2),
+                contentDescription = "user",
+                modifier = Modifier.padding(16.dp)
+
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Text(
+                    text = stringResource(id = R.string.label_selected_user),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(id = R.string.message_selected_user),
+                    modifier = Modifier.alpha(0.7f),
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }
@@ -104,14 +135,72 @@ private fun SettingsTopBar(
     onBackPressed: () -> Unit,
 ) {
     TopAppBar(
-        title = { Text(
-            text = stringResource(id = R.string.action_settings),
-            modifier = Modifier.padding(start = 24.dp)
-        ) },
+        title = {
+            Text(
+                text = stringResource(id = R.string.action_settings),
+                modifier = Modifier.padding(start = 24.dp)
+            )
+        },
         scrollBehavior = scrollBehavior,
         navigationIcon = { OnBackIconButton(onBackPressed = onBackPressed) }
     )
-    
+
+}
+
+
+@Composable
+fun ChangeUserNameDialog(
+    openDialog: Boolean,
+    onDialogDismissed: () -> Unit,
+    onConfirmClicked: (String) -> Unit,
+) {
+    if (openDialog) {
+        var text by remember { mutableStateOf("") }
+
+        AlertDialog(
+            onDismissRequest = onDialogDismissed,
+            content = {
+                Surface(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .wrapContentHeight(),
+                    shape = MaterialTheme.shapes.large,
+                    tonalElevation = AlertDialogDefaults.TonalElevation
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = stringResource(id = R.string.title_write_user),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = stringResource(id = R.string.message_write_user),
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.alpha(0.7f)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        OutlinedTextField(
+                            value = text,
+                            onValueChange = { text = it },
+                            singleLine = true
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row {
+                            TextButton(onClick = { onDialogDismissed() }) {
+                                Text(text = stringResource(id = R.string.action_cancel))
+                            }
+                            TextButton(onClick = { onConfirmClicked(text) }) {
+                                Text(text = stringResource(id = R.string.action_confirm))
+                            }
+                        }
+
+                    }
+                }
+
+
+            }
+        )
+    }
 }
 
 @Preview
