@@ -14,6 +14,8 @@ import com.saulmm.codewars.challengesDetailViewModel
 import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesScreen
 import com.saulmm.common.navigation_contract.home.HomeGraphDest
 import com.saulmm.codewars.feature.challenges.ui.detail.ChallengeDetailScreen
+import com.saulmm.codewars.feature.challenges.ui.preferences.ui.PreferencesScreen
+import com.saulmm.common.navigation_contract.home.SettingsGraphDest
 
 @Composable
 fun CodewarsNavHost(
@@ -55,6 +57,11 @@ fun CodewarsNavHost(
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url.toString())))
                 }
             )
+        }
+        composable(
+            route = SettingsGraphDest.Settings.route
+        ) {
+            PreferencesScreen()
         }
     }
 }

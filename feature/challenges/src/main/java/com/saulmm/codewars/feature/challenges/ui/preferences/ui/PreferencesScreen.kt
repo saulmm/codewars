@@ -33,11 +33,10 @@ import com.saulmm.codewars.common.design.system.component.OnBackIconButton
 import com.saulmm.codewars.feature.challenges.R
 
 @Composable
-fun PreferencesScreen() {
+fun PreferencesScreen(
+    onBackPressed: () -> Unit = {},
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val onBackPressed = { 
-        
-    }
 
     CodewarsTheme {
         CodewarsBackground {
