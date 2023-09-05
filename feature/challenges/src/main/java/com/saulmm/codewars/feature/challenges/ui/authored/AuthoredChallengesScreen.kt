@@ -56,7 +56,6 @@ import com.saulmm.codewars.feature.challenges.R
 
 @Composable
 fun AuthoredChallengesScreen(
-    userName: String,
     navigateToKataDetail: (String) -> Unit,
     navigateToSettings: () -> Unit,
     viewModel: AuthoredChallengesViewModel,
@@ -69,7 +68,7 @@ fun AuthoredChallengesScreen(
 
     CodewarsTheme {
         CodewarsBackground {
-            ChallengesScreenContent(userName, viewModel)
+            ChallengesScreenContent(viewModel)
         }
     }
 }
@@ -92,7 +91,7 @@ private fun AuthoredChallengesHeader(userName: String) {
 }
 
 @Composable
-private fun ChallengesScreenContent(userName: String, viewModel: AuthoredChallengesViewModel) {
+private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
     val viewState: AuthoredChallengesViewState by viewModel.viewState.collectAsStateWithLifecycle()
 
     val onFailureTryAgainClick = {
@@ -126,25 +125,25 @@ private fun ChallengesScreenContent(userName: String, viewModel: AuthoredChallen
         ) { targetState ->
             when (targetState) {
                 AuthoredChallengesViewState.Idle -> {}
-                AuthoredChallengesViewState.Failure -> {
+                is AuthoredChallengesViewState.Failure -> {
                     ChallengesFailure(
                         paddingValues = paddingValues,
-                        userName = userName,
+                        userName = targetState.username,
                         onTryAgainClick = onFailureTryAgainClick,
                     )
                 }
                 is AuthoredChallengesViewState.Loaded -> {
                     ChallengesLoaded(
                         paddingValues = paddingValues,
-                        userName = userName,
+                        userName = targetState.username,
                         challenges = (viewState as AuthoredChallengesViewState.Loaded).katas,
                         onChallengeClick = onChallengeClick
                     )
                 }
-                AuthoredChallengesViewState.Loading -> {
+                is AuthoredChallengesViewState.Loading -> {
                     ChallengesLoading(
                         paddingValues = paddingValues,
-                        userName = userName
+                        userName = targetState.username
                     )
                 }
             }

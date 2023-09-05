@@ -6,22 +6,7 @@ import com.saulmm.common.navigation_contract.ScreenArg
 import com.saulmm.common.navigation_contract.ScreenDest
 
 sealed class HomeGraphDest {
-    object AuthoredChallenges: ScreenDest("$HOME_GRAPH/home") {
-        private const val ARG_USER_NAME = "username"
-        private const val DEFAULT_USERNAME = "bkaes"
-
-        override val args: List<ScreenArg<*>> = listOf(
-            ScreenArg(ARG_USER_NAME, NavType.StringType, isNullable = true)
-        )
-
-        fun buildRoute(username: String): String {
-            return route.replace("{$ARG_USER_NAME}", username)
-        }
-
-        fun userNameFrom(bundle: Bundle?): String {
-            return bundle?.getString(ARG_USER_NAME) ?: DEFAULT_USERNAME
-        }
-    }
+    object AuthoredChallenges: ScreenDest("$HOME_GRAPH/home")
 
     object KataDetail: ScreenDest("$HOME_GRAPH/kata-detail") {
         private const val ARG_KATA_ID = "kata_id"

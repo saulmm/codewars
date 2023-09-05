@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":entity"))
     implementation(project(":common"))
     implementation(project(":common:android"))
+    implementation(project(":common:android:repository"))
     implementation(project(":common:network"))
     implementation(project(":common:repository"))
     implementation(project(":common:codewars-design-system"))

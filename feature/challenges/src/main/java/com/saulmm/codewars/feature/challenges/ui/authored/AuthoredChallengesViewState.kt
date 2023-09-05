@@ -4,8 +4,11 @@ import com.saulmm.codewars.entity.Challenge
 
 sealed class AuthoredChallengesViewState {
     object Idle: AuthoredChallengesViewState()
-    object Loading: AuthoredChallengesViewState()
-    object Failure: AuthoredChallengesViewState()
-    data class Loaded(val katas: List<Challenge>): AuthoredChallengesViewState()
+    data class Loading(val username: String): AuthoredChallengesViewState()
+    data class Failure(val username: String): AuthoredChallengesViewState()
+    data class Loaded(
+        val username: String,
+        val katas: List<Challenge>
+    ): AuthoredChallengesViewState()
 
 }

@@ -2,7 +2,6 @@
 
 package com.saulmm.codewars.feature.challenges.ui.preferences.ui
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,7 +24,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -42,8 +40,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.OnBackIconButton
@@ -51,9 +49,17 @@ import com.saulmm.codewars.feature.challenges.R
 
 @Composable
 fun PreferencesScreen(
-    onBackPressed: () -> Unit = {},
+    viewModel: PreferencesViewModel,
+    onNavigateBack: () -> Unit = {},
+    onNavigateToAuthoredChallenges: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+    initEventProcessor(
+        navigateBack = onNavigateBack,
+        navigateToAuthoredChallenges = onNavigateToAuthoredChallenges,
+        viewModel = viewModel
+    )
 
     CodewarsTheme {
         CodewarsBackground {
@@ -62,20 +68,19 @@ fun PreferencesScreen(
                 topBar = {
                     SettingsTopBar(
                         scrollBehavior = scrollBehavior,
-                        onBackPressed = onBackPressed,
+                        onBackPressed = onNavigateBack,
                     )
                 }
             ) { paddingValues ->
                 Box(modifier = Modifier.padding(paddingValues)) {
                     var openDialog by remember { mutableStateOf(false) }
-                    val context = LocalContext.current
                     PreferencesContent(onChangeUserClick = { openDialog = true })
                     ChangeUserNameDialog(
                         openDialog = openDialog,
                         onDialogDismissed = { openDialog = false },
                         onConfirmClicked = {
                             openDialog = false
-                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                            viewModel.onViewEvent(PreferencesViewEvent.OnUsernameSelected(it))
                         }
                     )
                 }
@@ -196,15 +201,26 @@ fun ChangeUserNameDialog(
 
                     }
                 }
-
-
             }
         )
     }
 }
 
-@Preview
 @Composable
-private fun PreferencesScreenPreview() {
-    PreferencesScreen()
+private fun initEventProcessor(
+    navigateBack: () -> Unit,
+    navigateToAuthoredChallenges: () -> Unit,
+    viewModel: PreferencesViewModel,
+) {
+    viewModel.events.observeWithLifecycle { event ->
+        when (event) {
+            PreferencesEvent.NavigateBack -> {
+                navigateBack()
+            }
+            PreferencesEvent.NavigateToAuthoredChallenges -> {
+                navigateToAuthoredChallenges()
+            }
+        }
+
+    }
 }

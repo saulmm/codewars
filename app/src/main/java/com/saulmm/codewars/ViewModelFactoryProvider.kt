@@ -14,7 +14,6 @@ import dagger.hilt.android.components.ActivityComponent
 @EntryPoint
 @InstallIn(ActivityComponent::class)
 interface ViewModelFactoryProvider {
-    fun authoredChallengesScreenViewModelFactory(): AuthoredChallengesViewModel.Factory
     fun challengesDetailScreenViewModelFactory(): ChallengeDetailViewModel.Factory
 }
 
@@ -23,17 +22,6 @@ fun viewModelFactory(): ViewModelFactoryProvider {
     return EntryPointAccessors.fromActivity(
         LocalContext.current as Activity,
         ViewModelFactoryProvider::class.java
-    )
-}
-
-@Composable
-fun authoredChallengesViewModel(userName: String): AuthoredChallengesViewModel {
-    val factory = viewModelFactory().authoredChallengesScreenViewModelFactory()
-
-    return viewModel(
-        factory = AuthoredChallengesViewModel.provideFactory(
-            assistedFactory = factory, userName = userName
-        )
     )
 }
 
