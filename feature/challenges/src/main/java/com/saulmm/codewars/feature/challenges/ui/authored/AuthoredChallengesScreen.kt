@@ -111,8 +111,7 @@ private fun ChallengesScreenContent(userName: String, viewModel: AuthoredChallen
 
 
     Scaffold(
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AuthoredChallengesTopBar(
                 scrollBehavior = scrollBehavior,
