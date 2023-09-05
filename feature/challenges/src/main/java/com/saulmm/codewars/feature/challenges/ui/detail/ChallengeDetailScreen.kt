@@ -114,6 +114,7 @@ fun ChallengeDetailScreen(
                                     .padding(padding)
                             )
                         }
+
                         is ChallengeDetailViewState.Loaded -> {
                             ChallengeDetailContent(
                                 challenge = viewState.challenge,

@@ -148,11 +148,8 @@ private fun ChallengesScreenContent(userName: String, viewModel: AuthoredChallen
                     )
                 }
             }
-
         }
-
     }
-
 }
 
 @Composable
@@ -196,7 +193,6 @@ private fun AuthoredChallengesTopBar(
         modifier = Modifier
     )
 }
-
 
 @Composable
 fun ChallengesFailure(
