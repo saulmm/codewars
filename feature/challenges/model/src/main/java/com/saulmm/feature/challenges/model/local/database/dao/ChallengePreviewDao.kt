@@ -15,6 +15,6 @@ internal interface ChallengePreviewDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg challenges: ChallengePreviewDbo)
 
-    @Query("SELECT MAX(insertedAt) FROM challenge_preview")
-    suspend fun getMostRecentInsertedDate(): Long?
+    @Query("SELECT MAX(insertedAt) FROM challenge_preview where username = :username")
+    suspend fun getMostRecentInsertedDate(username: String): Long?
 }
