@@ -14,8 +14,8 @@
     <string name="label_preferences">Preferences</string>
     <string name="label_selected_user">Current Codewars User</string>
     <string name="title_write_user">Write your preferred User</string>
-    <string name="message_selected_user">\'bkaes\' is the user is currently selected, you\'ll only see code challenges and information from this users. Tap here to change it.</string>
-    <string name="message_write_user">\'bkaes\' is the user is currently selected, you\'ll only see code challenges and information from this users. Write here any other valid Codewars user.</string>
+    <string name="message_selected_user">\'%s\' is the user is currently selected, you\'ll only see code challenges and information from this users. Tap here to change it.</string>
+    <string name="message_write_user">\'%s\' is the user is currently selected, you\'ll only see code challenges and information from this users. Write here any other valid Codewars user.</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_cancel">Cancel</string>
 </resources>

@@ -36,11 +36,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
@@ -54,12 +54,18 @@ fun PreferencesScreen(
     onNavigateToAuthoredChallenges: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val viewState: PreferencesViewState by viewModel.viewState.collectAsStateWithLifecycle()
+    val onUsernameSelected = { username: String ->
+        viewModel.onViewEvent(PreferencesViewEvent.OnUsernameSelected(username))
+    }
+
 
     initEventProcessor(
         navigateBack = onNavigateBack,
         navigateToAuthoredChallenges = onNavigateToAuthoredChallenges,
         viewModel = viewModel
     )
+
 
     CodewarsTheme {
         CodewarsBackground {
@@ -73,16 +79,18 @@ fun PreferencesScreen(
                 }
             ) { paddingValues ->
                 Box(modifier = Modifier.padding(paddingValues)) {
-                    var openDialog by remember { mutableStateOf(false) }
-                    PreferencesContent(onChangeUserClick = { openDialog = true })
-                    ChangeUserNameDialog(
-                        openDialog = openDialog,
-                        onDialogDismissed = { openDialog = false },
-                        onConfirmClicked = {
-                            openDialog = false
-                            viewModel.onViewEvent(PreferencesViewEvent.OnUsernameSelected(it))
+                    when (viewState) {
+                        PreferencesViewState.Idle -> {
+                            // no op
                         }
-                    )
+
+                        is PreferencesViewState.Loaded -> {
+                            PreferencesContent(
+                                username = (viewState as PreferencesViewState.Loaded).savedUsername,
+                                onUsernameSelected = onUsernameSelected
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -91,6 +99,31 @@ fun PreferencesScreen(
 
 @Composable
 private fun PreferencesContent(
+    username: String,
+    onUsernameSelected: (username: String) -> Unit
+) {
+    var openDialog by remember { mutableStateOf(false) }
+    val onConfirmClicked = { openDialog = true }
+
+    PreferencesContentLoaded(
+        username = username,
+        onChangeUserClick = onConfirmClicked
+    )
+    ChangeUserNameDialog(
+        username = username,
+        openDialog = openDialog,
+        onDialogDismissed = { openDialog = false },
+        onConfirmClicked = {
+            openDialog = false
+            onUsernameSelected(it)
+        }
+    )
+
+}
+
+@Composable
+private fun PreferencesContentLoaded(
+    username: String,
     onChangeUserClick: () -> Unit,
 ) {
     Column(
@@ -104,7 +137,8 @@ private fun PreferencesContent(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(start = 72.dp)
+            modifier = Modifier
+                .padding(start = 72.dp)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -117,6 +151,7 @@ private fun PreferencesContent(
 
             )
             Spacer(modifier = Modifier.width(16.dp))
+
             Column {
                 Text(
                     text = stringResource(id = R.string.label_selected_user),
@@ -125,7 +160,7 @@ private fun PreferencesContent(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = stringResource(id = R.string.message_selected_user),
+                    text = stringResource(id = R.string.message_selected_user, username),
                     modifier = Modifier.alpha(0.7f),
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -155,12 +190,13 @@ private fun SettingsTopBar(
 
 @Composable
 fun ChangeUserNameDialog(
+    username: String,
     openDialog: Boolean,
     onDialogDismissed: () -> Unit,
     onConfirmClicked: (String) -> Unit,
 ) {
     if (openDialog) {
-        var text by remember { mutableStateOf("") }
+        var text by remember { mutableStateOf(username) }
 
         AlertDialog(
             onDismissRequest = onDialogDismissed,
@@ -179,7 +215,7 @@ fun ChangeUserNameDialog(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = stringResource(id = R.string.message_write_user),
+                            text = stringResource(id = R.string.message_write_user, username),
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier.alpha(0.7f)
                         )
