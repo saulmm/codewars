@@ -66,8 +66,6 @@ richtext = { group = "com.halilibo.compose-richtext", name ="richtext-commonmark
 richtext-m3 = { group = "com.halilibo.compose-richtext", name ="richtext-ui-material3", version.ref = "richtext"}
 room-ktx = { group = "androidx.room", name ="room-ktx", version.ref = "room"}
 room-compiler = { group = "androidx.room", name ="room-compiler", version.ref = "room"}
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
