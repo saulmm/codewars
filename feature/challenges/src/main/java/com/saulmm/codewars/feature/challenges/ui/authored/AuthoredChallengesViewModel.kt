@@ -66,6 +66,10 @@ class AuthoredChallengesViewModel @Inject constructor(
             AuthoredChallengesViewEvent.OnSettingsClick -> {
                 _events.trySend(AuthoredChallengeEvent.NavigateToSettings)
             }
+
+            AuthoredChallengesViewEvent.OnSearchClick -> {
+                _events.trySend(AuthoredChallengeEvent.NavigateToSearch)
+            }
         }
     }
 }

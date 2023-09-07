@@ -104,6 +104,10 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
     val onSettingsClick = {
         viewModel.onViewEvent(AuthoredChallengesViewEvent.OnSettingsClick)
     }
+    
+    val onSearchClick = {
+        viewModel.onViewEvent(AuthoredChallengesViewEvent.OnSearchClick)
+    }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -113,7 +117,8 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
         topBar = {
             AuthoredChallengesTopBar(
                 scrollBehavior = scrollBehavior,
-                onSettingsClick = onSettingsClick
+                onSettingsClick = onSettingsClick,
+                onSearchClick = onSearchClick,
             )
         }
     ) { paddingValues ->
@@ -154,6 +159,7 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
 private fun initEventProcessor(
     navigateToKataDetail: (String) -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToSearch: () -> Unit,
     viewModel: AuthoredChallengesViewModel,
 ) {
 
@@ -165,6 +171,9 @@ private fun initEventProcessor(
 
             AuthoredChallengeEvent.NavigateToSettings ->
                 navigateToSettings()
+
+            AuthoredChallengeEvent.NavigateToSearch ->
+                navigateToSearch()
         }
     }
 }
@@ -174,6 +183,7 @@ private fun initEventProcessor(
 private fun AuthoredChallengesTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     onSettingsClick: () -> Unit,
+    onSearchClick: () -> Unit,
 ) {
     TopAppBar(
         title = {},
@@ -182,11 +192,19 @@ private fun AuthoredChallengesTopBar(
             scrolledContainerColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         actions = {
-            IconButton(onClick = { onSettingsClick() }
-            ) {
+            IconButton(onClick = { onSearchClick() }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = "Search",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+
+            }
+            IconButton(onClick = { onSettingsClick() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_settings),
                     contentDescription = "Settings",
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         },
