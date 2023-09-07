@@ -39,6 +39,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.saulmm.codewars.common.android.observeWithLifecycle
@@ -140,31 +141,36 @@ private fun PreferencesContentLoaded(
             modifier = Modifier
                 .padding(start = 72.dp)
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.clickable { onChangeUserClick() }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_user_2),
-                contentDescription = "user",
-                modifier = Modifier.padding(16.dp)
+        UsernamePreferenceRow(onChangeUserClick, username)
+    }
+}
 
+@Composable
+private fun UsernamePreferenceRow(onChangeUserClick: () -> Unit, username: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.clickable { onChangeUserClick() }
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_user_2),
+            contentDescription = "user",
+            modifier = Modifier.padding(16.dp)
+
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Column {
+            Text(
+                text = stringResource(id = R.string.label_selected_user),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
             )
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Column {
-                Text(
-                    text = stringResource(id = R.string.label_selected_user),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = stringResource(id = R.string.message_selected_user, username),
-                    modifier = Modifier.alpha(0.7f),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(id = R.string.message_selected_user, username),
+                modifier = Modifier.alpha(0.7f),
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
@@ -186,7 +192,6 @@ private fun SettingsTopBar(
     )
 
 }
-
 
 @Composable
 fun ChangeUserNameDialog(
@@ -211,22 +216,22 @@ fun ChangeUserNameDialog(
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = stringResource(id = R.string.title_write_user),
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleLarge,
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
                             text = stringResource(id = R.string.message_write_user, username),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.alpha(0.7f)
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
                         OutlinedTextField(
                             value = text,
                             onValueChange = { text = it },
                             singleLine = true
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        Row {
+                        Row(horizontalArrangement = Arrangement.End) {
                             TextButton(onClick = { onDialogDismissed() }) {
                                 Text(text = stringResource(id = R.string.action_cancel))
                             }
@@ -258,5 +263,31 @@ private fun initEventProcessor(
             }
         }
 
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UsernamePreferenceRowPreview() {
+    CodewarsTheme {
+        Box(modifier = Modifier.padding(16.dp)) {
+            UsernamePreferenceRow(
+                onChangeUserClick = {  },
+                username = "Saul"
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun ChangeUserNameDialogPreview() {
+    MaterialTheme {
+        ChangeUserNameDialog(
+            username = "Saul",
+            openDialog = true,
+            onDialogDismissed = { },
+            onConfirmClicked = { }
+        )
     }
 }
