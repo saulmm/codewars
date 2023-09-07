@@ -4,6 +4,7 @@ package com.saulmm.codewars.common.design.system
 
 import android.app.Activity
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -38,27 +39,21 @@ private val DarkAndroidBackgroundTheme = BackgroundTheme(color = Color.Black)
 @Composable
 fun CodewarsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        IS_DYNAMIC_COLOR_SUPPORTED -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
+    val backgroundTheme = when {
+        IS_DYNAMIC_COLOR_SUPPORTED -> BackgroundTheme(color = colorScheme.surfaceVariant)
+        darkTheme -> DarkAndroidBackgroundTheme
+        else -> LightAndroidBackgroundTheme
     }
-
-    val backgroundTheme = if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
 
     CompositionLocalProvider(
         LocalBackgroundTheme provides backgroundTheme,
@@ -70,3 +65,6 @@ fun CodewarsTheme(
         )
     }
 }
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+private val IS_DYNAMIC_COLOR_SUPPORTED = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S

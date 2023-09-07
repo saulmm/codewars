@@ -90,8 +90,7 @@ fun ChallengeDetailScreen(
             )
 
             Scaffold(
-                modifier = Modifier
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 topBar = {
                     ChallengeDetailTopBar(
                         scrollBehavior = scrollBehavior,

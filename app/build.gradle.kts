@@ -54,6 +54,7 @@ dependencies {
     implementation(project(":entity"))
     implementation(project(":common"))
     implementation(project(":common:network"))
+    implementation(project(":common:android:repository"))
     implementation(project(":common:navigation-contract"))
     implementation(project(":common:codewars-design-system"))
     implementation(project(":feature:challenges"))

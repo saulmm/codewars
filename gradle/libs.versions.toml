@@ -25,10 +25,12 @@ timber = "5.0.1"
 coroutines-test = "1.7.1"
 accompanist-placeholder = "0.30.1"
 truth = "1.1.5"
-mockito = "5.5.0"
+mockito = "5.1.0"
 turbine = "1.0.0"
 richtext = "0.16.0"
 room = "2.5.2"
+androidx-test-ext-junit = "1.1.5"
+espresso-core = "3.5.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -58,7 +60,7 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 accompanist-placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder", version.ref = "accompanist-placeholder" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
-mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockito = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 richtext = { group = "com.halilibo.compose-richtext", name ="richtext-commonmark", version.ref = "richtext"}
 richtext-m3 = { group = "com.halilibo.compose-richtext", name ="richtext-ui-material3", version.ref = "richtext"}

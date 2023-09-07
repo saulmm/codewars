@@ -18,8 +18,11 @@ import kotlinx.coroutines.test.setMain
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.mock
+import org.saulmm.common.android.repository.PreferencesRepository
 
 
 @ExperimentalCoroutinesApi
@@ -30,6 +33,9 @@ class AuthoredChallengesViewModelTest {
 
     @Mock
     lateinit var challengesRepository: Repository<ChallengePreviewParams, List<Challenge>>
+
+    @Mock
+    lateinit var preferencesRepository: PreferencesRepository
 
     init {
         MockitoAnnotations.openMocks(this)
@@ -105,8 +111,13 @@ class AuthoredChallengesViewModelTest {
     }
 
     private fun viewModel(): AuthoredChallengesViewModel {
+        mock<PreferencesRepository>() {
+            onBlocking { preferencesRepository.getString(PreferencesRepository.Key.SELECTED_USERNAME) }
+                .thenReturn("")
+        }
+
         return AuthoredChallengesViewModel(
-            userName = "",
+            preferencesRepository = preferencesRepository,
             repository = challengesRepository
         )
     }

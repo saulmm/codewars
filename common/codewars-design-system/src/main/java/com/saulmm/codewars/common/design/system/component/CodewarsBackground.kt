@@ -26,7 +26,7 @@ fun CodewarsBackground(
     val color = LocalBackgroundTheme.current.color
     val tonalElevation = LocalBackgroundTheme.current.tonalElevation
     Surface(
-        color = if (color == Color.Unspecified) Color.Transparent else color,
+        color = color.takeIf { color != Color.Unspecified } ?: Color.Transparent,
         tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
         modifier = modifier.fillMaxSize(),
     ) {

@@ -13,7 +13,8 @@ internal class ChallengesPreviewApiDataSource @Inject constructor(
 ) : ReadableDataSource<ChallengePreviewParams, List<Challenge>> {
 
     override suspend fun getData(query: ChallengePreviewParams): List<Challenge>? {
-        return codewarsApi.authoredChallenges(userName = query.userName).data
+        return codewarsApi.authoredChallenges(userName = query.userName)
+            .data
             .map(AuthoredChallengeDto::toChallenge)
     }
 }
