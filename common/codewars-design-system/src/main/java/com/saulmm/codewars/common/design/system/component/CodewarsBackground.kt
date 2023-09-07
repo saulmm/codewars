@@ -1,7 +1,5 @@
 package com.saulmm.codewars.common.design.system.component
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.Surface
@@ -28,14 +26,12 @@ fun CodewarsBackground(
     val color = LocalBackgroundTheme.current.color
     val tonalElevation = LocalBackgroundTheme.current.tonalElevation
     Surface(
-        color = Color.Red,
-//        tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
+        color = color.takeIf { color != Color.Unspecified } ?: Color.Transparent,
+        tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
         modifier = modifier.fillMaxSize(),
     ) {
-//        Box(modifier = Modifier.fillMaxSize().background(Color.Blue)) {
-//            CompositionLocalProvider(LocalAbsoluteTonalElevation provides 0.dp) {
-                content()
-//            }
-//        }
+        CompositionLocalProvider(LocalAbsoluteTonalElevation provides 0.dp) {
+            content()
+        }
     }
 }

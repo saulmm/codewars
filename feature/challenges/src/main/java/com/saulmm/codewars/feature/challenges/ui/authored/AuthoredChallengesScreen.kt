@@ -8,7 +8,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,8 +21,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
+import com.saulmm.codewars.common.design.system.LocalBackgroundTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
 import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
@@ -109,9 +107,9 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        containerColor = LocalBackgroundTheme.current.color,
         topBar = {
             AuthoredChallengesTopBar(
                 scrollBehavior = scrollBehavior,
@@ -179,7 +177,10 @@ private fun AuthoredChallengesTopBar(
 ) {
     TopAppBar(
         title = {},
-
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = LocalBackgroundTheme.current.color,
+            scrolledContainerColor = MaterialTheme.colorScheme.secondaryContainer
+        ),
         actions = {
             IconButton(onClick = { onSettingsClick() }
             ) {
@@ -339,7 +340,6 @@ private fun ChallengeListPreviewLight() {
         }
     }
 }
-
 
 @Composable
 private fun ChallengeCard(

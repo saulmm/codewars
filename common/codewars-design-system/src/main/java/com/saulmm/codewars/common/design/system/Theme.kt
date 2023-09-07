@@ -50,7 +50,7 @@ fun CodewarsTheme(
         else -> LightColorScheme
     }
     val backgroundTheme = when {
-        IS_DYNAMIC_COLOR_SUPPORTED -> BackgroundTheme(color = colorScheme.primary)
+        IS_DYNAMIC_COLOR_SUPPORTED -> BackgroundTheme(color = colorScheme.surfaceVariant)
         darkTheme -> DarkAndroidBackgroundTheme
         else -> LightAndroidBackgroundTheme
     }
