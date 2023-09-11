@@ -42,7 +42,7 @@ class AuthoredChallengesViewModel @Inject constructor(
 
         runCatching {
             requireNotNull(
-                repository.get(ChallengePreviewParams(username))
+                repository.get(ChallengePreviewParams.ByUsername(username))
             )
         }.onFailure {
             Timber.e(it)
@@ -69,6 +69,10 @@ class AuthoredChallengesViewModel @Inject constructor(
 
             AuthoredChallengesViewEvent.OnSearchClick -> {
                 _events.trySend(AuthoredChallengeEvent.NavigateToSearch)
+            }
+
+            is AuthoredChallengesViewEvent.OnSearchQuerySelected -> {
+
             }
         }
     }

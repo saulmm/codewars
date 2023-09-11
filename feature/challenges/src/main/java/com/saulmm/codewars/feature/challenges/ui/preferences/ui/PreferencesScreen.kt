@@ -46,6 +46,7 @@ import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.OnBackIconButton
+import com.saulmm.codewars.common.design.system.component.TextFieldDialog
 import com.saulmm.codewars.feature.challenges.R
 
 @Composable
@@ -200,51 +201,13 @@ fun ChangeUserNameDialog(
     onDialogDismissed: () -> Unit,
     onConfirmClicked: (String) -> Unit,
 ) {
-    if (openDialog) {
-        var text by remember { mutableStateOf(username) }
-
-        AlertDialog(
-            onDismissRequest = onDialogDismissed,
-            content = {
-                Surface(
-                    modifier = Modifier
-                        .wrapContentWidth()
-                        .wrapContentHeight(),
-                    shape = MaterialTheme.shapes.large,
-                    tonalElevation = AlertDialogDefaults.TonalElevation
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = stringResource(id = R.string.title_write_user),
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = stringResource(id = R.string.message_write_user, username),
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.alpha(0.7f)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        OutlinedTextField(
-                            value = text,
-                            onValueChange = { text = it },
-                            singleLine = true
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Row(horizontalArrangement = Arrangement.End) {
-                            TextButton(onClick = { onDialogDismissed() }) {
-                                Text(text = stringResource(id = R.string.action_cancel))
-                            }
-                            TextButton(onClick = { onConfirmClicked(text) }) {
-                                Text(text = stringResource(id = R.string.action_confirm))
-                            }
-                        }
-
-                    }
-                }
-            }
-        )
-    }
+    TextFieldDialog(
+        show = openDialog,
+        title = stringResource(id = R.string.title_write_user),
+        message = stringResource(id = R.string.message_write_user, username),
+        onDialogDismissed = onDialogDismissed,
+        onPositiveButtonClicked = onConfirmClicked
+    )
 }
 
 @Composable

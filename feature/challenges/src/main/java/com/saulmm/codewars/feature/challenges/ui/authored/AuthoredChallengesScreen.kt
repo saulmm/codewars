@@ -34,6 +34,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -48,6 +51,7 @@ import com.saulmm.codewars.common.design.system.LocalBackgroundTheme
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
 import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
+import com.saulmm.codewars.common.design.system.component.TextFieldDialog
 import com.saulmm.codewars.common.design.system.component.placeholder
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.ProgrammingLanguage
@@ -59,15 +63,30 @@ fun AuthoredChallengesScreen(
     navigateToSettings: () -> Unit,
     viewModel: AuthoredChallengesViewModel,
 ) {
+    var showSearchDialog: Boolean by remember {
+        mutableStateOf(false)
+    }
+
+    val navigateToSearch = {
+        showSearchDialog = true
+    }
+
     initEventProcessor(
         navigateToKataDetail = navigateToKataDetail,
         navigateToSettings = navigateToSettings,
+        navigateToSearch = navigateToSearch,
         viewModel = viewModel
     )
 
     CodewarsTheme {
         CodewarsBackground {
             ChallengesScreenContent(viewModel)
+            SearchChallengeDialog(
+                show = showSearchDialog,
+                onChallengeQuerySelected = {
+                    viewModel.onViewEvent(AuthoredChallengesViewEvent.OnSearchQuerySelected(it))
+                }
+            )
         }
     }
 }
@@ -394,6 +413,19 @@ private fun ChallengeCard(
             ProgramingLanguages(progammingLanguages = challenge.languages)
         }
     }
+}
+
+@Composable
+fun SearchChallengeDialog(
+    show: Boolean,
+    onChallengeQuerySelected: (String) -> Unit,
+) {
+    TextFieldDialog(
+        show = show,
+        title = stringResource(id = R.string.title_search_challenge),
+        onPositiveButtonClicked = onChallengeQuerySelected
+    )
+
 }
 
 @Composable
