@@ -6,6 +6,8 @@ import com.saulmm.feature.challenges.model.params.ChallengePreviewParams
 import com.saulmm.feature.challenges.model.local.mapper.toChallengePreview
 import com.saulmm.feature.challenges.model.local.mapper.toDbo
 import com.saulmm.codewars.repository.ReadAndWriteDataSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
 
@@ -17,13 +19,13 @@ internal class ChallengesPreviewRoomDataSource @Inject constructor(
         challengeDatabase.challengePreviewDao()
     }
 
-    override suspend fun getData(query: ChallengePreviewParams): List<Challenge>? {
-        return when (query) {
-            is ChallengePreviewParams.ByTextQuery -> {
-                challengesByChallengeName(query.query)
+    override suspend fun getData(query: ChallengePreviewParams): List<Challenge>? = withContext(Dispatchers.IO){
+        when (query) {
+            is ChallengePreviewParams.ByUsernameAndTextQuery -> {
+                challengesByChallengeName(query.textQuery)
             }
             is ChallengePreviewParams.ByUsername -> {
-                challengesByUsername(query.userName)
+                challengesByUsername(query.username)
             }
         }
 
@@ -41,12 +43,12 @@ internal class ChallengesPreviewRoomDataSource @Inject constructor(
 
     override suspend fun saveData(query: ChallengePreviewParams, data: List<Challenge>) {
         when (query) {
-            is ChallengePreviewParams.ByTextQuery -> {
+            is ChallengePreviewParams.ByUsernameAndTextQuery -> {
                 // no - op
             }
             is ChallengePreviewParams.ByUsername -> {
                 saveChallengesByUsername(
-                    username = query.userName,
+                    username = query.username,
                     data = data
                 )
             }
@@ -68,11 +70,11 @@ internal class ChallengesPreviewRoomDataSource @Inject constructor(
 
     override suspend fun lastSavedDataDate(query: ChallengePreviewParams): Date? {
         return when (query) {
-            is ChallengePreviewParams.ByTextQuery -> {
-                challengePreviewDao.getMostRecentInsertedDateByKeyword(query.query)?.let(::Date)
+            is ChallengePreviewParams.ByUsernameAndTextQuery -> {
+                challengePreviewDao.getMostRecentInsertedDateByKeyword(query.textQuery)?.let(::Date)
             }
             is ChallengePreviewParams.ByUsername -> {
-                challengePreviewDao.getMostRecentInsertedDate(query.userName)?.let(::Date)
+                challengePreviewDao.getMostRecentInsertedDate(query.username)?.let(::Date)
             }
         }
     }

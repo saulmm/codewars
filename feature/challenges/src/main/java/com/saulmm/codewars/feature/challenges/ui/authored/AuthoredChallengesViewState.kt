@@ -1,14 +1,24 @@
-package com.saulmm.codewars.feature.challenges.ui.authored
-
 import com.saulmm.codewars.entity.Challenge
 
-sealed class AuthoredChallengesViewState {
-    object Idle: AuthoredChallengesViewState()
-    data class Loading(val username: String): AuthoredChallengesViewState()
-    data class Failure(val username: String): AuthoredChallengesViewState()
-    data class Loaded(
-        val username: String,
-        val katas: List<Challenge>
-    ): AuthoredChallengesViewState()
+sealed class AuthoredChallengesViewState(
+    open val username: String = "",
+    open val textQuery: String? = null
+) {
+    object Idle : AuthoredChallengesViewState()
 
+    data class Loading(
+        override val username: String,
+        override val textQuery: String? = null
+    ) : AuthoredChallengesViewState(username, textQuery)
+
+    data class Failure(
+        override val username: String,
+        override val textQuery: String? = null
+    ) : AuthoredChallengesViewState(username, textQuery)
+
+    data class Loaded(
+        override val username: String,
+        override val textQuery: String? = null,
+        val katas: List<Challenge> = emptyList()
+    ) : AuthoredChallengesViewState(username, textQuery)
 }

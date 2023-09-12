@@ -2,7 +2,9 @@
 
 package com.saulmm.codewars.feature.challenges.ui.authored
 
+import AuthoredChallengesViewState
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -84,6 +86,7 @@ fun AuthoredChallengesScreen(
             SearchChallengeDialog(
                 show = showSearchDialog,
                 onChallengeQuerySelected = {
+                    showSearchDialog = false
                     viewModel.onViewEvent(AuthoredChallengesViewEvent.OnSearchQuerySelected(it))
                 }
             )
@@ -141,14 +144,16 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
             )
         }
     ) { paddingValues ->
+        Log.i("view-stage", "View state is: $viewState")
         AnimatedContent(
             targetState = viewState,
             transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) },
             label = "Animated Content"
         ) { targetState ->
-            when (targetState) {
+            when (viewState) {
                 AuthoredChallengesViewState.Idle -> {}
                 is AuthoredChallengesViewState.Failure -> {
+                    Log.i("view-stage", "Hello, I'm failure branch")
                     ChallengesFailure(
                         paddingValues = paddingValues,
                         userName = targetState.username,
@@ -156,6 +161,7 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
                     )
                 }
                 is AuthoredChallengesViewState.Loaded -> {
+                    Log.i("view-stage", "Hello, I'm Loaded branch")
                     ChallengesLoaded(
                         paddingValues = paddingValues,
                         userName = targetState.username,
@@ -164,10 +170,14 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
                     )
                 }
                 is AuthoredChallengesViewState.Loading -> {
+                    Log.i("view-stage", "Hello, I'm Loading branch")
                     ChallengesLoading(
                         paddingValues = paddingValues,
                         userName = targetState.username
                     )
+                }
+                else -> {
+                    error("Cannot happen")
                 }
             }
         }
