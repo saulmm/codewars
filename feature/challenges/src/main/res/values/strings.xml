@@ -19,4 +19,6 @@
     <string name="message_write_user">\'%s\' is the user is currently selected, you\'ll only see code challenges and information from this users. Write here any other valid Codewars user.</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_cancel">Cancel</string>
+    <string name="title_idle_search">Type something to start searching</string>
+    <string name="message_idle_search">Arrays, stacks, sorting tree, fizz buzz...</string>
 </resources>

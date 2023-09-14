@@ -4,7 +4,6 @@ package com.saulmm.codewars.feature.challenges.ui.authored
 
 import AuthoredChallengesViewState
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -30,9 +29,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
@@ -47,7 +43,6 @@ import com.saulmm.codewars.common.design.system.component.ChallengeCard
 import com.saulmm.codewars.common.design.system.component.ChallengesLoadingPlaceholders
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
-import com.saulmm.codewars.common.design.system.component.TextFieldDialog
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.ProgrammingLanguage
 import com.saulmm.codewars.feature.challenges.R
@@ -56,15 +51,9 @@ import com.saulmm.codewars.feature.challenges.R
 fun AuthoredChallengesScreen(
     navigateToKataDetail: (String) -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToSearch: (username: String) -> Unit,
     viewModel: AuthoredChallengesViewModel,
 ) {
-    var showSearchDialog: Boolean by remember {
-        mutableStateOf(false)
-    }
-
-    val navigateToSearch = {
-        showSearchDialog = true
-    }
 
     initEventProcessor(
         navigateToKataDetail = navigateToKataDetail,
@@ -76,13 +65,6 @@ fun AuthoredChallengesScreen(
     CodewarsTheme {
         CodewarsBackground {
             ChallengesScreenContent(viewModel)
-            SearchChallengeDialog(
-                show = showSearchDialog,
-                onChallengeQuerySelected = {
-                    showSearchDialog = false
-                    viewModel.onViewEvent(AuthoredChallengesViewEvent.OnSearchQuerySelected(it))
-                }
-            )
         }
     }
 }
@@ -137,7 +119,6 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
             )
         }
     ) { paddingValues ->
-        Log.i("view-stage", "View state is: $viewState")
         AnimatedContent(
             targetState = viewState,
             transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) },
@@ -146,7 +127,6 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
             when (viewState) {
                 AuthoredChallengesViewState.Idle -> {}
                 is AuthoredChallengesViewState.Failure -> {
-                    Log.i("view-stage", "Hello, I'm failure branch")
                     ChallengesFailure(
                         paddingValues = paddingValues,
                         userName = targetState.username,
@@ -154,7 +134,6 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
                     )
                 }
                 is AuthoredChallengesViewState.Loaded -> {
-                    Log.i("view-stage", "Hello, I'm Loaded branch")
                     ChallengesLoaded(
                         paddingValues = paddingValues,
                         userName = targetState.username,
@@ -163,7 +142,6 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
                     )
                 }
                 is AuthoredChallengesViewState.Loading -> {
-                    Log.i("view-stage", "Hello, I'm Loading branch")
                     ChallengesLoading(
                         paddingValues = paddingValues,
                         userName = targetState.username
@@ -181,7 +159,7 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
 private fun initEventProcessor(
     navigateToKataDetail: (String) -> Unit,
     navigateToSettings: () -> Unit,
-    navigateToSearch: () -> Unit,
+    navigateToSearch: (username: String) -> Unit,
     viewModel: AuthoredChallengesViewModel,
 ) {
 
@@ -194,8 +172,8 @@ private fun initEventProcessor(
             AuthoredChallengeEvent.NavigateToSettings ->
                 navigateToSettings()
 
-            AuthoredChallengeEvent.NavigateToSearch ->
-                navigateToSearch()
+            is AuthoredChallengeEvent.NavigateToSearch ->
+                navigateToSearch(event.username)
         }
     }
 }
@@ -341,7 +319,7 @@ private fun ChallengeListPreviewDark() {
     }
 }
 
-@Preview(showBackground = true,)
+@Preview(showBackground = true)
 @Composable
 private fun ChallengeListPreviewLight() {
     CodewarsTheme {
@@ -368,17 +346,4 @@ private fun ChallengeListPreviewLight() {
             )
         }
     }
-}
-
-@Composable
-fun SearchChallengeDialog(
-    show: Boolean,
-    onChallengeQuerySelected: (String) -> Unit,
-) {
-    TextFieldDialog(
-        show = show,
-        title = stringResource(id = R.string.title_search_challenge),
-        onPositiveButtonClicked = onChallengeQuerySelected
-    )
-
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,10 +28,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.saulmm.codewars.common.android.observeWithLifecycle
@@ -101,11 +106,13 @@ fun ChallengeResultsContent(
     ) {targetState ->
         when (targetState) {
             SearchChallengesViewState.Failure -> {
-                SearchChallengesFailure(onTryAgainClick = onFailureTryAgainClick)
-
+                SearchChallengesFailure(
+                    onTryAgainClick = onFailureTryAgainClick,
+                    modifier = Modifier.padding(paddingValues)
+                )
             }
             SearchChallengesViewState.Idle -> {
-                // No - op
+                SearchChallengesIdle(modifier = Modifier.padding(paddingValues))
             }
             is SearchChallengesViewState.Loaded -> {
                 ChallengesList(
@@ -121,12 +128,36 @@ fun ChallengeResultsContent(
     }
 }
 
+
+@Composable
+fun SearchChallengesIdle(modifier: Modifier = Modifier) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxSize(),
+    ) {
+        Text(
+            text = stringResource(id = R.string.title_idle_search),
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Text(
+            text = stringResource(id = R.string.message_idle_search),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+            modifier = Modifier.padding(top = 8.dp),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+    }
+
+}
+
 @Composable
 fun SearchChallengesFailure(
     onTryAgainClick: () -> Unit,
-    paddingValues: PaddingValues = PaddingValues()
+    modifier: Modifier = Modifier
 ) {
-    Column(modifier = Modifier.padding(paddingValues)) {
+    Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(32.dp))
         ErrorMessageWithAction(
             titleStringRes = R.string.message_error_challenges_title,
@@ -213,6 +244,15 @@ private fun initEventProcessor(
             }
         }
     }
+}
 
+@Composable
+@Preview
+private fun SearchChallengesIdlePreview() {
+    CodewarsTheme {
+        CodewarsBackground {
+            SearchChallengesIdle()
+        }
+    }
 }
 

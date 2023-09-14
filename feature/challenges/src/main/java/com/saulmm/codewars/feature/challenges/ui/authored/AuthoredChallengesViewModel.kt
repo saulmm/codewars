@@ -7,6 +7,7 @@ import com.saulmm.codewars.entity.Challenge
 import com.saulmm.feature.challenges.model.params.ChallengePreviewParams
 import com.saulmm.codewars.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,45 +58,6 @@ class AuthoredChallengesViewModel @Inject constructor(
         ) }
     }
 
-    suspend fun loadChallengesByTextQuery(textQuery: String) {
-        _viewState.update {
-            AuthoredChallengesViewState.Loading(
-                username = it.username,
-                textQuery = it.textQuery
-            )
-        }
-
-        runCatching {
-            delay(3_000)
-            val username = _viewState.value.username
-
-            repository.require(
-                ChallengePreviewParams.ByUsernameAndTextQuery(
-                    textQuery = textQuery,
-                    username = username
-                )
-            )
-        }.onFailure { error ->
-            Timber.e(error)
-
-            _viewState.update {
-                AuthoredChallengesViewState.Failure(
-                    username = it.username,
-                    textQuery = it.textQuery
-                )
-            }
-        }
-        .onSuccess { challenges ->
-            _viewState.update {
-                AuthoredChallengesViewState.Loaded(
-                    username = it.username,
-                    textQuery = it.textQuery,
-                    katas = challenges
-                )
-            }
-        }
-    }
-
     fun onViewEvent(viewEvent: AuthoredChallengesViewEvent) {
         when (viewEvent) {
             is AuthoredChallengesViewEvent.OnChallengeClick -> {
@@ -113,12 +75,9 @@ class AuthoredChallengesViewModel @Inject constructor(
             }
 
             AuthoredChallengesViewEvent.OnSearchClick -> {
-                _events.trySend(AuthoredChallengeEvent.NavigateToSearch)
-            }
-
-            is AuthoredChallengesViewEvent.OnSearchQuerySelected -> {
-                viewModelScope.launch {
-                    loadChallengesByTextQuery(viewEvent.query)
+                viewModelScope.launch(Dispatchers.IO) { // Accessing to disk via prefs
+                    val username = preferencesRepository.getString(PreferencesRepository.Key.SELECTED_USERNAME)
+                    _events.trySend(AuthoredChallengeEvent.NavigateToSearch(username))
                 }
             }
         }

@@ -52,6 +52,9 @@ fun CodewarsNavHost(
                 navigateToSettings = {
                      navController.navigate(SettingsGraphDest.Settings.route)
                 },
+                navigateToSearch =  {
+                    navController.navigate(HomeGraphDest.SearchChallenges.buildRoute(it))
+                },
                 viewModel = viewModel
             )
         }

@@ -5,5 +5,4 @@ sealed class AuthoredChallengesViewEvent {
     object OnFailureTryAgainClick: AuthoredChallengesViewEvent()
     object OnSettingsClick: AuthoredChallengesViewEvent()
     object OnSearchClick: AuthoredChallengesViewEvent()
-    data class OnSearchQuerySelected(val query: String): AuthoredChallengesViewEvent()
 }
