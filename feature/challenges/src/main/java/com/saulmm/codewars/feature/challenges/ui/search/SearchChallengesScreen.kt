@@ -116,7 +116,7 @@ fun ChallengeResultsContent(
             }
             is SearchChallengesViewState.Loaded -> {
                 ChallengesList(
-                    challenges = (viewState as SearchChallengesViewState.Loaded).challenges,
+                    challenges = targetState.challenges,
                     onChallengeClick = onChallengeClick
                 )
             }
