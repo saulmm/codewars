@@ -1,14 +1,17 @@
 package com.saulmm.codewars.feature.challenges.ui.search
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.repository.CachingRepository
 import com.saulmm.feature.challenges.model.params.ChallengePreviewParams
 import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -20,6 +23,7 @@ class SearchChallengeViewModel @AssistedInject constructor(
     private val _events = Channel<SearchChallengesEvent>(Channel.BUFFERED)
     private val _viewState = MutableStateFlow<SearchChallengesViewState>(SearchChallengesViewState.Idle)
     val events = _events.receiveAsFlow()
+    val viewState = _viewState.asStateFlow()
 
     fun onViewEvent(viewEvent: SearchChallengesViewEvent) {
         when (viewEvent) {
@@ -31,6 +35,9 @@ class SearchChallengeViewModel @AssistedInject constructor(
             }
             is SearchChallengesViewEvent.OnTextQueryChanged -> {
                 searchChallenges(viewEvent.query)
+            }
+            SearchChallengesViewEvent.OnFailureTryAgainClick -> {
+                TODO()
             }
         }
     }
@@ -51,6 +58,22 @@ class SearchChallengeViewModel @AssistedInject constructor(
                 .onSuccess {
                     _viewState.value = SearchChallengesViewState.Loaded(it)
                 }
+        }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(username: String): SearchChallengeViewModel
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: Factory,
+            username: String
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(username = username) as T
+            }
         }
     }
 }

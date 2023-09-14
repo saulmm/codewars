@@ -10,21 +10,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,7 +34,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,11 +43,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.LocalBackgroundTheme
+import com.saulmm.codewars.common.design.system.component.ChallengeCard
+import com.saulmm.codewars.common.design.system.component.ChallengesLoadingPlaceholders
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
-import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
 import com.saulmm.codewars.common.design.system.component.TextFieldDialog
-import com.saulmm.codewars.common.design.system.component.placeholder
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.ProgrammingLanguage
 import com.saulmm.codewars.feature.challenges.R
@@ -265,18 +258,7 @@ fun ChallengesLoading(userName: String, paddingValues: PaddingValues) {
     Box(Modifier.padding(paddingValues)) {
         Column(modifier = Modifier.padding(16.dp)) {
             AuthoredChallengesHeader(userName = userName)
-            Spacer(modifier = Modifier.height(16.dp))
-                repeat(2) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(16.dp))
-                            .height(196.dp)
-                            .placeholder()
-                    ) {}
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-
+            ChallengesLoadingPlaceholders(modifier = Modifier.padding(16.dp))
         }
     }
 
@@ -389,43 +371,6 @@ private fun ChallengeListPreviewLight() {
 }
 
 @Composable
-private fun ChallengeCard(
-    challenge: Challenge,
-    onChallengeClick: (String) -> Unit
-) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        modifier = Modifier.clickable { onChallengeClick.invoke(challenge.id) }
-    ) {
-        Column(
-            modifier = Modifier.padding(vertical = 12.dp)
-        ) {
-            Text(
-                text = challenge.name,
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = challenge.tags.joinToString(separator = " • "),
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = challenge.description,
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 4,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            ProgramingLanguages(progammingLanguages = challenge.languages)
-        }
-    }
-}
-
-@Composable
 fun SearchChallengeDialog(
     show: Boolean,
     onChallengeQuerySelected: (String) -> Unit,
@@ -436,20 +381,4 @@ fun SearchChallengeDialog(
         onPositiveButtonClicked = onChallengeQuerySelected
     )
 
-}
-
-@Composable
-fun ProgramingLanguages(
-    progammingLanguages: List<ProgrammingLanguage>,
-    modifier: Modifier = Modifier,
-) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier,
-    ) {
-        items(progammingLanguages) {
-            ProgrammingLanguageTag(programmingLanguage = it)
-        }
-    }
 }
