@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imeNestedScroll
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -39,6 +37,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.saulmm.codewars.common.android.observeWithLifecycle
@@ -60,7 +59,7 @@ fun AuthoredChallengesScreen(
     viewModel: AuthoredChallengesViewModel,
 ) {
 
-    initEventProcessor(
+    EventProcessor(
         navigateToKataDetail = navigateToKataDetail,
         navigateToSettings = navigateToSettings,
         navigateToSearch = navigateToSearch,
@@ -124,6 +123,13 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
             )
         }
     ) { paddingValues ->
+        val drawBelowBottomPaddingValues = PaddingValues(
+            top = paddingValues.calculateTopPadding(),
+            end = paddingValues.calculateRightPadding(LayoutDirection.Ltr),
+            start = paddingValues.calculateRightPadding(LayoutDirection.Ltr),
+            bottom = 0.dp,
+
+        )
         AnimatedContent(
             targetState = viewState,
             transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) },
@@ -133,22 +139,22 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
                 AuthoredChallengesViewState.Idle -> {}
                 is AuthoredChallengesViewState.Failure -> {
                     ChallengesFailure(
-                        paddingValues = paddingValues,
                         userName = targetState.username,
                         onTryAgainClick = onFailureTryAgainClick,
+                        modifier = Modifier.padding(drawBelowBottomPaddingValues),
                     )
                 }
                 is AuthoredChallengesViewState.Loaded -> {
                     ChallengesLoaded(
-                        paddingValues = paddingValues,
                         userName = targetState.username,
                         challenges = (viewState as AuthoredChallengesViewState.Loaded).katas,
-                        onChallengeClick = onChallengeClick
+                        onChallengeClick = onChallengeClick,
+                        modifier = Modifier.padding(drawBelowBottomPaddingValues)
                     )
                 }
                 is AuthoredChallengesViewState.Loading -> {
                     ChallengesLoading(
-                        paddingValues = paddingValues,
+                        paddingValues = drawBelowBottomPaddingValues,
                         userName = targetState.username
                     )
                 }
@@ -161,7 +167,7 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
 }
 
 @Composable
-private fun initEventProcessor(
+private fun EventProcessor(
     navigateToKataDetail: (String) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToSearch: (username: String) -> Unit,
@@ -222,9 +228,9 @@ private fun AuthoredChallengesTopBar(
 fun ChallengesFailure(
     userName: String,
     onTryAgainClick: () -> Unit,
-    paddingValues: PaddingValues = PaddingValues()
+    modifier: Modifier = Modifier,
 ) {
-    Column(modifier = Modifier.padding(paddingValues)) {
+    Column(modifier = modifier) {
         AuthoredChallengesHeader(userName = userName)
         Spacer(modifier = Modifier.height(32.dp))
         ErrorMessageWithAction(
@@ -252,25 +258,27 @@ fun ChallengesLoaded(
     userName: String,
     challenges: List<Challenge>,
     onChallengeClick: (String) -> Unit,
-    paddingValues: PaddingValues
+    modifier: Modifier = Modifier,
 ) {
-    Box(modifier = Modifier.padding(paddingValues)) {
-        ChallengesList(userName, challenges, onChallengeClick)
+    Box(modifier = modifier) {
+        ChallengesList(
+            userName = userName,
+            challenges = challenges,
+            onChallengeClick = onChallengeClick
+        )
     }
+
 }
 
 @Composable
 private fun ChallengesList(
     userName: String,
     challenges: List<Challenge>,
-    onChallengeClick: (String) -> Unit
+    onChallengeClick: (String) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(16.dp),
-        modifier = Modifier
-            .imePadding()
-            .imeNestedScroll(),
+        contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
         item {
             AuthoredChallengesHeader(userName)
