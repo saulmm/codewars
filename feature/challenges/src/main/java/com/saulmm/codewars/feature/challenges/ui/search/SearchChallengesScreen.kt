@@ -7,23 +7,28 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -53,13 +59,16 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.saulmm.codewars.common.android.extensions.drawBehindNavigationValues
 import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
-import com.saulmm.codewars.common.design.system.component.ChallengeCard
 import com.saulmm.codewars.common.design.system.component.ChallengesLoadingPlaceholders
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
@@ -101,7 +110,7 @@ fun SearchChallengesScreen(
                     },
                     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 ) { paddingValues ->
-                    ChallengeResultsContent(paddingValues, viewModel, focusRequester)
+                    ChallengeResultsContent(paddingValues, viewModel)
                 }
             }
         }
@@ -111,9 +120,10 @@ fun SearchChallengesScreen(
 fun ChallengeResultsContent(
     paddingValues: PaddingValues,
     viewModel: SearchChallengeViewModel,
-    focusRequester: FocusRequester,
 ) {
     val viewState: SearchChallengesViewState by viewModel.viewState.collectAsStateWithLifecycle()
+
+    val drawBehindNavigationPaddingValues = paddingValues.drawBehindNavigationValues()
 
     val onFailureTryAgainClick = {
         viewModel.onViewEvent(SearchChallengesViewEvent.OnFailureTryAgainClick)
@@ -132,24 +142,25 @@ fun ChallengeResultsContent(
             SearchChallengesViewState.Failure -> {
                 SearchChallengesFailure(
                     onTryAgainClick = onFailureTryAgainClick,
-                    modifier = Modifier.padding(paddingValues)
+                    modifier = Modifier.padding(drawBehindNavigationPaddingValues)
                 )
             }
 
             SearchChallengesViewState.Idle -> {
-                SearchChallengesIdle(modifier = Modifier.padding(paddingValues))
+                SearchChallengesIdle(modifier = Modifier.padding(drawBehindNavigationPaddingValues))
             }
 
             is SearchChallengesViewState.Loaded -> {
                 ChallengesList(
                     challenges = targetState.challenges,
                     onChallengeClick = onChallengeClick,
-                    modifier = Modifier.padding(paddingValues)
+                    query = targetState.query,
+                    modifier = Modifier.padding(drawBehindNavigationPaddingValues)
                 )
             }
 
             SearchChallengesViewState.Loading -> {
-                ChallengesLoadingPlaceholders(modifier = Modifier.padding(16.dp))
+                ChallengesLoadingPlaceholders(modifier = Modifier.padding(drawBehindNavigationPaddingValues))
             }
         }
     }
@@ -199,23 +210,26 @@ fun SearchChallengesFailure(
 @ExperimentalLayoutApi
 @Composable
 private fun ChallengesList(
+    query: String,
     challenges: List<Challenge>,
     onChallengeClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val lazyListState = rememberLazyListState()
     HideKeyboardAnRemoveFocusOnScroll(lazyListState)
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        state = lazyListState,
-        modifier = modifier
-            .imePadding()
-    ) {
-        items(challenges, key = { it.id }) { challenge ->
-            ChallengeCard(
-                challenge = challenge,
-                onChallengeClick = onChallengeClick
-            )
+
+    Box(modifier = modifier) {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            state = lazyListState,
+        ) {
+            items(challenges, key = { it.id }) { challenge ->
+                SearchResultAlternative(
+                    currentQuery = query,
+                    challenge = challenge,
+                    onChallengeClick = onChallengeClick
+                )
+            }
         }
     }
 }
@@ -263,9 +277,9 @@ fun SearchToolbar(
                 focusRequester = focusRequester
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(scrolledContainerColor = MaterialTheme.colorScheme.secondaryContainer),
         scrollBehavior = scrollBehavior,
-        navigationIcon = { OnBackIconButton(onBackPressed = onBackPressed) }
+        navigationIcon = { OnBackIconButton(onBackPressed = onBackPressed) },
+        modifier = Modifier.padding(bottom = 8.dp)
     )
 }
 
@@ -339,12 +353,123 @@ private fun initEventProcessor(
     }
 }
 
+@Preview(showBackground = true,)
 @Composable
-@Preview
-private fun SearchChallengesIdlePreview() {
+private fun SearchResultAlternativePreview() {
+    SearchResultAlternative(
+        currentQuery = "compose",
+        challenge = Challenge(
+            id = "b",
+            name = "Material components in compose are composable",
+            description = "Jetpack Compose offers an implementation of Material Design, a comprehensive design system for creating digital interfaces. You can use composable functions to implement Material components.",
+            tags = listOf("Arrays", "Stacks", "Queues"),
+            languages = listOf()
+        ),
+        onChallengeClick = {}
+    )
+}
+
+@Composable
+private fun SearchResultAlternative(
+    currentQuery: String,
+    challenge: Challenge,
+    onChallengeClick: (String) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 2.dp, horizontal = 16.dp)
+            .clickable { onChallengeClick(challenge.id) }
+    ) {
+
+        Icon(
+            painter = painterResource(id = R.drawable.ic_search), contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+            modifier = Modifier
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .padding(12.dp)
+        )
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        val queryIndexesInResult = firstOcurrenceIndexes(result = challenge.name, query = currentQuery)
+        val anotatedString = buildAnnotatedString {
+            append(challenge.name)
+
+            queryIndexesInResult?.let {
+                addStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    start = it.first,
+                    end = it.second
+                )
+            }
+        }
+
+        Text(
+            text = anotatedString,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+fun firstOcurrenceIndexes(result: String, query: String): Pair<Int, Int>? {
+    val startIndex = result.lowercase().indexOf(query.lowercase())
+
+    if (startIndex != -1) {
+        val endIndex = startIndex + query.length
+        return Pair(startIndex, endIndex)
+    }
+
+    return null
+}
+
+@Preview(
+    showBackground = true,
+)
+@Composable
+private fun SearchResultPreviewLoaded() {
     CodewarsTheme {
         CodewarsBackground {
-            SearchChallengesIdle()
+            ChallengesList(
+                query = "Compose",
+                challenges = listOf(
+                    Challenge(
+                        id = "a",
+                        name = "Material components in Compose",
+                        description = "Jetpack Compose offers an implementation of Material Design, a comprehensive design system for creating digital interfaces. You can use composable functions to implement Material components.",
+                        tags = listOf("Arrays", "Stacks", "Queues"),
+                        languages = listOf()
+                    ),
+                    Challenge(
+                        id = "b",
+                        name = "Material components in Compose",
+                        description = "Jetpack Compose offers an implementation of Material Design, a comprehensive design system for creating digital interfaces. You can use composable functions to implement Material components.",
+                        tags = listOf("Arrays", "Stacks", "Queues"),
+                        languages = listOf()
+                    ),
+                    Challenge(
+                        id = "c",
+                        name = "Material components in Compose",
+                        description = "Jetpack Compose offers an implementation of Material Design, a comprehensive design system for creating digital interfaces. You can use composable functions to implement Material components.",
+                        tags = listOf("Arrays", "Stacks", "Queues"),
+                        languages = listOf()
+                    ),
+                    Challenge(
+                        id = "d",
+                        name = "Material components in Compose",
+                        description = "Jetpack Compose offers an implementation of Material Design, a comprehensive design system for creating digital interfaces. You can use composable functions to implement Material components.",
+                        tags = listOf("Arrays", "Stacks", "Queues"),
+                        languages = listOf()
+                    ),
+
+                ),
+                onChallengeClick = {},
+                modifier = Modifier.padding(16.dp),
+            )
         }
     }
 }

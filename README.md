@@ -14,10 +14,11 @@ You can find an APK ready to install here [**codewars.apk**](apk/codewars.apk).
 
 ### Screenshots
 
-|           | Light Theme                                     | Dark Theme                                     |
-|-----------|-------------------------------------------------|------------------------------------------------|
-| List      | <img src="art/list-light.png" width="400"/>     | <img src="art/list-dark.png" width="400"/>     |
-| Detail    | <img src="art/detail-light.png" width="400"/>   | <img src="art/detail-dark.png" width="400"/>   |
+|        | Light Theme                                   | Dark Theme                                   |
+|--------|-----------------------------------------------|----------------------------------------------|
+| List   | <img src="art/list-light.png" width="400"/>   | <img src="art/list-dark.png" width="400"/>   |
+| Detail | <img src="art/detail-light.png" width="400"/> | <img src="art/detail-dark.png" width="400"/> |
+| Search | <img src="art/search-light.png" width="400"/> | <img src="art/search-dark.png" width="400"/> |
 
 ### Requirements
 

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.saulmm.codewars.entity.Challenge
-import com.saulmm.codewars.repository.CachingRepository
 import com.saulmm.codewars.repository.Repository
 import com.saulmm.feature.challenges.model.params.ChallengePreviewParams
 import dagger.assisted.Assisted
@@ -57,7 +56,10 @@ class SearchChallengeViewModel @AssistedInject constructor(
                     Timber.e(it)
                 }
                 .onSuccess {
-                    _viewState.value = SearchChallengesViewState.Loaded(it)
+                    _viewState.value = SearchChallengesViewState.Loaded(
+                        challenges = it,
+                        query = query
+                    )
                 }
         }
     }

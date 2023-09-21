@@ -1,5 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalLayoutApi::class
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
 )
 
 package com.saulmm.codewars.feature.challenges.ui.authored
@@ -14,7 +13,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -40,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.saulmm.codewars.common.android.extensions.drawBehindNavigationValues
 import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.LocalBackgroundTheme
@@ -114,7 +113,6 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        containerColor = LocalBackgroundTheme.current.color,
         topBar = {
             AuthoredChallengesTopBar(
                 scrollBehavior = scrollBehavior,
@@ -123,13 +121,8 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
             )
         }
     ) { paddingValues ->
-        val drawBelowBottomPaddingValues = PaddingValues(
-            top = paddingValues.calculateTopPadding(),
-            end = paddingValues.calculateRightPadding(LayoutDirection.Ltr),
-            start = paddingValues.calculateRightPadding(LayoutDirection.Ltr),
-            bottom = 0.dp,
+        val drawBelowBottomPaddingValues = paddingValues.drawBehindNavigationValues()
 
-        )
         AnimatedContent(
             targetState = viewState,
             transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) },
@@ -198,10 +191,6 @@ private fun AuthoredChallengesTopBar(
 ) {
     TopAppBar(
         title = {},
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = LocalBackgroundTheme.current.color,
-            scrolledContainerColor = MaterialTheme.colorScheme.secondaryContainer
-        ),
         actions = {
             IconButton(onClick = { onSearchClick() }) {
                 Icon(
@@ -254,7 +243,7 @@ fun ChallengesLoading(userName: String, paddingValues: PaddingValues) {
 }
 
 @Composable
-fun ChallengesLoaded(
+private fun ChallengesLoaded(
     userName: String,
     challenges: List<Challenge>,
     onChallengeClick: (String) -> Unit,
