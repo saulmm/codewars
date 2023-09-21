@@ -2,18 +2,7 @@ package com.saulmm.codewars.navigation
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.EaseOut
-import androidx.compose.animation.core.Easing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.saulmm.codewars.challengesDetailViewModel
+import com.saulmm.codewars.searchChallengesViewModel
 import com.saulmm.codewars.common.design.system.animation.CodewarsEnterTransition
 import com.saulmm.codewars.common.design.system.animation.CodewarsExitTransition
 import com.saulmm.codewars.feature.challenges.ui.authored.AuthoredChallengesScreen
@@ -32,8 +22,10 @@ import com.saulmm.common.navigation_contract.home.HomeGraphDest
 import com.saulmm.codewars.feature.challenges.ui.detail.ChallengeDetailScreen
 import com.saulmm.codewars.feature.challenges.ui.preferences.ui.PreferencesScreen
 import com.saulmm.codewars.feature.challenges.ui.preferences.ui.PreferencesViewModel
+import com.saulmm.codewars.feature.challenges.ui.search.SearchChallengesScreen
 import com.saulmm.common.navigation_contract.home.SettingsGraphDest
 
+@ExperimentalMaterial3Api
 @Composable
 fun CodewarsNavHost(
     modifier: Modifier = Modifier,
@@ -55,20 +47,23 @@ fun CodewarsNavHost(
 
             AuthoredChallengesScreen(
                 navigateToKataDetail = {
-                    navController.navigate(HomeGraphDest.KataDetail.buildRoute(it))
+                    navController.navigate(HomeGraphDest.ChallengeDetail.buildRoute(it))
                 },
                 navigateToSettings = {
                      navController.navigate(SettingsGraphDest.Settings.route)
+                },
+                navigateToSearch =  {
+                    navController.navigate(HomeGraphDest.SearchChallenges.buildRoute(it))
                 },
                 viewModel = viewModel
             )
         }
         composable(
-            route = HomeGraphDest.KataDetail.route,
-            arguments = HomeGraphDest.KataDetail.navArgs
+            route = HomeGraphDest.ChallengeDetail.route,
+            arguments = HomeGraphDest.ChallengeDetail.navArgs
         ) {
             val context = LocalContext.current
-            val challengeId = HomeGraphDest.KataDetail.kataIdFrom(it.arguments)
+            val challengeId = HomeGraphDest.ChallengeDetail.kataIdFrom(it.arguments)
             val viewModel = challengesDetailViewModel(challengeId = challengeId)
             ChallengeDetailScreen(
                 viewModel = viewModel,
@@ -78,6 +73,37 @@ fun CodewarsNavHost(
                 }
             )
         }
+        composable(
+            route = HomeGraphDest.ChallengeDetail.route,
+            arguments = HomeGraphDest.ChallengeDetail.navArgs
+        ) {
+            val context = LocalContext.current
+            val challengeId = HomeGraphDest.ChallengeDetail.kataIdFrom(it.arguments)
+            val viewModel = challengesDetailViewModel(challengeId = challengeId)
+            ChallengeDetailScreen(
+                viewModel = viewModel,
+                navigateBack = { navController.popBackStack() },
+                navigateToUrl = { url ->
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url.toString())))
+                }
+            )
+        }
+        composable(
+            route = HomeGraphDest.SearchChallenges.route,
+            arguments = HomeGraphDest.SearchChallenges.navArgs
+        ) {
+            val username = HomeGraphDest.SearchChallenges.usernameFrom(it.arguments)
+            val viewModel = searchChallengesViewModel(username = username)
+
+            SearchChallengesScreen(
+                navigateToChallengeDetail = {
+                    navController.navigate(HomeGraphDest.ChallengeDetail.buildRoute(it))
+                },
+                navigateBack = { navController.popBackStack() },
+                viewModel = viewModel
+            )
+        }
+
         composable(
             route = SettingsGraphDest.Settings.route
         ) {

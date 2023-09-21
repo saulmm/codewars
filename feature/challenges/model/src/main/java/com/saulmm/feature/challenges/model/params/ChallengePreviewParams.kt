@@ -1,5 +1,9 @@
 package com.saulmm.feature.challenges.model.params
 
-data class ChallengePreviewParams(
-    val userName: String
-)
+sealed class ChallengePreviewParams {
+    data class ByUsername(val username: String): ChallengePreviewParams()
+    data class ByUsernameAndTextQuery(
+        val username: String,
+        val textQuery: String
+    ): ChallengePreviewParams()
+}

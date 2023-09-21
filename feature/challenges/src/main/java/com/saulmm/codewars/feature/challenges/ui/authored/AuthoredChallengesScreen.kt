@@ -1,28 +1,24 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
+)
 
 package com.saulmm.codewars.feature.challenges.ui.authored
 
+import AuthoredChallengesViewState
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,20 +31,21 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.saulmm.codewars.common.android.extensions.drawBehindNavigationValues
 import com.saulmm.codewars.common.android.observeWithLifecycle
 import com.saulmm.codewars.common.design.system.CodewarsTheme
 import com.saulmm.codewars.common.design.system.LocalBackgroundTheme
+import com.saulmm.codewars.common.design.system.component.ChallengeCard
+import com.saulmm.codewars.common.design.system.component.ChallengesLoadingPlaceholders
 import com.saulmm.codewars.common.design.system.component.CodewarsBackground
 import com.saulmm.codewars.common.design.system.component.ErrorMessageWithAction
-import com.saulmm.codewars.common.design.system.component.ProgrammingLanguageTag
-import com.saulmm.codewars.common.design.system.component.placeholder
 import com.saulmm.codewars.entity.Challenge
 import com.saulmm.codewars.entity.ProgrammingLanguage
 import com.saulmm.codewars.feature.challenges.R
@@ -57,11 +54,14 @@ import com.saulmm.codewars.feature.challenges.R
 fun AuthoredChallengesScreen(
     navigateToKataDetail: (String) -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToSearch: (username: String) -> Unit,
     viewModel: AuthoredChallengesViewModel,
 ) {
-    initEventProcessor(
+
+    EventProcessor(
         navigateToKataDetail = navigateToKataDetail,
         navigateToSettings = navigateToSettings,
+        navigateToSearch = navigateToSearch,
         viewModel = viewModel
     )
 
@@ -104,46 +104,55 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
     val onSettingsClick = {
         viewModel.onViewEvent(AuthoredChallengesViewEvent.OnSettingsClick)
     }
+    
+    val onSearchClick = {
+        viewModel.onViewEvent(AuthoredChallengesViewEvent.OnSearchClick)
+    }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        containerColor = LocalBackgroundTheme.current.color,
         topBar = {
             AuthoredChallengesTopBar(
                 scrollBehavior = scrollBehavior,
-                onSettingsClick = onSettingsClick
+                onSettingsClick = onSettingsClick,
+                onSearchClick = onSearchClick,
             )
         }
     ) { paddingValues ->
+        val drawBelowBottomPaddingValues = paddingValues.drawBehindNavigationValues()
+
         AnimatedContent(
             targetState = viewState,
             transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) },
             label = "Animated Content"
         ) { targetState ->
-            when (targetState) {
+            when (viewState) {
                 AuthoredChallengesViewState.Idle -> {}
                 is AuthoredChallengesViewState.Failure -> {
                     ChallengesFailure(
-                        paddingValues = paddingValues,
                         userName = targetState.username,
                         onTryAgainClick = onFailureTryAgainClick,
+                        modifier = Modifier.padding(drawBelowBottomPaddingValues),
                     )
                 }
                 is AuthoredChallengesViewState.Loaded -> {
                     ChallengesLoaded(
-                        paddingValues = paddingValues,
                         userName = targetState.username,
                         challenges = (viewState as AuthoredChallengesViewState.Loaded).katas,
-                        onChallengeClick = onChallengeClick
+                        onChallengeClick = onChallengeClick,
+                        modifier = Modifier.padding(drawBelowBottomPaddingValues)
                     )
                 }
                 is AuthoredChallengesViewState.Loading -> {
                     ChallengesLoading(
-                        paddingValues = paddingValues,
+                        paddingValues = drawBelowBottomPaddingValues,
                         userName = targetState.username
                     )
+                }
+                else -> {
+                    error("Cannot happen")
                 }
             }
         }
@@ -151,9 +160,10 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
 }
 
 @Composable
-private fun initEventProcessor(
+private fun EventProcessor(
     navigateToKataDetail: (String) -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToSearch: (username: String) -> Unit,
     viewModel: AuthoredChallengesViewModel,
 ) {
 
@@ -165,6 +175,9 @@ private fun initEventProcessor(
 
             AuthoredChallengeEvent.NavigateToSettings ->
                 navigateToSettings()
+
+            is AuthoredChallengeEvent.NavigateToSearch ->
+                navigateToSearch(event.username)
         }
     }
 }
@@ -174,19 +187,24 @@ private fun initEventProcessor(
 private fun AuthoredChallengesTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     onSettingsClick: () -> Unit,
+    onSearchClick: () -> Unit,
 ) {
     TopAppBar(
         title = {},
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = LocalBackgroundTheme.current.color,
-            scrolledContainerColor = MaterialTheme.colorScheme.secondaryContainer
-        ),
         actions = {
-            IconButton(onClick = { onSettingsClick() }
-            ) {
+            IconButton(onClick = { onSearchClick() }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = "Search",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+
+            }
+            IconButton(onClick = { onSettingsClick() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_settings),
                     contentDescription = "Settings",
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         },
@@ -199,9 +217,9 @@ private fun AuthoredChallengesTopBar(
 fun ChallengesFailure(
     userName: String,
     onTryAgainClick: () -> Unit,
-    paddingValues: PaddingValues = PaddingValues()
+    modifier: Modifier = Modifier,
 ) {
-    Column(modifier = Modifier.padding(paddingValues)) {
+    Column(modifier = modifier) {
         AuthoredChallengesHeader(userName = userName)
         Spacer(modifier = Modifier.height(32.dp))
         ErrorMessageWithAction(
@@ -218,44 +236,38 @@ fun ChallengesLoading(userName: String, paddingValues: PaddingValues) {
     Box(Modifier.padding(paddingValues)) {
         Column(modifier = Modifier.padding(16.dp)) {
             AuthoredChallengesHeader(userName = userName)
-            Spacer(modifier = Modifier.height(16.dp))
-                repeat(2) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(16.dp))
-                            .height(196.dp)
-                            .placeholder()
-                    ) {}
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-
+            ChallengesLoadingPlaceholders(modifier = Modifier.padding(16.dp))
         }
     }
 
 }
 
 @Composable
-fun ChallengesLoaded(
+private fun ChallengesLoaded(
     userName: String,
     challenges: List<Challenge>,
     onChallengeClick: (String) -> Unit,
-    paddingValues: PaddingValues
+    modifier: Modifier = Modifier,
 ) {
-    Box(modifier = Modifier.padding(paddingValues)) {
-        ChallengesList(userName, challenges, onChallengeClick)
+    Box(modifier = modifier) {
+        ChallengesList(
+            userName = userName,
+            challenges = challenges,
+            onChallengeClick = onChallengeClick
+        )
     }
+
 }
 
 @Composable
 private fun ChallengesList(
     userName: String,
     challenges: List<Challenge>,
-    onChallengeClick: (String) -> Unit
+    onChallengeClick: (String) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
         item {
             AuthoredChallengesHeader(userName)
@@ -312,7 +324,7 @@ private fun ChallengeListPreviewDark() {
     }
 }
 
-@Preview(showBackground = true,)
+@Preview(showBackground = true)
 @Composable
 private fun ChallengeListPreviewLight() {
     CodewarsTheme {
@@ -337,59 +349,6 @@ private fun ChallengeListPreviewLight() {
                     )
                 )
             )
-        }
-    }
-}
-
-@Composable
-private fun ChallengeCard(
-    challenge: Challenge,
-    onChallengeClick: (String) -> Unit
-) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        modifier = Modifier.clickable { onChallengeClick.invoke(challenge.id) }
-    ) {
-        Column(
-            modifier = Modifier.padding(vertical = 12.dp)
-        ) {
-            Text(
-                text = challenge.name,
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = challenge.tags.joinToString(separator = " • "),
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = challenge.description,
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 4,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            ProgramingLanguages(progammingLanguages = challenge.languages)
-        }
-    }
-}
-
-@Composable
-fun ProgramingLanguages(
-    progammingLanguages: List<ProgrammingLanguage>,
-    modifier: Modifier = Modifier,
-) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier,
-    ) {
-        items(progammingLanguages) {
-            ProgrammingLanguageTag(programmingLanguage = it)
         }
     }
 }

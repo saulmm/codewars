@@ -4,7 +4,7 @@ import com.saulmm.codewars.entity.Challenge
 import com.saulmm.feature.challenges.model.local.database.entities.ChallengePreviewDbo
 
 internal fun Challenge.toDbo(
-    userName: String,
+    username: String,
     insertedAt: Long,
 ): ChallengePreviewDbo {
     return ChallengePreviewDbo(
@@ -13,7 +13,7 @@ internal fun Challenge.toDbo(
         shortDescription = description,
         tags = tags.joinToString(separator = ","),
         languages = languages.joinToString(separator = ",") { it.name },
-        username = userName,
+        username = username,
         insertedAt = insertedAt
     )
 }

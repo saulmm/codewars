@@ -13,7 +13,16 @@ internal class ChallengesPreviewApiDataSource @Inject constructor(
 ) : ReadableDataSource<ChallengePreviewParams, List<Challenge>> {
 
     override suspend fun getData(query: ChallengePreviewParams): List<Challenge>? {
-        return codewarsApi.authoredChallenges(userName = query.userName)
+        return when (query) {
+            is ChallengePreviewParams.ByUsernameAndTextQuery -> {
+                throw UnsupportedOperationException("Searching by text query is not supported for remote requests")
+            }
+            is ChallengePreviewParams.ByUsername -> challengesByUsername(query)
+        }
+    }
+
+    private suspend fun challengesByUsername(query: ChallengePreviewParams.ByUsername): List<Challenge> {
+        return codewarsApi.authoredChallenges(userName = query.username)
             .data
             .map(AuthoredChallengeDto::toChallenge)
     }
