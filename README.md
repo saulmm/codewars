@@ -7,10 +7,7 @@ This project utilizes the [Codewars API](https://dev.codewars.com/#introduction)
 - Display of challenges created by a user.
 - List view for easy navigation.
 - Detailed challenge information on a separate screen.
-
-### APK
-
-You can find an APK ready to install here [**codewars.apk**](apk/codewars.apk).
+- Search
 
 ### Screenshots
 
@@ -18,7 +15,7 @@ You can find an APK ready to install here [**codewars.apk**](apk/codewars.apk).
 |--------|-----------------------------------------------|----------------------------------------------|
 | List   | <img src="art/list-light.png" width="400"/>   | <img src="art/list-dark.png" width="400"/>   |
 | Detail | <img src="art/detail-light.png" width="400"/> | <img src="art/detail-dark.png" width="400"/> |
-| Search | <img src="art/search-light.png" width="400"/> | <img src="art/search-dark.png" width="400"/> |
+| Search | <img src="art/search-light.jpg" width="400"/> | <img src="art/search-dark.jpg" width="400"/> |
 
 ### Requirements
 
