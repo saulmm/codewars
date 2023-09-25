@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Codewars"
+// rootProject.name = "Codewars"
 include(":app")
 include(":entity")
 include(":common")

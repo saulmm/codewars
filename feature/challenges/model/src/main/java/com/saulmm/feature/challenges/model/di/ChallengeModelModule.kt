@@ -9,6 +9,7 @@ import com.saulmm.feature.challenges.model.params.ChallengeDetailParams
 import com.saulmm.feature.challenges.model.remote.datasource.ChallengeDetailApiDataSource
 import com.saulmm.feature.challenges.model.remote.datasource.ChallengesPreviewApiDataSource
 import com.saulmm.codewars.repository.CachingRepository
+import com.saulmm.codewars.repository.LocalSearchRepository
 import com.saulmm.codewars.repository.Repository
 import dagger.Module
 import dagger.Provides
@@ -32,6 +33,15 @@ internal class ChallengeModelModule {
         )
     }
 
+    @Provides
+    @Singleton
+    fun provideSearchRepository(
+        local: ChallengesPreviewRoomDataSource,
+    ): LocalSearchRepository<ChallengePreviewParams, List<Challenge>> {
+        return LocalSearchRepository<ChallengePreviewParams, List<Challenge>>(
+            local = local
+        )
+    }
 
     @Provides
     @Singleton

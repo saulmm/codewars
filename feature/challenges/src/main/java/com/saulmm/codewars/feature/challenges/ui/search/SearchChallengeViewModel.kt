@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.saulmm.codewars.entity.Challenge
+import com.saulmm.codewars.repository.LocalSearchRepository
 import com.saulmm.codewars.repository.Repository
 import com.saulmm.feature.challenges.model.params.ChallengePreviewParams
 import dagger.assisted.Assisted
@@ -18,7 +19,7 @@ import timber.log.Timber
 
 class SearchChallengeViewModel @AssistedInject constructor(
     @Assisted private val username: String,
-    private val repository: Repository<ChallengePreviewParams, List<Challenge>>,
+    private val repository: LocalSearchRepository<ChallengePreviewParams, List<Challenge>>,
 ): ViewModel() {
     private val _events = Channel<SearchChallengesEvent>(Channel.BUFFERED)
     private val _viewState = MutableStateFlow<SearchChallengesViewState>(SearchChallengesViewState.Idle)
