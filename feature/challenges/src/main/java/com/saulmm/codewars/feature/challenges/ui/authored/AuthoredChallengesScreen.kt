@@ -29,6 +29,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -140,7 +141,7 @@ private fun ChallengesScreenContent(viewModel: AuthoredChallengesViewModel) {
                 is AuthoredChallengesViewState.Loaded -> {
                     ChallengesLoaded(
                         userName = targetState.username,
-                        challenges = (viewState as AuthoredChallengesViewState.Loaded).katas,
+                        viewState = viewState as AuthoredChallengesViewState.Loaded,
                         onChallengeClick = onChallengeClick,
                         modifier = Modifier.padding(drawBelowBottomPaddingValues)
                     )
@@ -245,14 +246,14 @@ fun ChallengesLoading(userName: String, paddingValues: PaddingValues) {
 @Composable
 private fun ChallengesLoaded(
     userName: String,
-    challenges: List<Challenge>,
+    viewState: AuthoredChallengesViewState.Loaded,
     onChallengeClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
         ChallengesList(
             userName = userName,
-            challenges = challenges,
+            challenges = viewState.katas,
             onChallengeClick = onChallengeClick
         )
     }

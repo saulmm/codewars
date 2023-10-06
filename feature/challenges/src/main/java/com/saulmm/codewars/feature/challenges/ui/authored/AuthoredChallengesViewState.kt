@@ -1,3 +1,4 @@
+import androidx.compose.runtime.Immutable
 import com.saulmm.codewars.entity.Challenge
 
 sealed class AuthoredChallengesViewState(
@@ -15,7 +16,7 @@ sealed class AuthoredChallengesViewState(
         override val username: String,
         override val textQuery: String? = null
     ) : AuthoredChallengesViewState(username, textQuery)
-
+//    @Immutable
     data class Loaded(
         override val username: String,
         override val textQuery: String? = null,
