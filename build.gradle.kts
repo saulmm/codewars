@@ -7,3 +7,21 @@ plugins {
     id(libs.plugins.org.jetbrains.kotlin.jvm.get().pluginId) apply false
     id(libs.plugins.androidLibrary.get().pluginId) apply false
 }
+
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+
+            if (project.findProperty("codewars.enableComposeCompilerReports") == "true") {
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                            project.buildDir.absolutePath + "/compose_metrics",
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                            project.buildDir.absolutePath + "/compose_metrics"
+                )
+            }
+        }
+    }
+}
